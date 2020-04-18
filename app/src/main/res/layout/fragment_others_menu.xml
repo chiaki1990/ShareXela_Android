@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OthersMenuFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnContactUs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ContactUs" />
+
+        <Button
+            android:id="@+id/btnHowTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HowTo" />
+
+        <Button
+            android:id="@+id/btnPolitica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Politica" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
