@@ -196,16 +196,43 @@ data class ItemDetailSerializerAPIViewModel(
     //var ITEM_OBJ_SERIALIZER: ItemSerializerModel これに変えておく時間があったら。
     var item_obj_serializer: ItemSerializerModel,
     var profile_obj_serializer: ProfileSerializerModel,
-    var item_contact_objects_serializer: Any,
+    var item_contact_objects_serializer: ArrayList<ItemContactSerializerModel>,
     var SOLICITUD_OBJECTS_SERIALIZER: ArrayList<SolicitudSerializerModel>,
     var BTN_CHOICE: String = ""
 
 )
 
 
+
+
+// django: api/serializers.py ItemContactSerializerに対応する
+data class ItemContactSerializerModel(
+
+    var post_user: ProfileSerializerModel,
+    var item: ItemSerializerModel,
+    var message: String,
+    var reply_user: ProfileSerializerModel,//削除予定
+    var timestamp: String
+    ):Serializable
+
+
+// django: api/views.py ItemContactListAPIViewに対応する
+data class ItemContactListAPIViewModel(
+    var ITEM_CONTACT_OBJECTS: ArrayList<ItemContactSerializerModel>
+):Serializable
+
+
+
+// django: api/views.py DirectMessageContentListAPIViewに対応する
 data class DirectMessageContentListAPIView(
     var DM_CONTENT_OBJECTS_SERIALIZER: ArrayList<DirectMessageContentSerializerModel>,
     var ACCESS_USER_PROFILE_SERIALIZER: ProfileSerializerModel
+)
+
+
+// django: api/views.py ItemObjByDirectMessageContentObjPKAPIViewに対応する
+data class ItemObjByDirectMessageContentObjPKAPIView(
+    var ITEM_OBJECT: ItemSerializerModel
 )
 
 
@@ -227,17 +254,49 @@ data class ChangePasswordResponseModel(
 )
 
 
+
+/* Solicitud関連      */
+
 // SolicitarFragmentにて使用
 // django: api/serializers.py SolicitudSerializerより
 data class SolicitudSerializerModel(
-    var id: Int,
-    var item: ItemSerializerModel,
-    var applicant: ProfileSerializerModel,
-    var message: String,
-    var timestamp: String,
-    var accepted: Boolean
+    var id: Int? = null,
+    var item: ItemSerializerModel? = null,
+    var applicant: ProfileSerializerModel? = null,
+    var message: String? = null,
+    var timestamp: String? = null,
+    var accepted: Boolean? = null
 ):Serializable
 
 
 
+// django: api/views.py SolicitudAPIViewを受ける
+data class SolicitudAPIViewModel(
+    var SOLICITUD_OBJECT: SolicitudSerializerModel
+)
 
+
+
+
+
+// NotificationFragmentで使用
+// django: api/views.py AvisosAllListAPIViewより
+data class AvisosAllListAPIViewModel(
+    var AVISO_OBJECTS: ArrayList<AvisoSerializerModel>
+)
+
+// django: api/serializers.py AvisoSerializerより
+data class AvisoSerializerModel(
+    var aviso_user: ProfileSerializerModel,
+    var content_type: String,
+    var object_id: Int,
+    var content_object: contentObjectModel, //djangoのAvisoObjectRelatedFieldで便宜的に返り値をstr型に変更している為
+    var checked: Boolean,
+    var created_at: String
+)
+
+
+data class contentObjectModel(
+    var itemName: String,
+    var modelName: String
+)

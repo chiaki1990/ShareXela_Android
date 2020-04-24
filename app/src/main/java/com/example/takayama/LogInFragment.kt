@@ -106,17 +106,9 @@ class LogInFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
+
+
     interface OnFragmentInteractionListener {
 
         fun resultSuccessLogIn()
@@ -232,22 +224,20 @@ class LogInFragment : Fragment() {
 
     private fun logInByBasicAuth(email: String, password: String) {
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-
-        val service = retrofit.create(ShareXelaService::class.java)
-        //println(email+" : "+ password)
+        val service = setService()
+        println(email+" : "+ password)
         service.login(email, password).enqueue(object: Callback<AuthModel> {
             override fun onResponse(call: Call<AuthModel>, response: Response<AuthModel>) {
+                println("onResponseを通る")
+                println(call.request().headers())
+                println(call.request().body())
                 //BasicAuthにおいて認証データが適切な場合にはステータス：200が返される。
                 //逆に不適切な場合にはステータス：400が返される。
                 //したがって認証情報が不適切な場合(401)にはnon_field_errorsが返されることは全くない
 
 
-                print("レスポンスを回収")
+
                 println(response.code())
                 if (response.isSuccessful) {
                     //println(response.body())
@@ -267,7 +257,7 @@ class LogInFragment : Fragment() {
 
                 } else if (response.isSuccessful == false) {
                     //nullが返される
-                    println(response.errorBody().toString())//?.non_field_errors
+                    println(response.errorBody())//?.non_field_errors
                     println(response.message())
 
                     //誤りの場合にはToastを表示してログイン画面は継続させる

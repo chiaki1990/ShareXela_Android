@@ -19,19 +19,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [SignUpFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 
 
@@ -65,7 +58,6 @@ class SignUpFragment : Fragment() {
 
 
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -83,12 +75,9 @@ class SignUpFragment : Fragment() {
                 //エラーを表示する
                 //layoutInputの仕様を確認する
 
-
             }else{
                 trySignUp(inputEmailAdderss, inputPassword1, inputPassword2)
             }
-
-
 
         }
     }
@@ -96,10 +85,7 @@ class SignUpFragment : Fragment() {
 
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -115,20 +101,10 @@ class SignUpFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
+
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun finishActivity()
     }
 
     companion object {
@@ -153,6 +129,10 @@ class SignUpFragment : Fragment() {
 
 
     private fun trySignUp(email: String, password1: String, password2: String) {
+        //ユーザー登録が成功できたらcode:201が返る
+        //既登録メールアドレスの場合は失敗 code:400が返る
+
+
         //password1とpassword2が一致しているので、考えるべきところはemailが使われていないかどうか
 
         val retrofit = Retrofit.Builder()
@@ -163,8 +143,9 @@ class SignUpFragment : Fragment() {
         service.signup(email, password1, password2).enqueue(object :Callback<AuthModel>{
 
             override fun onResponse(call: Call<AuthModel>, response: Response<AuthModel>) {
+                println("onResponseを通る")
 
-                if (response.isSuccessful){
+                if (response.code() == 201){
                     val key = response.body()?.key
                     authToken = key
 
@@ -188,7 +169,19 @@ class SignUpFragment : Fragment() {
                     println("確認用；authToken ...." + authToken)
 
                     println("確認用 : "+ sharedPreferences.getString(getString(R.string.SP_KEY_AUTH_TOKEN), "authTokenは存在しない"))
+                    listener!!.finishActivity()
+                    return
 
+                }else if (response.code() == 400){
+                    //print("既登録Eメールアドレス")
+                    makeToast(MyApplication.appContext, "このメールアドレスはすでに登録されています。")
+                    return
+                }
+                else{
+                    println(response.body())
+                    println(response.message())
+                    println(response.errorBody())
+                    return
                 }
             }
 

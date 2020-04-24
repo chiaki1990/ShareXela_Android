@@ -27,7 +27,7 @@ class MySolicitarRecyclerViewAdapter(val dataArrayList: ArrayList<SolicitudSeria
 
     override fun onBindViewHolder(holder: MySolicitarRecyclerViewAdapter.MyViewHolder, position: Int) {
 
-        holder.userName.text = dataArrayList[position].applicant.user!!.username
+        holder.userName.text = dataArrayList[position].applicant!!.user!!.username
         holder.message.text = dataArrayList[position].message
 
         //println(dataArrayList[position].applicant.username)

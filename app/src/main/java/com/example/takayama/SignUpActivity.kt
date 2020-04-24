@@ -31,8 +31,9 @@ class SignUpActivity : AppCompatActivity(), SignUpFragment.OnFragmentInteraction
             .commit()
     }
 
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("Not yet implemented")
+    override fun finishActivity() {
+        finish()
     }
+
 
 }

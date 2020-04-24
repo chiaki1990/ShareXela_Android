@@ -15,11 +15,23 @@
     <string name="menu_send">Send</string>
 
 
+    <!-- カテゴリーのリスト -->
     <string-array name="categoryList">
         <item>Donar o vender</item>
         <item>Buscar ayuda</item>
         <item>Anunciate</item>
     </string-array>
+
+
+    <!-- ナビゲーションドロワー -->
+    <string name="drawer_menu_signIn">ログイン</string>
+    <string name="drawer_menu_signUp">ユーザー登録</string>
+    <string name="drawer_menu_notification">通知</string>
+    <string name="drawer_menu_myList">マイリスト</string>
+    <string name="drawer_menu_profile">プロフィール</string>
+    <string name="drawer_menu_settings">設定</string>
+    <string name="drawer_menu_others">その他</string>
+    <string name="drawer_menu_signOut">サインアウト</string>
 
 
     <!-- Master -->
@@ -64,6 +76,7 @@
     <!--        Toast Message -->
     <string name="title_o_description_blank_message">記事タイトル、記事説明に入力がありません。記入してください。</string>
     <string name="success_crear_articlo_message">記事を作成しました。</string>
+
 
     <!-- Solicitar -->
     <!--        title -->
@@ -115,6 +128,9 @@
     <!--        widget -->
     <string name="fragment_solicitar_decide_btnDecideSolicitar_text">取引相手として決定する</string>
     <string name="fragment_solicitar_decide_tvTitleMessage">メッセージ</string>
+    <!--        FragmentTag -->
+    <string name="fragment_tag_choose_solicitud">choose_solicitud</string>
+    <string name="fragment_tag_make_solicitud_message">make_solicitud_message</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -123,4 +139,6 @@
     <string name="title_activity_others">OthersActivity</string>
     <string name="title_activity_direct_message">DirectMessageActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_item_contact">ItemContactActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
 </resources>

@@ -124,7 +124,7 @@ class MasterActivity : AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.menuLogIn -> {
+            R.id.menuSignIn -> {
                 //ログイン済みであれば実行しない
                 if (MyApplication.loginStatus == true){
                     makeToast(this@MasterActivity, getString(R.string.login_status_true))
@@ -144,15 +144,17 @@ class MasterActivity : AppCompatActivity(),
                 //sendSignUpActivity()
                 sendSignUpActivity(this@MasterActivity)
                  }
-            R.id.menuProfile -> {
+
+            R.id.menuNotification -> {
                 //未ログインであれば実行しない
                 if (MyApplication.loginStatus == false){
                     makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
                     return true
                 }
-
-                sendProfileActivity(this@MasterActivity)
+                //sendNotificationActivity()
+                sendNotificationActivity(this@MasterActivity)
             }
+
             R.id.menuMyList -> {
                 //ログイン済みであれば実行しない
                 if (MyApplication.loginStatus == false){
@@ -164,12 +166,27 @@ class MasterActivity : AppCompatActivity(),
                     .commit()
             }
 
+            R.id.menuProfile -> {
+                //未ログインであれば実行しない
+                if (MyApplication.loginStatus == false){
+                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
+                    return true
+                }
+
+                sendProfileActivity(this@MasterActivity)
+            }
+
+            R.id.menuSettings -> {
+                //未設定
+
+            }
 
             R.id.menuOthers -> {
                 val intent = Intent(this, OthersActivity::class.java)
                 startActivity(intent)
             }
-            R.id.menuLogOut -> {
+
+            R.id.menuSignOut -> {
                 //logoutを実行してToastで表示する
                 if (MyApplication.loginStatus == false){
                     makeToast(this@MasterActivity, "ログインしていません。")
@@ -185,6 +202,10 @@ class MasterActivity : AppCompatActivity(),
                         if (detail == "Successfully logged out."){
                             MyApplication.loginStatus = false
                             makeToast(this@MasterActivity, "ログアウトしました")
+
+                            //SPにログアウトした旨を記述する
+
+
                         }
                     }
 

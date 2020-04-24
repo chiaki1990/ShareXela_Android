@@ -3,14 +3,23 @@ package com.example.takayama
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+
 import android.util.Log
 import android.widget.Toast
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+
+
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -34,6 +43,36 @@ fun getAuthTokenHeader(authToken: String?): String?{
     if (authToken == "" || authToken == null) return null
     return " Token " + authToken
 }
+
+
+
+//SharedPreferencesインスタンスを取得する。
+// またインスタンスは、APIレベルによって暗号化させるかさせないかの性質が変わる。
+fun getSharedPreferencesInstance(): SharedPreferences{
+    lateinit var sharedPreferences:SharedPreferences;
+
+    val SP_XML = "SESSION_MANAGE"
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+         sharedPreferences= MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
+        //return sharedPreferences
+        //return MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
+
+    } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+
+        val sharedPreferences = EncryptedSharedPreferences.create(
+            Fragment().getString(R.string.LOGIN_SHARED_PREFERENCES),
+            masterKeyAlias,
+            MyApplication.appContext,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+    return sharedPreferences
+}
+
 
 
 //MainActivityに画面遷移させる
@@ -62,6 +101,23 @@ fun sendCrearArticuloActivity(context: Context){
     val intent = Intent(context, CrearArticuloActivity::class.java)
     context.startActivity(intent)
 }
+
+
+fun sendItemContactActivity(context:Context, itemObjId:Int){
+    val intent = Intent(context, ItemContactActivity::class.java).apply {
+        putExtra("itemObjId", itemObjId)
+    }
+
+    context.startActivity(intent)
+}
+
+
+fun sendNotificationActivity(context: Context){
+    val intent = Intent(context, NotificationActivity::class.java)
+    context.startActivity(intent)
+}
+
+
 
 /*
 fun sendDetailActivity(context: Context){

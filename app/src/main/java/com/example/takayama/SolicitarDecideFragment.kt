@@ -18,14 +18,11 @@ import retrofit2.Response
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [SolicitarDecideFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [SolicitarDecideFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
+
+
+
+
 class SolicitarDecideFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var selectedSolicitud: SolicitudSerializerModel? = null
@@ -48,10 +45,12 @@ class SolicitarDecideFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        println(selectedSolicitud)
+
         //Solicitudインスタンスのデータの取得
         val userName:String = selectedSolicitud!!.applicant!!.user!!.username!!
         val message:String? = selectedSolicitud!!.message
-        val profileImage = selectedSolicitud!!.applicant.image
+        val profileImage = selectedSolicitud!!.applicant!!.image
         val profileImageUrl = BASE_URL + profileImage!!.substring(1)
 
         //取得したデータを画面へ反映
@@ -65,7 +64,7 @@ class SolicitarDecideFragment : Fragment() {
             //いきなりDirectMessageActivityを開いても駄目で、一度SolicitudインスタンスのacceptedをTrueに変更する必要がある。
             val service = setService()
             val authTokenHeader = " Token " + authToken
-            service.patchSolicitudAPIView(authTokenHeader=authTokenHeader, solicitudObjId=selectedSolicitud!!.id).enqueue(object :
+            service.patchSolicitudAPIView(authTokenHeader=authTokenHeader, solicitudObjId=selectedSolicitud!!.id!!).enqueue(object :
                 Callback<ResultModel>{
 
                 override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
@@ -77,7 +76,7 @@ class SolicitarDecideFragment : Fragment() {
                         //取引画面へ移動するアクティビティを起動するためにコールバックを実行する
                         //引数として渡すものを考えておく。おそらくItemSerializerModelを渡すのが良いと思われる
                         // selectedSolicitud.itemはItemSerializerModelとして使うことができる
-                        val itemObj: ItemSerializerModel = selectedSolicitud!!.item
+                        val itemObj: ItemSerializerModel = selectedSolicitud!!.item!!
                         listener!!.launchDirectMessageActivity(itemObj)
                     }
 
@@ -87,12 +86,7 @@ class SolicitarDecideFragment : Fragment() {
                     println("onFailureを通る。")
 
                 }
-
-
             })
-
-
-
         }
     }
 

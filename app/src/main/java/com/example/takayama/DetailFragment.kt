@@ -61,10 +61,7 @@ class DetailFragment : Fragment() {
             findItem(R.id.action_settings).isVisible = true
             //findItem(R.id.menuBottomSolicitar).isVisible = false
         }
-
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
@@ -79,13 +76,11 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
     }
 
 
     override fun onResume() {
         super.onResume()
-
 
         //サーバーとやり取りして画面を描画する
         //itemIdを起点にItemオブジェクトデータを取得する
@@ -106,6 +101,9 @@ class DetailFragment : Fragment() {
                     val itemTitle = itemObj.title
                     val itemDescription = itemObj.description
                     val itemCreatedAt = itemObj.created_at
+                    val d = dateFormat.parse(itemCreatedAt)
+                    val strDate = showDateFormat.format(d)
+
                     //価格は後で実装する
                     val itemImage1 = itemObj.image1
                     val itemAdm0 = itemObj.adm0
@@ -115,8 +113,8 @@ class DetailFragment : Fragment() {
                     //val itemPoint = response.body()!!.item_obj_serializer.
                     val itemCategory = response.body()!!.item_obj_serializer.category.name
 
-                    val hoge = response.body()!!.item_contact_objects_serializer
-                    println("itemContact   " + hoge)
+                    val ItemContactObjects = response.body()!!.item_contact_objects_serializer
+                    println("itemContact   " + ItemContactObjects)
                     val solicitud_objects: ArrayList<SolicitudSerializerModel> = response.body()!!.SOLICITUD_OBJECTS_SERIALIZER
                     val btnChoice = response.body()!!.BTN_CHOICE
                     println("BTNcHOICE  : "+btnChoice)
@@ -125,13 +123,29 @@ class DetailFragment : Fragment() {
                     //画面にデータを描画する
                     tvItemTitle.text = itemTitle
                     tvItemDescription.text = itemDescription
-                    tvCreatedAt.text = itemCreatedAt
+                    //tvCreatedAt.text = itemCreatedAt
+                    tvCreatedAt.text = strDate
                     tvCategoryContent.text = itemCategory
                     tvDealAreaAdm1.text = itemAdm1
                     tvDealAreaAdm2.text = itemAdm2
                     val imageUrl = BASE_URL + itemImage1!!.substring(1)
                     println(imageUrl)
                     Glide.with(MyApplication.appContext).load(Uri.parse(imageUrl)).into(ivItemDetail)
+
+                    //ItemContactObjectsの表示
+                    if (ItemContactObjects.size != 0){
+
+                        //新しいものから上に表示
+                        for (numero in 0..ItemContactObjects.size-1){
+                            when (numero){
+                                0 -> { tvItemContact0.text = ItemContactObjects[0].message }
+                                1 -> { tvItemContact1.text = ItemContactObjects[1].message }
+                                2 -> { tvItemContact2.text = ItemContactObjects[2].message }
+                                3 -> { tvItemContact3.text = ItemContactObjects[3].message }
+                                4 -> { tvItemContact4.text = ItemContactObjects[4].message }
+                            }
+                        }
+                    }
 
 
                     //btnChoiceによって下部バーボタンの内容を表示する
@@ -144,14 +158,18 @@ class DetailFragment : Fragment() {
                         btnSolicitado.visibility = View.GONE
 
                         //コメントを一覧するビューを作成するそして、その画面へ遷移させる
-                        btnCommentBottom.setOnClickListener {  }
-                        btnComment.setOnClickListener {  }
+                        btnCommentBottom.setOnClickListener {
+                            //コメントを一覧するfragまたはActivity
+                            //アクティビティを新たに作成する。
+                            listener!!.launchItemContactActivity(itemObj.id!!)
+                        }
+                        btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
 
                         //申請するボタンを押すとwarningをToastで表示する
                         btnSolicitar.setOnClickListener {
                             makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
                         }
-                        return
+
                     }
                     if (btnChoice == BtnChoice.SOLICITAR.name){
                         //描画内容 -> "申請する"を表示する
@@ -162,17 +180,36 @@ class DetailFragment : Fragment() {
                         btnSolicitar.visibility = View.VISIBLE
                         btnCommentBottom.visibility = View.VISIBLE
 
-                        btnCommentBottom.setOnClickListener {  }
-                        btnComment.setOnClickListener {  }
+                        btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
+                        btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
 
                         //申請するボタンを押すと、申請メッセージフォーム画面遷移する。
-                        btnSolicitar.setOnClickListener{  }
-                        return
+                        btnSolicitar.setOnClickListener{
+                            //要するにsolicitudオブジェクトを生成するAPIを叩き画面遷移する。
+
+                            //以下の引数が異なる。これは各アイテムのオブジェクトIDに対応するものだから。
+                            listener!!.launchSolicitarMessageMakingFragment(itemObj, getString(R.string.fragment_tag_make_solicitud_message))
+
+                        }
                     }
+
+                    //ユーザーが出品者以外である場合&&取引相手がまだ決まっていない場合
                     if (btnChoice == BtnChoice.SOLICITADO.name){
-                        //Todo あとで記述する
-                        return
+
+                        //描画内容 -> "申請する"を表示するがボタン押せない(申請済みだから)
+                        btnTransaction.visibility = View.GONE
+                        btnShowFail.visibility = View.GONE
+                        btnSolicitado.visibility = View.VISIBLE
+                        btnSelectSolicitudes.visibility = View.GONE
+                        btnSolicitar.visibility = View.GONE
+                        btnCommentBottom.visibility = View.VISIBLE
+
+                        btnSolicitado.setOnClickListener { makeToast(MyApplication.appContext, "すでに申請済みです。") }
+
+                        btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
+                        btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
                     }
+
                     //ユーザーが出品者である場合&&申請者が現れていない場合
                     if (btnChoice == BtnChoice.NO_SOLICITUDES.name){
                         //"コメント"を表示させる
@@ -183,6 +220,9 @@ class DetailFragment : Fragment() {
                         btnSelectSolicitudes.visibility = View.VISIBLE
                         btnSelectSolicitudes.isEnabled = false
                         btnCommentBottom.visibility = View.VISIBLE
+
+                        btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
+                        btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj.id!!) }
 
                     }
 
@@ -198,7 +238,7 @@ class DetailFragment : Fragment() {
 
                         btnSelectSolicitudes.setOnClickListener {
                             //SolicitarActivityを起動する
-                            listener!!.launchSolicitarActivity(solicitud_objects)
+                            listener!!.launchSolicitarActivity(solicitud_objects, getString(R.string.fragment_tag_choose_solicitud))
                         }
 
                     }
@@ -227,11 +267,7 @@ class DetailFragment : Fragment() {
                 println("onFailureを通過")
                 println(t)
             }
-
-
         })
-
-
     }
 
 
@@ -251,27 +287,23 @@ class DetailFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
     interface OnFragmentInteractionListener {
 
         //DetailActivityでMainActivityに画面遷移させるためのコールバック
         fun onSearchMenuSelected()
 
         //SolicitarActivityに画面遷移させるためのコールバック
-        fun launchSolicitarActivity(solicitud_objects: ArrayList<SolicitudSerializerModel>)
+        fun launchSolicitarActivity(solicitud_objects: ArrayList<SolicitudSerializerModel>, tag: String)
 
         //DirectMessageActivityに画面遷移させるためのコールバック
         fun launchDirectMessageActivity(itemObj:ItemSerializerModel)
+
+        // ItemContactActivityに画面遷移させるためのコールバック
+        fun launchItemContactActivity(itemObjId: Int)
+
+        //fun launchSolicitar
+        fun launchSolicitarMessageMakingFragment(itemObj:ItemSerializerModel, tag: String)
     }
 
     companion object {

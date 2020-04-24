@@ -280,5 +280,5 @@ class SearchMenuFragment : Fragment() {
             }
         })
     }
-    
+
 }

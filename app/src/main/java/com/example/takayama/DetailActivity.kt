@@ -8,6 +8,9 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_detail.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteractionListener {
 
@@ -44,12 +47,30 @@ class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteraction
     }
 
     //DetailFragment.OnFragmentInteractionListener#launchSolicitarActivity
-    override fun launchSolicitarActivity(solicitud_objects: ArrayList<SolicitudSerializerModel>) {
+    override fun launchSolicitarActivity(solicitud_objects: ArrayList<SolicitudSerializerModel>, launchFragmentTag :String) {
 
         val intent = Intent(this@DetailActivity, SolicitarActivity::class.java)
         intent.putExtra("solicitud_objects", solicitud_objects )
+        intent.putExtra("launchFragmentTag", launchFragmentTag)
         startActivity(intent)
     }
+
+
+
+    override fun launchSolicitarMessageMakingFragment(itemObj:ItemSerializerModel, tag: String){
+
+        val launchFragmentTag = "SolicitarMessageMakingFragment"
+        val intent = Intent(this@DetailActivity, SolicitarActivity::class.java).apply {
+            putExtra("launchFragmentTag", launchFragmentTag)
+            putExtra("itemObj",itemObj)
+        }
+        startActivity(intent)
+
+    }
+
+
+
+
 
     //DetailFragment.OnFragmentInteractionListener#launchDirectMessageActivity
     override fun launchDirectMessageActivity(itemObj: ItemSerializerModel) {
@@ -60,4 +81,33 @@ class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteraction
     }
 
 
+    override fun launchItemContactActivity(itemObjId: Int) {
+        //引数を送った先のActivity,Fragmentで使うのではなく、先にクエリの結果を取得しそれをFragmentに与える方法に変更する。
+
+        //itemContactObjectsを取得し描画する。
+        val service = setService()
+        val authTokenHeader = getAuthTokenHeader(authToken)
+        if (authTokenHeader == null) return
+        service.getItemContactListAPIView(authTokenHeader, itemObjId!!).enqueue(object :
+            Callback<ItemContactListAPIViewModel> {
+
+            override fun onResponse(call: Call<ItemContactListAPIViewModel>, response: Response<ItemContactListAPIViewModel>) {
+                println("onResponseを通る  ")
+                println(response.body())
+                val itemContectObjects: ItemContactListAPIViewModel = response.body()!!
+
+                val intent = Intent(this@DetailActivity, ItemContactActivity::class.java).apply {
+                    putExtra("itemContactObjects", itemContectObjects)
+                }
+                startActivity(intent)
+
+            }
+
+            override fun onFailure(call: Call<ItemContactListAPIViewModel>, t: Throwable) {
+                println(" onFailureを通る  ")
+                println(t)
+                println(t.message)
+            }
+        })
+    }
 }

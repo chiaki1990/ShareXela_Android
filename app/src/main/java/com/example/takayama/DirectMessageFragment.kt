@@ -61,7 +61,9 @@ class DirectMessageFragment : Fragment() {
                     val dataArrayList : ArrayList<DirectMessageContentSerializerModel> = response.body()!!.DM_CONTENT_OBJECTS_SERIALIZER
 
                     //リサイクラービューを実装する
-                    val layoutManager = LinearLayoutManager(MyApplication.appContext)
+                    val layoutManager = LinearLayoutManager(MyApplication.appContext).apply {
+                        stackFromEnd = true
+                    }
                     recyclerViewDirectMessage.layoutManager = layoutManager
                     recyclerViewDirectMessage.adapter = MyDirectMessageRecyclerViewAdapter(dataArrayList, listener!!)
 
@@ -85,6 +87,8 @@ class DirectMessageFragment : Fragment() {
                                 if (result == "success"){
                                     //Toastで送信できた旨を出力する
                                     makeToast(MyApplication.appContext, "メッセージを送信しました。")
+
+                                    textInputEditTextDirectMessage.setText("")
 
                                     //画面を更新する。
                                     onResume()

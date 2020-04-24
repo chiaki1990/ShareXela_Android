@@ -102,6 +102,27 @@ interface ShareXelaService {
 
 
 
+    /* ItemContactオブジェクト */
+
+    // api/views.py ItemContactListAPIView#getに連結する
+    @GET("api/item/{id}/item_contacts/")
+    fun getItemContactListAPIView(@Header("Authorization") authTokenHeader: String, @Path("id") itemObjId:Int): Call<ItemContactListAPIViewModel>
+
+
+    // api/views.py ItemContactListByContactObjAPIView#getに連結する
+    @GET("api/item_contact/{id}/item_contacts/")
+    fun getItemContactListByContactObjPKAPIView(@Header("Authorization") authTokenHeader: String, @Path("id") itemContactObjId:Int): Call<ItemContactListAPIViewModel>
+
+
+    // api/views.py ItemContactAPIView#postに連結する
+    @POST("api/contacts/")
+    fun postContactInstance(@Header("Authorization") authToken: String?, @Body contact:ContactSerializerModel): Call<ResultModel>
+
+
+
+
+
+
     /*  django: profiles.models.Profile           */
 
 
@@ -158,32 +179,44 @@ interface ShareXelaService {
 
 
 
-    /*  django: contacts.models.Contact      */
-
-    //ContactModelに関するデータを送信する
-    @POST("api/contacts/")
-    fun postContactInstance(@Header("Authorization") authToken: String?, @Body contact:ContactSerializerModel): Call<ResultModel>
-
-
 
 
     /* django: direct_messages/models.py DirectMessage, DirectMessageContent  */
 
-
     // api/views.DirectMessageContentListAPIView#getに連結する
-    @GET("api/direct_message/{id}/")
+    @GET("api/item/{id}/direct_message_content_list/")
     fun getDirectMessageContentListAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") itemObjId: Int): Call<DirectMessageContentListAPIView>
-
 
     // api/views.DirectMessageContentAPIView#postに連結する
     @POST("api/direct_message_content/{id}/")
     fun postDirectMessageContentAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") itemObjId: Int, @Body directMessageContent:DirectMessageContentSerializerModel): Call<ResultModel>
 
+    //
+    @GET("api/direct_message_content/{id}/ritem/")
+    fun getItemObjByDirectMessageContentObjPKAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") DirectMessageContentObjId: Int): Call<ItemSerializerModel>
+
+
+    /*  django: solicitudes.models.Solicitud      */
+
+    // api/views.py SolicitudAPIView#getに連結する
+    @GET("api/solicitud/{id}/")
+    fun getSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int):Call<SolicitudAPIViewModel>
+
+    // api/views.SolicitudAPIView#postに連結する
+    @POST ("api/solicitud/")
+    fun postSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Body solicitudObj: SolicitudSerializerModel): Call<ResultModel>
 
     // api/views.SolicitudAPIView#patchに連結する
     @PATCH("api/solicitud/{id}/")
     fun patchSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int): Call<ResultModel>
 
+
+
+    /* django: avisos/models.py Aviso       */
+
+    /* django: avisos/views.AvisosAllListAPIView#getに連結する */
+    @GET("api/avisos/list/")
+    fun getAvisosAllListAPIView(@Header("Authorization") authTokenHeader: String?):Call<AvisosAllListAPIViewModel>
 
 
 }

@@ -3,31 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <item
-        android:id="@+id/menuLogIn"
+        android:id="@+id/menuSignIn"
         android:icon="@drawable/ic_check_box_black_24dp"
-        android:title="Login" />
+        android:title="@string/drawer_menu_signIn" />
     <item
         android:id="@+id/menuSignUp"
-        android:title="SignUp" />
+        android:title="@string/drawer_menu_signUp" />
     <item
-        android:id="@+id/menuContact"
-        android:title="コンタクト" />
+        android:id="@+id/menuNotification"
+        android:title="@string/drawer_menu_notification" />
     <item
         android:id="@+id/menuMyList"
-        android:title="MyList" />
+        android:title="@string/drawer_menu_myList" />
     <item
         android:id="@+id/menuProfile"
         android:icon="@drawable/ic_face_black_24dp"
-        android:title="Profile" />
+        android:title="@string/drawer_menu_profile" />
     <item
         android:id="@+id/menuSettings"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Setting" />
+        android:title="@string/drawer_menu_settings" />
     <item
-        android:id="@+id/menuLogOut"
+        android:id="@+id/menuSignOut"
         android:icon="@drawable/ic_check_box_outline_blank_black_24dp"
-        android:title="Logout" />
+        android:title="@string/drawer_menu_signOut" />
     <item
         android:id="@+id/menuOthers"
-        android:title="others" />
+        android:title="@string/drawer_menu_others" />
 </menu>
