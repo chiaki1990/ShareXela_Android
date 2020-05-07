@@ -3,6 +3,7 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- 通知メニューが真っ白になるので削除した https://minpro.net/status-bar-white -->
+        <!--item name="android:statusBarColor">@android:color/transparent</item-->
     </style>
 </resources>

@@ -1,14 +1,24 @@
 package com.example.takayama
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+
+
+
+
+
 class ServiceProfile {
+
+
 
 
     companion object{
@@ -21,9 +31,9 @@ class ServiceProfile {
                 .build()
 
             var service = retrofit.create(ShareXelaService::class.java)
-            service.patchProfile(authToken, profile).enqueue(object: Callback<ResultModel> {
+            service.patchProfile(authToken, profile).enqueue(object: Callback<profileResultModel> {
 
-                override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
+                override fun onResponse(call: Call<profileResultModel>, response: Response<profileResultModel>) {
 
                     println("onResponse")
 
@@ -35,7 +45,14 @@ class ServiceProfile {
                     println(response.body())
 
 
-                    //送信が成功したら内容を反映させる
+                    //送信が成功したら内容を反映させる(エリア設定が終わったらProfileデータを取得)
+                    val profileObj = response.body()!!.PROFILE_OBJ
+
+                    println("profileObjの更新をServiceProfile#patchで行う")
+                    println(profileObj)
+
+                    sessionData.profileObj = profileObj
+
 
 
                     //トーストで成功の旨を表示(overrideでToastを実行する)
@@ -44,9 +61,13 @@ class ServiceProfile {
 
                     //変更したらフラグメントを終わらせるのはどうか？
                     //終わらせるならreplaceは良くないのか？
+                    //ProfileActivity().supportFragmentManager.beginTransaction().replace(R.id.frameLayoutProfile, ProfileListFragment.newInstance("","")).commit()
+
+
+
                 }
 
-                override fun onFailure(call: Call<ResultModel>, t: Throwable) {
+                override fun onFailure(call: Call<profileResultModel>, t: Throwable) {
 
                     println(t.message)
                     //送信失敗している旨を表示(overrideでToastを実行する)

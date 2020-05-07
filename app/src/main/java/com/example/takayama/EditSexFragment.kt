@@ -16,14 +16,10 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [EditSexFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [EditSexFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
+
+
+
 class EditSexFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -53,11 +49,12 @@ class EditSexFragment : Fragment() {
 
         //リスナーの設定
         btnChangeSex.setOnClickListener {
+
             //RadioGroupでセットされている。
             when (rgSex.checkedRadioButtonId){
-                R.id.rbNoAnswer -> ServiceProfile.patchProfile(authToken= authToken!!, profile= ProfileSerializerModel(sex=0), context=MyApplication.appContext)
-                R.id.rbMale -> ServiceProfile.patchProfile(authToken= authToken!!, profile=ProfileSerializerModel(sex=1), context=MyApplication.appContext)
-                R.id.rbFemale -> ServiceProfile.patchProfile(authToken= authToken!!, profile=ProfileSerializerModel(sex=2), context=MyApplication.appContext)
+                R.id.rbNoAnswer -> ServiceProfile.patchProfile(authToken= sessionData.authTokenHeader!!, profile= ProfileSerializerModel(sex=0), context=MyApplication.appContext)
+                R.id.rbMale -> ServiceProfile.patchProfile(authToken= sessionData.authTokenHeader!!, profile=ProfileSerializerModel(sex=1), context=MyApplication.appContext)
+                R.id.rbFemale -> ServiceProfile.patchProfile(authToken= sessionData.authTokenHeader!!, profile=ProfileSerializerModel(sex=2), context=MyApplication.appContext)
 
             }
         }
@@ -88,14 +85,8 @@ class EditSexFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditSexFragment.
-         */
+
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

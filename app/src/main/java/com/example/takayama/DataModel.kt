@@ -1,5 +1,7 @@
 package com.example.takayama
 
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import java.io.Serializable
 
 
@@ -16,16 +18,38 @@ APIViewの結果を解析するための各Modelに対応するdataクラスは�
 
  */
 
+data class SessionData(
+    var profileObj: ProfileSerializerModel? = null,
+    var logInStatus: Boolean = false,
+    var authTokenHeader: String? = null
+)
+
+
+
+
 data class ResultModel(
     var result: String,
     var detail: String
 )
 
 
-data class AuthModel(
+data class profileResultModel(
+    var result: String,
+    var detail: String,
+    var PROFILE_OBJ: ProfileSerializerModel
+)
 
+data class CheckTokenResult(
+    var result: String,
+    var PROFILE_OBJ: ProfileSerializerModel,
+    var key: String
+)
+
+
+data class AuthModel(
     var key:String?,
-    var non_field_errors: String?
+    var non_field_errors: String?,
+    var PROFILE_OBJ: ProfileSerializerModel?
 
     //{ "key": "ebfa00bd84de2b8f319b747636270257ec24601c" }
     //{ "non_field_errors": [ "Unable to log in with provided credentials." ] }
@@ -47,14 +71,36 @@ data class AreaSet(
 )
 */
 
+
+
+
+/*
 data class RegionListSet(
 
     var ADM0_LIST: ArrayList<String>,
     var ADM1_LIST: ArrayList<String>,
     var ADM2_LIST: ArrayList<String>
 )
+*/
 
 
+data class RegionListSet(
+
+    var ADM0_LIST: ArrayList<String>,
+    var ADM1_LIST: ArrayList<String>,
+    var ADM2_LIST: ArrayList<String>,
+    var geoJsonData: String,
+    var muniGeoJson: String
+)
+
+
+data class RegionListSimpleSet(
+
+    var ADM0_LIST: ArrayList<String>,
+    var ADM1_LIST: ArrayList<String>,
+    var ADM2_LIST: ArrayList<String>
+
+)
 
 
 data class ItemModel(
@@ -131,7 +177,8 @@ data class ProfileSerializerModel(
     var description: String? = null,
     var point: Any? = null,         //これをどのように扱うか。
     var image: String? = null,
-    var sex: Int? = null
+    var sex: Int? = null,
+    var phoneNumber: String? = null
 ):Serializable
 
 
@@ -208,17 +255,17 @@ data class ItemDetailSerializerAPIViewModel(
 // django: api/serializers.py ItemContactSerializerに対応する
 data class ItemContactSerializerModel(
 
-    var post_user: ProfileSerializerModel,
-    var item: ItemSerializerModel,
-    var message: String,
-    var reply_user: ProfileSerializerModel,//削除予定
-    var timestamp: String
+    var post_user: ProfileSerializerModel? = null,
+    var item: ItemSerializerModel? = null,
+    var message: String? = null,
+    var timestamp: String? = null
     ):Serializable
 
 
 // django: api/views.py ItemContactListAPIViewに対応する
 data class ItemContactListAPIViewModel(
-    var ITEM_CONTACT_OBJECTS: ArrayList<ItemContactSerializerModel>
+    var ITEM_CONTACT_OBJECTS: ArrayList<ItemContactSerializerModel>,
+    var ITEM_OBJECT: ItemSerializerModel
 ):Serializable
 
 
@@ -287,7 +334,7 @@ data class AvisosAllListAPIViewModel(
 
 // django: api/serializers.py AvisoSerializerより
 data class AvisoSerializerModel(
-    var aviso_user: ProfileSerializerModel,
+    var aviso_user: ArrayList<ProfileSerializerModel>,
     var content_type: String,
     var object_id: Int,
     var content_object: contentObjectModel, //djangoのAvisoObjectRelatedFieldで便宜的に返り値をstr型に変更している為
@@ -299,4 +346,11 @@ data class AvisoSerializerModel(
 data class contentObjectModel(
     var itemName: String,
     var modelName: String
+)
+
+
+
+data class Multipolygon(
+    
+    var coordinates:Any
 )

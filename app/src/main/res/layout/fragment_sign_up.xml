@@ -7,78 +7,177 @@
     android:layout_height="match_parent"
     tools:context=".SignUpFragment">
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent">
-
-    <TextView
-        android:id="@+id/tv_space5"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Email Address"
-    app:hintAnimationEnabled="true"
-    app:hintEnabled="true">
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etEmailAdressSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress" />
-</com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_space6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/fragment_sign_up_inputLayout_hintPassword1"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword1SignUp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_space7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <View
+                android:id="@+id/basicDivider37"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/fragment_sign_up_inputLayout_hintPassword2"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true">
+            <View
+                android:id="@+id/basicDivider38"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword2SignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/fragment_sign_up_btnSignUp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Address"
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true">
 
-</LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailAdressSignUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider52"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/fragment_sign_up_inputLayout_hintPassword1"
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword1SignUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider53"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fragment_sign_up_inputLayout_hintPassword2"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword2SignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/divider54"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <Button
+                android:id="@+id/btnSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_sign_up_btnSignUp" />
+
+            <View
+                android:id="@+id/divider55"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <View
+                android:id="@+id/divider57"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <View
+                android:id="@+id/divider56"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <View
+                android:id="@+id/basicDivider40"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider41"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider42"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider43"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider44"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider45"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider46"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider49"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

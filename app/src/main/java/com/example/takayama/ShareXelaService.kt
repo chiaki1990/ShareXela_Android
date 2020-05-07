@@ -17,7 +17,7 @@ interface ShareXelaService {
     fun signup(@Field("email") email: String, @Field("password1") password1: String, @Field("password2") password2: String) : Call<AuthModel>
 
 
-    //ログインを行う
+    //Basic認証でログインを行う
     @FormUrlEncoded
     @POST("rest-auth/login/")
     fun login(@Field("email") email: String, @Field("password") password: String) : Call<AuthModel>
@@ -25,7 +25,7 @@ interface ShareXelaService {
 
     //AuthTokenで認証を行う
     @GET("api/tokencheck/")
-    fun loginWithAuthtoken(@Header("Authorization") authToken: String ): Call<AuthModel>
+    fun loginWithAuthtoken(@Header("Authorization") authToken: String ): Call<CheckTokenResult>
 
 
     //ログアウトを行う
@@ -105,8 +105,13 @@ interface ShareXelaService {
     /* ItemContactオブジェクト */
 
     // api/views.py ItemContactListAPIView#getに連結する
-    @GET("api/item/{id}/item_contacts/")
+    @GET("api/item/{id}/item_contacts/list/")
     fun getItemContactListAPIView(@Header("Authorization") authTokenHeader: String, @Path("id") itemObjId:Int): Call<ItemContactListAPIViewModel>
+
+
+    // api/views.py ItemContactAPIView#postに連結する
+    @POST("api/item_contacts/")
+    fun postItemContactAPIView(@Header("Authorization") authTokenHeader: String, @Body itemContactObj: ItemContactSerializerModel): Call<ResultModel>
 
 
     // api/views.py ItemContactListByContactObjAPIView#getに連結する
@@ -114,7 +119,12 @@ interface ShareXelaService {
     fun getItemContactListByContactObjPKAPIView(@Header("Authorization") authTokenHeader: String, @Path("id") itemContactObjId:Int): Call<ItemContactListAPIViewModel>
 
 
-    // api/views.py ItemContactAPIView#postに連結する
+
+
+
+    /* Contactオブジェクト */
+
+    // api/views.py ContactAPIView#postに連結する
     @POST("api/contacts/")
     fun postContactInstance(@Header("Authorization") authToken: String?, @Body contact:ContactSerializerModel): Call<ResultModel>
 
@@ -135,7 +145,7 @@ interface ShareXelaService {
     // api.views.ProfileAPIView#patch に連絡する
     @Headers("Content-Type:application/json")
     @PATCH("api/profiles/")
-    fun patchProfile(@Header("Authorization") authTokenHeader: String, @Body profile:ProfileSerializerModel): Call<ResultModel>
+    fun patchProfile(@Header("Authorization") authTokenHeader: String, @Body profile:ProfileSerializerModel): Call<profileResultModel>
 
 
 
@@ -160,11 +170,13 @@ interface ShareXelaService {
 
 
 
-    //トークン認証データ必要か考えること
-    @Headers("Content-Type:application/json")
-    @GET("api/area_setting/")
 
-    fun getRegionList():Call<RegionListSet>
+
+    //トークン認証データ必要か考えること
+    @GET("api/area_setting_geo/")
+    fun getRegionList(@Header("Authorization") authTokenHeader: String):Call<RegionListSet>
+
+
 
 
     //なにこれ？
@@ -219,4 +231,13 @@ interface ShareXelaService {
     fun getAvisosAllListAPIView(@Header("Authorization") authTokenHeader: String?):Call<AvisosAllListAPIViewModel>
 
 
+
+
+
+
+
+
+    @GET("api/multipoly_test/")
+    fun getMultipolygon():Call<Multipolygon>
 }
+

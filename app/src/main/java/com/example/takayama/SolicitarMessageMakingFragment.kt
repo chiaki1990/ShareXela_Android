@@ -59,10 +59,10 @@ class SolicitarMessageMakingFragment : Fragment() {
 
             //データを送信し、Solicitudインスタンスを生成する
             val service = setService()
-            val authTokenHeader = getAuthTokenHeader(authToken)
+
             val solicitudObj = SolicitudSerializerModel(item=itemObj, message=message)
 
-            service.postSolicitudAPIView(authTokenHeader, solicitudObj).enqueue(object : Callback<ResultModel>{
+            service.postSolicitudAPIView(sessionData.authTokenHeader, solicitudObj).enqueue(object : Callback<ResultModel>{
 
                 override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
                     println("onResponseを通る。　SolicitarMessageMakingFragment#onActivityCreated")

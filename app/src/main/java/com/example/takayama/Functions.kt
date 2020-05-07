@@ -1,5 +1,6 @@
 package com.example.takayama
 
+import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
@@ -13,10 +14,6 @@ import android.provider.MediaStore
 
 import android.util.Log
 import android.widget.Toast
-
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-
 
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -49,21 +46,19 @@ fun getAuthTokenHeader(authToken: String?): String?{
 //SharedPreferencesインスタンスを取得する。
 // またインスタンスは、APIレベルによって暗号化させるかさせないかの性質が変わる。
 fun getSharedPreferencesInstance(): SharedPreferences{
-    lateinit var sharedPreferences:SharedPreferences;
 
+    lateinit var sharedPreferences:SharedPreferences;
     val SP_XML = "SESSION_MANAGE"
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-         sharedPreferences= MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
-        //return sharedPreferences
-        //return MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
+         sharedPreferences = MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
 
     } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
 
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            Fragment().getString(R.string.LOGIN_SHARED_PREFERENCES),
+        sharedPreferences = EncryptedSharedPreferences.create(
+            MyApplication.appContext.getString(R.string.LOGIN_SHARED_PREFERENCES),
             masterKeyAlias,
             MyApplication.appContext,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -72,6 +67,23 @@ fun getSharedPreferencesInstance(): SharedPreferences{
     }
     return sharedPreferences
 }
+
+
+fun getAuthTokenFromSP(sharedPreferences: SharedPreferences): String? {
+
+    val authToken = sharedPreferences.getString(MyApplication.appContext.getString(R.string.SP_KEY_AUTH_TOKEN), null)
+    println("端末内のTOKENデータを表示       " +  authToken)
+    return authToken
+}
+
+
+fun getLOGIN_STATUS(sharedPreferences: SharedPreferences): Boolean{
+
+    val LOGIN_STATUS = sharedPreferences.getBoolean(MyApplication.appContext.getString(R.string.SP_KEY_LOGIN_STATUS), false)
+    return LOGIN_STATUS
+}
+
+
 
 
 
@@ -94,6 +106,7 @@ fun sendSignUpActivity(context: Context){
 
 fun sendProfileActivity(context: Context){
     val intent = Intent(context, ProfileActivity::class.java)
+    intent.putExtra(IntentKey.FragmentTag.name, FragmentTag.PROFILE_LIST.name )
     context.startActivity(intent)
 }
 
@@ -187,3 +200,8 @@ fun getDataColumn(
     }
     return null
 }
+
+
+
+
+

@@ -8,76 +8,202 @@
     tools:context=".EditProfileBasicFragment">
 
 
-<TextView
-android:id="@+id/textView"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_marginTop="16dp"
-android:text="Tu Perfil Informacion"
-android:textSize="24sp"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.5"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent" />
-
-<ImageView
-android:id="@+id/ivUserProfileImage"
-android:layout_width="50dp"
-android:layout_height="50dp"
-android:layout_marginStart="16dp"
-android:layout_marginTop="50dp"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent"
-app:srcCompat="@mipmap/ic_launcher_round" />
-
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginTop="140dp"
-android:orientation="vertical"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent">
-
-    <com.google.android.material.textfield.TextInputLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/fragment_edit_profile_basic_inputLayout_hintUserName">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etUserName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical" >
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/fragment_edit_profile_basic_inputLayout_hintDescription">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:id="@+id/basicDivider14"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:orientation="vertical">
+            <View
+                android:id="@+id/basicDivider15"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-        <Button
-            android:id="@+id/btnProfileConfirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Cambiar Perfil" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-</LinearLayout>
+                <View
+                    android:id="@+id/divider27"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/ivUserProfileImage"
+                    android:layout_width="@android:dimen/notification_large_icon_width"
+                    android:layout_height="@android:dimen/notification_large_icon_height"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
+                <View
+                    android:id="@+id/divider7"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/basicDivider17"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <View
+                    android:id="@+id/divider28"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/fragment_edit_profile_basic_inputLayout_hintUserName"
+                    android:paddingLeft="@dimen/startText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:id="@+id/divider29"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider21"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:id="@+id/divider33"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/fragment_edit_profile_basic_inputLayout_hintDescription"
+                    android:paddingStart="@dimen/startText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine|text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:id="@+id/divider35"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider20"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/divider30"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <Button
+                    android:id="@+id/btnProfileConfirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Cambiar Perfil" />
+
+                <View
+                    android:id="@+id/divider31"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/divider32"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/basicDivider22"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/basic_span"
+                    android:background="@color/backgroundColor" />
+
+                <View
+                    android:id="@+id/basicDivider23"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/basic_span"
+                    android:background="@color/backgroundColor" />
+
+                <View
+                    android:id="@+id/basicDivider24"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/basic_span"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

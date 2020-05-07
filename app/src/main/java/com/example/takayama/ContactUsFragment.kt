@@ -114,8 +114,7 @@ class ContactUsFragment : Fragment() {
     private fun createContactInstance(contact: ContactSerializerModel) {
 
         val service = setService()
-        val authTokenHeader = " Token " + authToken
-        service.postContactInstance(authTokenHeader, contact).enqueue(object : Callback<ResultModel>{
+        service.postContactInstance(sessionData.authTokenHeader, contact).enqueue(object : Callback<ResultModel>{
 
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
                 println("ONRESPONSE" + response)

@@ -192,13 +192,12 @@ class SearchMenuFragment : Fragment() {
 
     private fun executeGetItemDonarLocalListAPIView(){
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null){
+        if (sessionData.authTokenHeader == null){
             makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
             return
         }
 
-        service.getItemDonarLocalListAPIView(authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
+        service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
 
 
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
@@ -225,12 +224,11 @@ class SearchMenuFragment : Fragment() {
 
     private fun executeGetItemAyudaLocalAPIView(){
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null){
+        if (sessionData.authTokenHeader == null){
             makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
             return
         }
-        service.getItemAyudaLocalListAPIView(authTokenHeader).enqueue(object:Callback<ItemUniversalListAPIView>{
+        service.getItemAyudaLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object:Callback<ItemUniversalListAPIView>{
 
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
                 println("onResponseを通る_SearchMenuFragment#excuteGetItemAyudaLocalListAPIView")
@@ -254,12 +252,11 @@ class SearchMenuFragment : Fragment() {
 
     private fun executeGetItemAnuncioLocalListAPIView(){
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null){
+        if (sessionData.authTokenHeader == null){
             makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
             return
         }
-        service.getItemAnuncioLocalListAPIView(authTokenHeader).enqueue(object :Callback<ItemUniversalListAPIView>{
+        service.getItemAnuncioLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
 
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
                 println("onResponseを通る_SearchMenuFragment#excuteGetItemAnuncioLocalListAPIView")

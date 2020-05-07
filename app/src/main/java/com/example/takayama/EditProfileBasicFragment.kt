@@ -16,14 +16,9 @@ import kotlinx.android.synthetic.main.fragment_edit_profile_basic.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [EditProfileBasicFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [EditProfileBasicFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
+
+
 class EditProfileBasicFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -69,34 +64,32 @@ class EditProfileBasicFragment : Fragment() {
 
 
         //送信データを押したら変更を始める
-        val authTokenHeader = " Token " + authToken
+
         btnProfileConfirm.setOnClickListener {
 
             //入力内容を取得
             val inputUserName = etUserName.text.toString()
             val inputDescription = etDescription.text.toString()
 
-            var profile = ProfileSerializerModel(UserSerializerModel())
+            var profileObjForSend = ProfileSerializerModel(UserSerializerModel())
 
             //入力内容とオブジェクトのプロパティが同一のものが含まれている場合、
             // Djangoのis_valid()がFalseになってしまう。
             //したがって同一のものは送らない仕組みに変更する。
-            if (username != inputUserName ) {
-                profile.user!!.username = inputUserName
+            if (sessionData.profileObj!!.user!!.username != inputUserName ) {
+                profileObjForSend.user!!.username = inputUserName
             }
-            if (description != inputDescription){
-                profile.description = inputDescription
+            if (sessionData.profileObj!!.description != inputDescription){
+                profileObjForSend.description = inputDescription
             }
 
-            if (username == inputUserName && description == inputDescription){
+            if (sessionData.profileObj!!.user!!.username == inputUserName && sessionData.profileObj!!.description == inputDescription){
                 makeToast(MyApplication.appContext, "内容が変更されていません。")
             }else {
 
                 //retrofitで送信する
-                ServiceProfile.patchProfile(authToken=authTokenHeader, profile=profile, context=MyApplication.appContext )
+                ServiceProfile.patchProfile(authToken= sessionData.authTokenHeader!!, profile=profileObjForSend, context=MyApplication.appContext )
 
-                username = inputUserName
-                description = inputDescription
             }
         }
 
@@ -106,10 +99,17 @@ class EditProfileBasicFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         //画面を描画する
+
+        /* 改修パート
         etUserName.setText(username)
         etDescription.setText(description)
         Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
+        */
 
+        etUserName.setText(sessionData.profileObj!!.user!!.username)
+        etDescription.setText(sessionData.profileObj!!.description)
+        val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
+        Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
     }
 
 
@@ -135,7 +135,6 @@ class EditProfileBasicFragment : Fragment() {
     interface OnFragmentInteractionListener {
 
         fun onClickProfileImage()
-
 
     }
 

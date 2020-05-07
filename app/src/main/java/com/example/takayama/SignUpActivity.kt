@@ -1,5 +1,6 @@
 package com.example.takayama
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -7,12 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
+
 class SignUpActivity : AppCompatActivity(), SignUpFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "ユーザー登録"
 
         //バックボタンを実装
         toolbar.apply {
@@ -20,18 +23,20 @@ class SignUpActivity : AppCompatActivity(), SignUpFragment.OnFragmentInteraction
             setNavigationOnClickListener { finish() }
         }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
 
         //フラグメントの起動
         supportFragmentManager.beginTransaction()
-            .add(R.id.frameLayoutSignUp, SignUpFragment.newInstance("param1","param2"), "TAG")
+            .add(R.id.frameLayoutSignUp, SignUpFragment.newInstance("",""), "TAG")
             .commit()
     }
 
-    override fun finishActivity() {
+
+    override fun sendEditAreaInfoFragment() {
+        val intent = Intent(this@SignUpActivity, ProfileActivity::class.java).apply {
+            putExtra(IntentKey.FragmentTag.name, FragmentTag.PROFILE_EDIT_AREA.name)
+        }
+        startActivity(intent)
         finish()
     }
 

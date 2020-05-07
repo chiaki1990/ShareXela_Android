@@ -21,68 +21,152 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivItemDetail"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                tools:src="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/tv_span7"
+            <View
+                android:id="@+id/basicDivider39"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/tvItemTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ItemTitle"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-            <TextView
-                android:id="@+id/tvCreatedAt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text='"hhhh/MM/dd HH:mm"'
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
             <LinearLayout
-                android:id="@+id/linearLayoutActionPart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnFavorite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/fragment_detail_btn_text_btnFavorite" />
+                <View
+                    android:id="@+id/divider51"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/ivItemDetail"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
+                    android:layout_gravity="center"
+                    tools:src="@tools:sample/avatars" />
 
-                <Button
-                    android:id="@+id/btnComment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/fragment_detail_btn_text_btnComment" />
+                <View
+                    android:id="@+id/divider58"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider48"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvItemTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="ItemTitle"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+                <View
+                    android:id="@+id/divider59"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <TextView
+                    android:id="@+id/tvCreatedAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingRight="@dimen/startText"
+                    android:text='"hhhh/MM/dd HH:mm"'
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:id="@+id/divider60"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider47"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/divider73"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutActionPart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnFavorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_detail_btn_text_btnFavorite" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TextView" />
+
+                    <Button
+                        android:id="@+id/btnComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="💬コメント" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TextView" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider72"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/divider74"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider50"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:layout_weight="1"
+                android:background="@color/backgroundColor" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutAreaInfo"
@@ -91,21 +175,25 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_span2"
+                    android:id="@+id/tvDealAreaTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="@string/fragment_detail_TextView_tvDealAreaTitle"
+                    android:textColor="@color/colorAccent" />
+
+                <View
+                    android:id="@+id/divider61"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvDealAreaTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_detail_TextView_tvDealAreaTitle" />
 
                     <TextView
                         android:id="@+id/tvDealAreaAdm1"
@@ -123,11 +211,11 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_span1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                <View
+                    android:id="@+id/divider62"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
                 <FrameLayout
                     android:id="@+id/framLayoutAreaMap"
@@ -136,46 +224,184 @@
 
                 </FrameLayout>
 
+                <View
+                    android:id="@+id/divider75"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvItemDescription"
+            <View
+                android:id="@+id/basicDivider51"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="説明" />
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
             <LinearLayout
-                android:id="@+id/linearLayoutCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvItemDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="説明"
+                    android:textColor="@color/colorAccent" />
+
+                <View
+                    android:id="@+id/divider65"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/divider63"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/divider64"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider52"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:layout_weight="1"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvCategoryTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/fragment_detail_TextView_tvCategoryTitle" />
+                    android:background="@color/backgroundColor"
+                    android:paddingStart="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="@string/fragment_detail_TextView_tvCategoryTitle"
+                    android:textColor="@color/colorAccent" />
+
+                <View
+                    android:id="@+id/divider67"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
                 <TextView
                     android:id="@+id/tvCategoryContent"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/fragment_main_btn_text_donar" />
+
+                <View
+                    android:id="@+id/divider68"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayoutUserProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvAnuncioSpace"
+                <TextView
+                    android:id="@+id/textView35"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="ユーザー情報"
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/tvDetailUserProfileImage"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_account_circle_black_48dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDetailUsername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="username" />
+
+                        <TextView
+                            android:id="@+id/tvDetailFeedback"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Feedback" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider54"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Anuncio" />
+                android:layout_height="@dimen/basic_span"
+                android:layout_weight="1"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/divider69"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+
+                <TextView
+                    android:id="@+id/tvAnuncioSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Anuncio" />
+
+                <View
+                    android:id="@+id/divider70"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider53"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:layout_weight="1"
+                android:background="@color/backgroundColor" />
 
             <LinearLayout
                 android:id="@+id/linearLayotComments"
@@ -187,8 +413,17 @@
                     android:id="@+id/tvCommentArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/fragment_detail_btn_text_btnComment" />
+                    android:background="@color/backgroundColor"
+                    android:paddingStart="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="@string/fragment_detail_btn_text_btnComment"
+                    android:textColor="@color/colorAccent" />
+
+                <View
+                    android:id="@+id/divider66"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
                 <TextView
                     android:id="@+id/tvItemContact0"

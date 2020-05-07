@@ -118,10 +118,10 @@ class EditMailPasswordFragment : Fragment() {
             var email: String = etEmailAddress.text.toString()
 
             //ProfileModelオブジェクトを生成する
-            var profile = ProfileSerializerModel(UserSerializerModel(email=email))
+            var profileObjForSend = ProfileSerializerModel(UserSerializerModel(email=email))
 
             //retrofitでEmailAddress変更のAPIをたたく
-            ServiceProfile.patchProfile(authToken!!, profile, MyApplication.appContext)
+            ServiceProfile.patchProfile(sessionData.authTokenHeader!!, profileObjForSend, MyApplication.appContext)
         }
 
 
@@ -150,7 +150,7 @@ class EditMailPasswordFragment : Fragment() {
                 )
 
                 //retrofitでpassword変更のAPIをたたく
-                changePassword(authToken!!, changePasswordModel)
+                changePassword(sessionData.authTokenHeader!!, changePasswordModel)
             }
         }
 
@@ -160,8 +160,11 @@ class EditMailPasswordFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        /*
         //EmailAddressを表示する
         etEmailAddress.setText(email)
+        */
+        etEmailAddress.setText(sessionData.profileObj!!.user!!.email)
     }
 
     override fun onAttach(context: Context) {
@@ -178,22 +181,14 @@ class EditMailPasswordFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
+
+
+
     interface OnFragmentInteractionListener {
 
-
-
     }
+
 
     companion object {
         /**
@@ -223,13 +218,13 @@ class EditMailPasswordFragment : Fragment() {
     }
 
 
-    private fun changePassword(authToken: String, changePasswordModel: ChangePasswordModel) {
+    private fun changePassword(authTokenHeader: String, changePasswordModel: ChangePasswordModel) {
 
         val service = setService()
 
 
         //callbackにchangePasswordResponseModelを使ってるけど必要ないかも。またはResultModelの属性を拡張してしまえば済話かもしれない。
-        service.changePassword(authToken, changePasswordModel).enqueue(object:
+        service.changePassword(authTokenHeader, changePasswordModel).enqueue(object:
             Callback<ChangePasswordResponseModel> {
 
             override fun onResponse(
@@ -260,8 +255,5 @@ class EditMailPasswordFragment : Fragment() {
         })
 
     }
-
-
-
 
 }

@@ -80,8 +80,7 @@ class MyListFragment : Fragment() {
     private fun getMyItemList() {
 
         val service = setService()
-        val authTokenHeader = " Token " + authToken
-        service.getMyItemListAPIView(authTokenHeader).enqueue(object : Callback<MyItemListSerializerAPIView>{
+        service.getMyItemListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<MyItemListSerializerAPIView>{
 
             override fun onResponse(call: Call<MyItemListSerializerAPIView>, response: Response<MyItemListSerializerAPIView>) {
                 println("onResponceを通る")
@@ -122,7 +121,7 @@ class MyListFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<MyItemListSerializerAPIView>, t: Throwable) {
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }
 
         })

@@ -32,6 +32,9 @@ class MasterActivity : AppCompatActivity(),
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
             //記事作成 ただカメラ機能を実装しなければならない
+
+
+            //ログインユーザーかチェックするのが終わっていない。
             sendCrearArticuloActivity(context=this@MasterActivity)
         }
 
@@ -42,6 +45,13 @@ class MasterActivity : AppCompatActivity(),
 
 
         nav_view.setNavigationItemSelectedListener(this)
+
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
 
 
         println("INTENT.EXTRASのテスト")
@@ -59,9 +69,11 @@ class MasterActivity : AppCompatActivity(),
         //フラグメントの起動 データを取得した後にフラグメントを開く
         firstLaunchMasterFragment()
 
-
-
     }
+
+
+
+
 
     private fun firstLaunchMasterFragment() {
         //データを取得した後にフラグメントを開く
@@ -82,7 +94,6 @@ class MasterActivity : AppCompatActivity(),
 
             }
 
-
             override fun onFailure(call: Call<ItemListAPIViewModel>, t: Throwable) {
                 println("onFailureの結果　：　")
                 println(t)
@@ -90,11 +101,6 @@ class MasterActivity : AppCompatActivity(),
         })
 
     }
-
-
-
-
-
 
 
 
@@ -118,15 +124,11 @@ class MasterActivity : AppCompatActivity(),
     }
 
 
-
-
-
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.menuSignIn -> {
                 //ログイン済みであれば実行しない
-                if (MyApplication.loginStatus == true){
+                if (sessionData.logInStatus == true){
                     makeToast(this@MasterActivity, getString(R.string.login_status_true))
                     return true
                 }
@@ -136,7 +138,7 @@ class MasterActivity : AppCompatActivity(),
             }
             R.id.menuSignUp -> {
                 //ログイン済みであれば実行しない
-                if (MyApplication.loginStatus == true){
+                if (sessionData.logInStatus == true){
                     makeToast(this@MasterActivity, getString(R.string.login_status_true))
                     return true
                 }
@@ -147,7 +149,7 @@ class MasterActivity : AppCompatActivity(),
 
             R.id.menuNotification -> {
                 //未ログインであれば実行しない
-                if (MyApplication.loginStatus == false){
+                if (sessionData.logInStatus == false){
                     makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
                     return true
                 }
@@ -157,8 +159,8 @@ class MasterActivity : AppCompatActivity(),
 
             R.id.menuMyList -> {
                 //ログイン済みであれば実行しない
-                if (MyApplication.loginStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.login_status_true))
+                if (sessionData.logInStatus == false){
+                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
                     return true
                 }
                 supportFragmentManager.beginTransaction()
@@ -168,7 +170,7 @@ class MasterActivity : AppCompatActivity(),
 
             R.id.menuProfile -> {
                 //未ログインであれば実行しない
-                if (MyApplication.loginStatus == false){
+                if (sessionData.logInStatus == false){
                     makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
                     return true
                 }
@@ -188,34 +190,19 @@ class MasterActivity : AppCompatActivity(),
 
             R.id.menuSignOut -> {
                 //logoutを実行してToastで表示する
-                if (MyApplication.loginStatus == false){
+                if (sessionData.logInStatus == false){
                     makeToast(this@MasterActivity, "ログインしていません。")
                     return true
                 }
 
-                val service = setService()
-                service.logout().enqueue(object : Callback<ResultModel>{
+                // sessionDataを初期化する
+                sessionData = SessionData()
 
-                    override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
-                        println("onResponseを通る")
-                        val detail:String = response.body()!!.detail
-                        if (detail == "Successfully logged out."){
-                            MyApplication.loginStatus = false
-                            makeToast(this@MasterActivity, "ログアウトしました")
-
-                            //SPにログアウトした旨を記述する
-
-
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResultModel>, t: Throwable) {
-                        println("onFailureを通る")
-                        println(t)
-                    }
-
-
-                })
+                //SPにLOGIN_STATUSをfalseに保存する
+                val sharedPreferences = getSharedPreferencesInstance()
+                val editor = sharedPreferences.edit()
+                editor.putBoolean(getString(R.string.SP_KEY_LOGIN_STATUS), false).apply()
+                makeToast(this@MasterActivity, "ログアウトしました。")
 
 
             }
@@ -224,19 +211,6 @@ class MasterActivity : AppCompatActivity(),
     }
 
 
-
-    /*
-    private fun sendLogInActivity() {
-        val intent: Intent = Intent(this@MasterActivity, LogInActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun sendSignUpActivity() {
-        val intent: Intent = Intent(this@MasterActivity, SignUpActivity::class.java)
-        startActivity(intent)
-    }
-
-     */
 
 
     //MasterFragment.OnFragmentInteractionListener#onSearchMenuSelected

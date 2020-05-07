@@ -20,6 +20,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
+
             <LinearLayout
                 android:id="@+id/linearLayoutCategorySet"
                 android:layout_width="match_parent"
@@ -39,6 +45,12 @@
                     android:spinnerMode="dialog" />
             </LinearLayout>
 
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -51,6 +63,12 @@
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutAreaSet"
@@ -119,6 +137,12 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
+
             <LinearLayout
                 android:id="@+id/linearlayoutImages"
                 android:layout_width="match_parent"
@@ -137,26 +161,35 @@
 
                     <ImageView
                         android:id="@+id/ivArticuloImage1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="@dimen/nav_header_vertical_spacing"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_image_black_72dp" />
 
                     <ImageView
                         android:id="@+id/ivArticuloImage2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="@dimen/nav_header_vertical_spacing"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_image_black_72dp" />
 
                     <ImageView
                         android:id="@+id/ivArticuloImage3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="@dimen/nav_header_vertical_spacing"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_image_black_72dp" />
                 </TableRow>
             </TableLayout>
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -169,11 +202,44 @@
                     android:hint="@string/fragment_crear_articulo_etArticuloDescription_hint" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@color/backgroundColor" />
+
             <Button
                 android:id="@+id/btnCrearArticulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="作成する" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnRegionDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="具体的な地域データを提供する" />
+
+                <FrameLayout
+                    android:id="@+id/frameLayoutGoogleMaps"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp"
+                    android:visibility="gone">
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="座標X,Yから500メートル。" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

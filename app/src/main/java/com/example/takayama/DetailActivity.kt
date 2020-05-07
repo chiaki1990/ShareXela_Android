@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Serializable
 
 class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteractionListener {
 
@@ -81,26 +82,24 @@ class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteraction
     }
 
 
-    override fun launchItemContactActivity(itemObjId: Int) {
+    override fun launchItemContactActivity(itemObj: ItemSerializerModel) {
         //引数を送った先のActivity,Fragmentで使うのではなく、先にクエリの結果を取得しそれをFragmentに与える方法に変更する。
 
         //itemContactObjectsを取得し描画する。
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null) return
-        service.getItemContactListAPIView(authTokenHeader, itemObjId!!).enqueue(object :
+        service.getItemContactListAPIView(sessionData.authTokenHeader!!, itemObj.id!!).enqueue(object :
             Callback<ItemContactListAPIViewModel> {
 
             override fun onResponse(call: Call<ItemContactListAPIViewModel>, response: Response<ItemContactListAPIViewModel>) {
                 println("onResponseを通る  ")
                 println(response.body())
-                val itemContectObjects: ItemContactListAPIViewModel = response.body()!!
+                val itemContectObjects: ArrayList<ItemContactSerializerModel> = response.body()!!.ITEM_CONTACT_OBJECTS
 
                 val intent = Intent(this@DetailActivity, ItemContactActivity::class.java).apply {
-                    putExtra("itemContactObjects", itemContectObjects)
+                    putExtra("itemContactObjects", itemContectObjects as Serializable)
+                    putExtra("itemObj", itemObj)
                 }
                 startActivity(intent)
-
             }
 
             override fun onFailure(call: Call<ItemContactListAPIViewModel>, t: Throwable) {

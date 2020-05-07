@@ -18,15 +18,11 @@ class ItemContactActivity : AppCompatActivity(),
             setNavigationOnClickListener { finish() }
         }
 
-        //val notificationTag = intent.extras!!.getString("notificationTag",null)
-        /*
-        if (notificationTag != null){
-            val itemContactObjects = intent.extras!!.getSerializable("itemContactObjects")
-        }
 
-        */
-
-        val itemContactObjects = intent.extras!!.getSerializable("itemContactObjects") as ItemContactListAPIViewModel
+        //初回表示用
+        val itemContactObjects = intent.extras!!.getSerializable("itemContactObjects")
+        //onResume用
+        val itemObj = intent.extras!!.getSerializable("itemObj") as ItemSerializerModel
         println("ItemContactActivity内でitemContactObjectsをprintln")
         println(itemContactObjects)
 
@@ -35,11 +31,8 @@ class ItemContactActivity : AppCompatActivity(),
 
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.frameLayoutItemContact, ItemContactFragment.newInstance(itemContactObjects!!, ""))
+            .add(R.id.frameLayoutItemContact, ItemContactFragment.newInstance(itemContactObjects!!, itemObj))
             .commit()
-
-
-
 
     }
 

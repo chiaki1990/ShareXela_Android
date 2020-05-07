@@ -30,9 +30,9 @@ private const val ARG_PARAM2 = "param2"
 
 class SignUpFragment : Fragment() {
 
-    val SP_XML = "SESSION_MANAGE"
-    lateinit var sharedPreferences: SharedPreferences;
-    var masterKeyAlias = "";
+    //val SP_XML = "SESSION_MANAGE"
+    //lateinit var sharedPreferences: SharedPreferences;
+    //var masterKeyAlias = "";
 
 
     // TODO: Rename and change types of parameters
@@ -104,7 +104,7 @@ class SignUpFragment : Fragment() {
 
 
     interface OnFragmentInteractionListener {
-        fun finishActivity()
+        fun sendEditAreaInfoFragment()
     }
 
     companion object {
@@ -135,11 +135,8 @@ class SignUpFragment : Fragment() {
 
         //password1とpassword2が一致しているので、考えるべきところはemailが使われていないかどうか
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(ShareXelaService::class.java)
+
+        val service = setService()
         service.signup(email, password1, password2).enqueue(object :Callback<AuthModel>{
 
             override fun onResponse(call: Call<AuthModel>, response: Response<AuthModel>) {
@@ -147,8 +144,9 @@ class SignUpFragment : Fragment() {
 
                 if (response.code() == 201){
                     val key = response.body()?.key
-                    authToken = key
+                    //authToken = key
 
+                    /*
                     //ユーザー登録できたのでauthTokenを端末に登録する -> SharedPreferencesに格納
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                         sharedPreferences = MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
@@ -162,17 +160,29 @@ class SignUpFragment : Fragment() {
                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
                         )
                     }
+                    */
 
+                    val sharedPreferences = getSharedPreferencesInstance()
                     val editor = sharedPreferences.edit()
-                    editor.putString(getString(R.string.SP_KEY_AUTH_TOKEN), authToken).apply()
-                    //格納できているか確認できていない。
-                    println("確認用；authToken ...." + authToken)
+                    editor.putString(getString(R.string.SP_KEY_AUTH_TOKEN), key).apply()
 
-                    println("確認用 : "+ sharedPreferences.getString(getString(R.string.SP_KEY_AUTH_TOKEN), "authTokenは存在しない"))
-                    listener!!.finishActivity()
+                    val authTokenHeader = getAuthTokenHeader(key)
+                    if (authTokenHeader == null) return
+                    sessionData.authTokenHeader = authTokenHeader
+
+
+                    sessionData.logInStatus = true
+                    editor.putBoolean(getString(R.string.SP_KEY_LOGIN_STATUS), true).apply()
+
+
+                    //エリアセッティングフラグメントを起動する。
+                    listener!!.sendEditAreaInfoFragment()
                     return
 
                 }else if (response.code() == 400){
+
+                    // スペイン語の文字が入力されると400になる場合もある。
+
                     //print("既登録Eメールアドレス")
                     makeToast(MyApplication.appContext, "このメールアドレスはすでに登録されています。")
                     return

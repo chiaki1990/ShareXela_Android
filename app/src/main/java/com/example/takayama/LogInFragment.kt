@@ -20,20 +20,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+
+
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [LogInFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [LogInFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
 
 
 
@@ -42,10 +36,6 @@ private const val ARG_PARAM2 = "param2"
 class LogInFragment : Fragment() {
 
 
-
-    val SP_XML = "SESSION_MANAGE"
-    lateinit var sharedPreferences: SharedPreferences;
-    var masterKeyAlias = "";
 
 
     // TODO: Rename and change types of parameters
@@ -76,19 +66,9 @@ class LogInFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-        authToken = getAuthTokenFromSP()
 
-
-        if (authToken != null){
-            //AuthTokenloginAPIを使ったを実施
-            logInByAuthToken(authToken!!)
-
-        }else{
-            //authTokenがnullの場合-> ログイン画面の表示+Basic認証(logInByBasicAuth()メソッドの実施)
-
-            //ログインボタンを押したら発動するリスナーを設置
-            setBtnLogInListener()
-        }
+        //ログインボタンを押したら発動するリスナーを設置
+        setBtnLogInListener()
     }
 
 
@@ -111,7 +91,11 @@ class LogInFragment : Fragment() {
 
     interface OnFragmentInteractionListener {
 
-        fun resultSuccessLogIn()
+        // そのままLogInActivityを終了する
+        //fun resultSuccessLogIn()
+
+        // profileObjを取得してLogInActivityを終了する
+        fun getProfileSerializerModel()
     }
 
     companion object {
@@ -134,28 +118,8 @@ class LogInFragment : Fragment() {
             }
     }
 
-    private fun getAuthTokenFromSP(): String? {
-        //SPからauthTokenを取り出す
-        //println("BUILD_NUMBERを表示")
-        //println(Build.VERSION.SDK_INT)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            sharedPreferences = MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
 
-        }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-            sharedPreferences = EncryptedSharedPreferences.create(
-                getString(R.string.LOGIN_SHARED_PREFERENCES),
-                masterKeyAlias,
-                MyApplication.appContext,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            )
-        }
 
-        authToken = sharedPreferences.getString(getString(R.string.SP_KEY_AUTH_TOKEN), null)
-        println("端末内のTOKENデータを表示       " +  authToken)
-        return authToken
-    }
 
     private fun setBtnLogInListener() {
         btnLogIn.setOnClickListener {
@@ -166,61 +130,8 @@ class LogInFragment : Fragment() {
         }
     }
 
-    private fun logInByAuthToken(authToken: String) {
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val authTokenHeader = " Token " + authToken
-        val service = retrofit.create(ShareXelaService::class.java)
-        service.loginWithAuthtoken(authTokenHeader).enqueue(object :Callback<AuthModel>{
-
-            override fun onResponse(call: Call<AuthModel>, response: Response<AuthModel>) {
-                print("レスポンスを回収" +response.code().toString())
-
-                println(call.request().headers())
-                if (response.isSuccessful) {
-                    //println(response.body())
-                    println(response.body()?.key)
-
-                    var newToken = response.body()?.key
-
-                    println("NEW_TOKEN" + newToken)
-
-                    //SPにAuthTokenを保存する
-                    val editor = sharedPreferences.edit()
-                    editor.putString(getString(R.string.SP_KEY_AUTH_TOKEN), newToken)
-                    editor.apply()
 
 
-
-                    //ログイン成功がしたので、LogInActivityでfinish()を実行
-                    listener!!.resultSuccessLogIn()
-
-
-                }else if(response.isSuccessful == false) {
-
-                    //失敗したのでログイン画面を表示させる
-                    //buttonのリスナー設置
-                    setBtnLogInListener()
-
-                }
-            }
-
-            override fun onFailure(call: Call<AuthModel>, t: Throwable) {
-                println("AuthToken login によるエラーハンドリング")
-                //失敗したのでログイン画面を表示させる
-                //buttonのリスナー設置
-                setBtnLogInListener()
-
-            }
-
-
-        })
-
-    }
 
     private fun logInByBasicAuth(email: String, password: String) {
 
@@ -242,18 +153,26 @@ class LogInFragment : Fragment() {
                 if (response.isSuccessful) {
                     //println(response.body())
                     //println(response.body()?.key)
-                    authToken = response.body()?.key
+                    val key = response.body()?.key
 
                     println("onResponseメソッド内のauthToken")
-                    println("Authtoken " +authToken)
-                    //SPにAuthTokenを保存する
+                    println("Authtoken " + key)
 
+                    //SPにAuthTokenを保存する
+                    val sharedPreferences = getSharedPreferencesInstance()
                     val editor = sharedPreferences.edit()
-                    editor.putString(getString(R.string.SP_KEY_AUTH_TOKEN), authToken)
+                    editor.putString(getString(R.string.SP_KEY_AUTH_TOKEN), key)
                     editor.apply()
 
-                    //ログイン成功がしたので、LogInActivityでfinish()を実行
-                    listener!!.resultSuccessLogIn()
+                    //SessionDataオブジェクトのauthTokenHeader属性値を更新する
+                    val authTokenHeader = getAuthTokenHeader(key)
+                    if (authTokenHeader == null) return
+                    sessionData.authTokenHeader = authTokenHeader
+
+
+                    //ログイン成功がしたのでProfileSerializerModelオブジェクトを取得するために以下メソッドを実行
+                    listener!!.getProfileSerializerModel()
+
 
                 } else if (response.isSuccessful == false) {
                     //nullが返される
@@ -278,10 +197,6 @@ class LogInFragment : Fragment() {
         })
 
     }
-
-
-
-
 
 }
 

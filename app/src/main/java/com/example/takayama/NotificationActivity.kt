@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_notification.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Serializable
 
 class NotificationActivity : AppCompatActivity(),
     NotificationFragment.OnFragmentInteractionListener {
@@ -37,9 +38,7 @@ class NotificationActivity : AppCompatActivity(),
         //通知に応じたFragmentを起動させるためにデータを取得しActivityを起動する
 
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader==null) return
-        service.getSolicitudAPIView(authTokenHeader, objectId.toInt()).enqueue(object :Callback<SolicitudAPIViewModel>{
+        service.getSolicitudAPIView(sessionData.authTokenHeader, objectId.toInt()).enqueue(object :Callback<SolicitudAPIViewModel>{
 
             override fun onResponse(call: Call<SolicitudAPIViewModel>, response: Response<SolicitudAPIViewModel>) {
                 println("onResponseを通る")
@@ -65,16 +64,19 @@ class NotificationActivity : AppCompatActivity(),
     override fun launchNotificationItemContact(itemContactobjId: String) {
 
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null) return
-        service.getItemContactListByContactObjPKAPIView(authTokenHeader, itemContactobjId.toInt()).enqueue(object :Callback<ItemContactListAPIViewModel>{
+
+        service.getItemContactListByContactObjPKAPIView(sessionData.authTokenHeader!!, itemContactobjId.toInt()).enqueue(object :Callback<ItemContactListAPIViewModel>{
 
             override fun onResponse(call: Call<ItemContactListAPIViewModel>, response: Response<ItemContactListAPIViewModel>) {
                 println("onResponseを通る")
 
-                val itemContactObjects = response.body()!!
+                val itemContactObjects = response.body()!!.ITEM_CONTACT_OBJECTS
+                val itemObj = response.body()!!.ITEM_OBJECT
+                println(itemContactObjects)
+                println(itemObj)
                 val intent = Intent(this@NotificationActivity, ItemContactActivity::class.java).apply {
-                    putExtra("itemContactObjects", itemContactObjects)
+                    putExtra("itemContactObjects", itemContactObjects as Serializable)
+                    putExtra("itemObj", itemObj)
                     putExtra("notificationTag", "notificationTag")
                 }
                 startActivity(intent)
@@ -94,9 +96,7 @@ class NotificationActivity : AppCompatActivity(),
         //必要なデータをメモしておく
 
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader==null) return
-        service.getItemObjByDirectMessageContentObjPKAPIView(authTokenHeader, directMessageContentObjId.toInt()).enqueue(object :Callback<ItemSerializerModel> {
+        service.getItemObjByDirectMessageContentObjPKAPIView(sessionData.authTokenHeader, directMessageContentObjId.toInt()).enqueue(object :Callback<ItemSerializerModel> {
 
             override fun onResponse(call: Call<ItemSerializerModel>, response: Response<ItemSerializerModel>) {
                 println("onResponseを通る")

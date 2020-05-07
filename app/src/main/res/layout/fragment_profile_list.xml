@@ -8,138 +8,292 @@
     tools:context=".ProfileListFragment">
 
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical">
-
-<LinearLayout
-    android:id="@+id/linerLayoutProfileBasic"
-    android:layout_width="match_parent"
-    android:layout_height="78dp"
-    android:layout_marginEnd="6dp"
-    android:clickable="true"
-    android:focusable="auto"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/textView19"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="プロフィール" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+            <View
+                android:id="@+id/basicDivider1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-</LinearLayout>
+            <LinearLayout
+                android:id="@+id/linerLayoutProfileBasic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="auto"
+                android:orientation="vertical">
 
-<LinearLayout
-    android:id="@+id/linerLayoutAreaInfo"
-    android:layout_width="match_parent"
-    android:layout_height="99dp"
-    android:clickable="true"
-    android:focusable="auto"
-    android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="プロフィール"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="取引エリア" />
+                <View
+                    android:id="@+id/divider17"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
 
-    <TextView
-        android:id="@+id/tvPais"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="pais" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvDepartamento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="departamento" />
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/startText"
+                        android:text="TextView" />
 
-    <TextView
-        android:id="@+id/tvMunicipio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="municipio" />
-</LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-<LinearLayout
-    android:id="@+id/linerLayoutMailPassword"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:clickable="true"
-    android:focusable="auto"
-    android:orientation="vertical">
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="@android:dimen/notification_large_icon_width"
+                            android:layout_height="@android:dimen/notification_large_icon_height"
+                            android:layout_weight="1"
+                            app:srcCompat="@mipmap/ic_launcher" />
+                    </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="メール。パスワード" />
+                </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+                <View
+                    android:id="@+id/divider16"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:color/transparent" />
 
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="＊＊＊＊＊" />
-</LinearLayout>
+            </LinearLayout>
 
-<LinearLayout
-    android:id="@+id/linerLayoutSex"
-    android:layout_width="match_parent"
-    android:layout_height="59dp"
-    android:orientation="vertical">
+            <View
+                android:id="@+id/basicDivider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
-    <TextView
-        android:id="@+id/textView28"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="性別" />
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:paddingLeft="@dimen/startText"
+                android:paddingBottom="@dimen/titlePaddingBottom"
+                android:text="取引エリア"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tvSex"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+            <LinearLayout
+                android:id="@+id/linerLayoutAreaInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="auto"
+                android:orientation="vertical">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="65dp"
-    android:orientation="vertical">
+                <View
+                    android:id="@+id/divider18"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
 
-    <TextView
-        android:id="@+id/textView30"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="電話番号確認"
-        tools:visibility="invisible" />
+                <TextView
+                    android:id="@+id/tvPais"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="pais" />
 
-    <TextView
-        android:id="@+id/textView31"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:visibility="invisible" />
-</LinearLayout>
+                <TextView
+                    android:id="@+id/tvDepartamento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="departamento" />
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/tvMunicipio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="municipio" />
+
+                <View
+                    android:id="@+id/divider19"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:id="@+id/linerLayoutMailPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="auto"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="メール。パスワード"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp" />
+
+                <View
+                    android:id="@+id/divider20"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <TextView
+                    android:id="@+id/tvEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/tvPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="＊＊＊＊＊" />
+
+                <View
+                    android:id="@+id/divider21"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:id="@+id/linerLayoutSex"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView28"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="性別"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp" />
+
+                <View
+                    android:id="@+id/divider22"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <TextView
+                    android:id="@+id/tvSex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText" />
+
+                <View
+                    android:id="@+id/divider23"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/backgroundColor"
+                    android:paddingLeft="@dimen/startText"
+                    android:paddingBottom="@dimen/titlePaddingBottom"
+                    android:text="電話番号確認"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:visibility="visible" />
+
+                <View
+                    android:id="@+id/divider24"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/startText"
+                    android:text="090-3334-3333"
+                    android:visibility="visible" />
+
+                <View
+                    android:id="@+id/divider25"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/basicDivider5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+        </LinearLayout>
+    </ScrollView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,8 +46,7 @@ class DirectMessageFragment : Fragment() {
 
         //APIアクセス 画面に反映
         val service = setService()
-        val authTokenHeader = " Token " + authToken
-        service.getDirectMessageContentListAPIView(authTokenHeader=authTokenHeader, itemObjId=itemObj!!.id!!)
+        service.getDirectMessageContentListAPIView(authTokenHeader= sessionData.authTokenHeader, itemObjId=itemObj!!.id!!)
             .enqueue(object : Callback<DirectMessageContentListAPIView>{
 
                 override fun onResponse(call: Call<DirectMessageContentListAPIView>, response: Response<DirectMessageContentListAPIView>) {
@@ -72,14 +71,14 @@ class DirectMessageFragment : Fragment() {
                         //入力データを取得する
                         val inputData:String = textInputEditTextDirectMessage.text.toString()
                         if (inputData == ""){
-                            makeToast(MyApplication.appContext, "メッセージが入力されていません")
+                            makeToast(MyApplication.appContext, getString(R.string.toast_message_no_input_message))
                             return@setOnClickListener
                         }
 
                         val directmessageContent = DirectMessageContentSerializerModel(content=inputData)
 
                         //DirectMessageContentインスタンスを生成するためのAPI通信を行う。
-                        service.postDirectMessageContentAPIView(authTokenHeader=authTokenHeader, itemObjId=itemObj!!.id!!, directMessageContent=directmessageContent).enqueue(object :Callback<ResultModel>{
+                        service.postDirectMessageContentAPIView(authTokenHeader= sessionData.authTokenHeader, itemObjId=itemObj!!.id!!, directMessageContent=directmessageContent).enqueue(object :Callback<ResultModel>{
 
                             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
                                 println("onResponseを通る_DirectMessageFragment/postDirectMessageContentAPIView")

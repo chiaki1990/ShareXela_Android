@@ -52,8 +52,7 @@ class NotificationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        service.getAvisosAllListAPIView(authTokenHeader).enqueue(object : Callback<AvisosAllListAPIViewModel>{
+        service.getAvisosAllListAPIView(sessionData.authTokenHeader).enqueue(object : Callback<AvisosAllListAPIViewModel>{
 
             override fun onResponse(call: Call<AvisosAllListAPIViewModel>, response: Response<AvisosAllListAPIViewModel>) {
                 println("onResponseを通る")

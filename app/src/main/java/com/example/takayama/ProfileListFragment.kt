@@ -62,7 +62,6 @@ class ProfileListFragment : Fragment() {
         linerLayoutProfileBasic.setOnClickListener{
             //プロフィールBasicの編集フラグメントを起動するまたは置き換える
             listener!!.editProfileBasic()
-
         }
 
         linerLayoutAreaInfo.setOnClickListener {
@@ -81,13 +80,14 @@ class ProfileListFragment : Fragment() {
         }
 
 
-
     }
 
     override fun onResume() {
         super.onResume()
 
         //val service = setService()
+
+        /* この部分を改修する。
 
         var retrofit: Retrofit = retrofit2.Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -145,6 +145,22 @@ class ProfileListFragment : Fragment() {
 
         })
 
+         */
+
+        //取得データをレイアウトファイルへ反映する
+        if (sessionData.profileObj == null) return println("profileObjがnullになっている")
+        tvUserName.text = sessionData.profileObj!!.user!!.username
+        tvEmailAddress.text = sessionData.profileObj!!.user!!.email
+        val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
+        Glide.with(MyApplication.appContext).load(imageUrl).into(imageView)
+        tvPais.text = sessionData.profileObj!!.adm0
+        tvDepartamento.text = sessionData.profileObj!!.adm1
+        tvMunicipio.text = sessionData.profileObj!!.adm2
+        if (sessionData.profileObj!!.sex == 0){
+            tvSex.text = "未設定"
+        }else{
+            tvSex.text = "設定済み"
+        }
 
     }
 

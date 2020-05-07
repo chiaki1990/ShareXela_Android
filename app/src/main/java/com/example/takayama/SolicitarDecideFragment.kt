@@ -63,8 +63,7 @@ class SolicitarDecideFragment : Fragment() {
 
             //いきなりDirectMessageActivityを開いても駄目で、一度SolicitudインスタンスのacceptedをTrueに変更する必要がある。
             val service = setService()
-            val authTokenHeader = " Token " + authToken
-            service.patchSolicitudAPIView(authTokenHeader=authTokenHeader, solicitudObjId=selectedSolicitud!!.id!!).enqueue(object :
+            service.patchSolicitudAPIView(authTokenHeader= sessionData.authTokenHeader, solicitudObjId=selectedSolicitud!!.id!!).enqueue(object :
                 Callback<ResultModel>{
 
                 override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {

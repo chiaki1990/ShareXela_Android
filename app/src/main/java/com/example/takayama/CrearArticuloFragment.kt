@@ -10,6 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolygonOptions
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
 import okhttp3.MediaType
@@ -28,19 +36,10 @@ import java.net.URI
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [CrearArticuloFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [CrearArticuloFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 
 
-
-class CrearArticuloFragment : Fragment() {
+class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -73,6 +72,21 @@ class CrearArticuloFragment : Fragment() {
         spArticuloCategory.adapter = adapter
 
 
+        //具体的な座標データを利用する
+        btnRegionDetail.setOnClickListener {
+
+            frameLayoutGoogleMaps.visibility = View.VISIBLE
+
+            val map = SupportMapFragment.newInstance()
+            //supportFragmentManager.beginTransaction().add(R.id.googleMapsApiFrameLayout, map).commit()
+            //fragmentManager!!.beginTransaction().add(R.id.frameLayoutGoogleMaps, map).commit()
+            fragmentManager!!.beginTransaction().add(R.id.frameLayoutCrearArticulo, map).commit()
+
+            map.getMapAsync(this)
+        }
+
+
+
         //btnCrearArticuloのリスナーセット
         btnCrearArticulo.setOnClickListener {
             //サーバーにデータ送信
@@ -80,9 +94,12 @@ class CrearArticuloFragment : Fragment() {
         }
 
 
-        ivArticuloImage1.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage1) }
-        ivArticuloImage2.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage2) }
-        ivArticuloImage3.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage3) }
+        //ivArticuloImage1.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage1) }
+        ivArticuloImage1.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        ivArticuloImage2.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        ivArticuloImage3.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        //ivArticuloImage2.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage2) }
+        //ivArticuloImage3.setOnClickListener { listener!!.onClickImageView(R.id.ivArticuloImage3) }
 
 
         //Regionデータを取得してRegionをセット
@@ -138,25 +155,32 @@ class CrearArticuloFragment : Fragment() {
 
         //ivArticuloImageにセットされたuriをMultipartBody.Partオブジェクトに変換する
         var part1:MultipartBody.Part? = null
-        if (uri1 != null) {
-            var filePath1 = getPathFromUri(MyApplication.appContext, uri1!!)
-            var file1 = File(filePath1)
+        if (imageView1FilePath != null) {
+            //var filePath1 = getPathFromUri(MyApplication.appContext, uri1!!)
+            //var file1 = File(filePath1)
+            var file1 = File(imageView1FilePath)
+
+            println("FILEの内容チェック")
+            println(file1)
+
             var fileBody1 = RequestBody.create(MediaType.parse("image/*"), file1)
             part1 = MultipartBody.Part.createFormData(IMAGE1, file1.name, fileBody1)
         }
 
         var part2:MultipartBody.Part? = null
-        if (uri2 != null){
-            var filePath2 = getPathFromUri(MyApplication.appContext, uri2!!)
-            var file2 = File(filePath2)
+        if (imageView2FilePath != null){
+            //var filePath2 = getPathFromUri(MyApplication.appContext, uri2!!)
+            //var file2 = File(filePath2)
+            var file2 = File(imageView2FilePath)
             var fileBody2 = RequestBody.create(MediaType.parse("image/*"), file2)
             part2 = MultipartBody.Part.createFormData(IMAGE2, file2.name, fileBody2)
         }
 
         var part3:MultipartBody.Part? = null
-        if (uri3 != null){
-            var filePath3 = getPathFromUri(MyApplication.appContext, uri3!!)
-            var file3 = File(filePath3)
+        if (imageView3FilePath != null){
+            //var filePath3 = getPathFromUri(MyApplication.appContext, uri3!!)
+            //var file3 = File(filePath3)
+            var file3 = File(imageView3FilePath)
             var fileBody3 = RequestBody.create(MediaType.parse("image/*"), file3)
             part3 = MultipartBody.Part.createFormData(IMAGE3, file3.name, fileBody3)
         }
@@ -189,14 +213,19 @@ class CrearArticuloFragment : Fragment() {
         //val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), "{'active': True, 'adm0': 'GUATEMALA', 'adm1': 'Alta Verapaz', 'adm2': 'Acatenango', 'category': {'name': 'Donar o vender'}, 'description': 'huhuhuhko', 'title': 'kokokok'}")
         val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(itemObj))
         //val authTokenHeader = " Token ebfa00bd84de2b8f319b747636270257ec24601c"
-        val authTokenHeader = " Token " + authToken
+
 
         val service = setService()
         //service.postItemCreateAPIView(authTokenHeader=authTokenHeader, itemObj=itemObj).enqueue(object :Callback<ResultModel>{
-        service.postItemCreateAPIViewMultiPart(authTokenHeader=authTokenHeader, file1=part1, file2 = part2, file3 = part3, requestBody=reqBody).enqueue(object :Callback<ResultModel>{
+        service.postItemCreateAPIViewMultiPart(authTokenHeader= sessionData.authTokenHeader!!, file1=part1, file2 = part2, file3 = part3, requestBody=reqBody).enqueue(object :Callback<ResultModel>{
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
                 println("onResponseを通る")
                 println(call.request().body())
+
+
+                //CrearActivityを切る
+                listener!!.successCrearArticulo()
+
 
             }
 
@@ -211,6 +240,39 @@ class CrearArticuloFragment : Fragment() {
 
         })
     }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        // https://tools.wmflabs.org/geohack/geohack.php?language=ja&pagename=%E3%82%B1%E3%83%84%E3%82%A1%E3%83%AB%E3%83%86%E3%83%8A%E3%83%B3%E3%82%B4&params=14_50_45_N_91_31_08_W_
+
+        //選択したスピナー値から地図中心座標を設定する改善案がある。
+
+        val xela = LatLng(14.845833, -91.518889)
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(xela));
+        //googleMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(xela, 14.0f));
+        googleMap.uiSettings.isZoomGesturesEnabled = true;
+        googleMap.uiSettings.isScrollGesturesEnabled = true;
+        googleMap.isMyLocationEnabled = true
+
+        //googleMap.addMarker(MarkerOptions().position(xela).draggable(true))
+
+        val rectOptions = PolygonOptions()
+            .add(LatLng(37.35, -122.0),
+                LatLng(37.45, -122.0),
+                LatLng(37.45, -122.2),
+                LatLng(37.35, -122.2),
+                LatLng(37.35, -122.0))
+        googleMap.addPolygon(rectOptions)
+
+
+        //googleMap.minZoomLevel
+        googleMap.setOnMapClickListener {
+
+            makeToast(MyApplication.appContext, "てすと") }
+        //setOnMapLongClickListener
+
+    }
+
 
 
     override fun onAttach(context: Context) {
@@ -233,19 +295,13 @@ class CrearArticuloFragment : Fragment() {
         //CrearArticuloActivityに戻し、Activityをfinish()する
         fun successCrearArticulo()
 
-        //ImageViewをクリックしてギャラリーから画像データを呼び出す。
-        fun onClickImageView(imageViewId:Int)
+
+        //画像をImageViewにセットするためのImagesActivityを起動する
+        fun onLaunchImagesActivity()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CrearArticuloFragment.
-         */
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -256,6 +312,5 @@ class CrearArticuloFragment : Fragment() {
                 }
             }
     }
-
 
 }

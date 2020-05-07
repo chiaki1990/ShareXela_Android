@@ -23,6 +23,12 @@
     </string-array>
 
 
+    <!-- SharedPreferences Key -->
+    <string name="LOGIN_SHARED_PREFERENCES">LOGIN_SHARED_PREFERENCES</string>
+    <string name="SP_KEY_AUTH_TOKEN">SP_AUTH_TOKEN</string>
+    <string name="SP_KEY_LOGIN_STATUS">SP_LOGIN_STATUS</string>
+
+
     <!-- ナビゲーションドロワー -->
     <string name="drawer_menu_signIn">ログイン</string>
     <string name="drawer_menu_signUp">ユーザー登録</string>
@@ -92,9 +98,7 @@
     <!--        Toolbarタイトル -->
     <string name="toolbar_login_title">ログイン</string>
     <string name="title_activity_log_in">LogInActivity</string>
-    <!--        SharedPreferences Key -->
-    <string name="LOGIN_SHARED_PREFERENCES">LOGIN_SHARED_PREFERENCES</string>
-    <string name="SP_KEY_AUTH_TOKEN">SP_AUTH_TOKEN</string>
+
     <!--        Toast Massage -->
     <string name="login_success_message">ログインしました。</string>
     <string name="login_fail_message">認証情報に誤りがあります。</string>
@@ -132,6 +136,10 @@
     <string name="fragment_tag_choose_solicitud">choose_solicitud</string>
     <string name="fragment_tag_make_solicitud_message">make_solicitud_message</string>
 
+    <!-- DirectMessage -->
+    <!--         Toast Massage -->
+    <string name="toast_message_no_input_message">メッセージが入力されていません</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -141,4 +149,5 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="title_activity_item_contact">ItemContactActivity</string>
     <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_images">ImagesActivity</string>
 </resources>

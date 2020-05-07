@@ -4,15 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 
 import kotlinx.android.synthetic.main.activity_crear_articulo.*
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 var uri1:Uri? = null
 var uri2:Uri? = null
 var uri3:Uri? = null
+var imageView1FilePath: String? = null
+var imageView2FilePath: String? = null
+var imageView3FilePath: String? = null
+
+val REQUEST_TAKE_PHOTO = 1
+
 
 class CrearArticuloActivity : AppCompatActivity(),
     CrearArticuloFragment.OnFragmentInteractionListener {
@@ -45,6 +59,9 @@ class CrearArticuloActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction()
             .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance("param1", "param2"))
             .commit()
+
+
+
     }
 
 
@@ -54,18 +71,27 @@ class CrearArticuloActivity : AppCompatActivity(),
         finish()
     }
 
-    //CrearArticuloFragment.OnFragmentInteractionListener#onClickImageView
-    override fun onClickImageView(imageViewId: Int) {
 
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "image/*"
-            putExtra("imageViewId", imageViewId)
-        }
-        when (imageViewId){
-            R.id.ivArticuloImage1 -> startActivityForResult(intent, REQUEST_CODE_ARTICULO_IMAGE1)
-            R.id.ivArticuloImage2 -> startActivityForResult(intent, REQUEST_CODE_ARTICULO_IMAGE2)
-            R.id.ivArticuloImage3 -> startActivityForResult(intent, REQUEST_CODE_ARTICULO_IMAGE3)
+
+
+    override fun onLaunchImagesActivity() {
+
+        //後にuriを引っ張るためにstartActivityForResultに改修する
+        //val intent = Intent(this, ImagesActivity::class.java)
+        //startActivity(intent)
+
+        val intent = Intent(this, ImagesActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE_IMAGES_ACTIVITY)
+    }
+
+
+    var currentPhotoPath: String = ""
+
+    fun createImageFile():File{
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
         }
 
     }
@@ -73,23 +99,43 @@ class CrearArticuloActivity : AppCompatActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        val uri = data!!.data
 
-        //if (requestCode != REQUEST_CODE_ARTICULO_IMAGE1 && requestCode != REQUEST_CODE_ARTICULO_IMAGE2 && requestCode != REQUEST_CODE_ARTICULO_IMAGE3) return
+        if (resultCode != Activity.RESULT_OK) return makeToast(this, resultCode.toString())
 
         when (requestCode){
             REQUEST_CODE_ARTICULO_IMAGE1 -> {
+                val uri = data!!.data
                 ivArticuloImage1.setImageURI(uri)
                 uri1 = uri
             }
             REQUEST_CODE_ARTICULO_IMAGE2 -> {
+                val uri = data!!.data
                 ivArticuloImage2.setImageURI(uri)
                 uri2 = uri
             }
             REQUEST_CODE_ARTICULO_IMAGE3 -> {
+                val uri = data!!.data
                 ivArticuloImage3.setImageURI(uri)
                 uri3 = uri
+            }
+
+            REQUEST_CODE_IMAGES_ACTIVITY -> {
+
+                makeToast(this, "わはっはははははｈ")
+                imageView1FilePath = data!!.getStringExtra("imageView1FilePath")
+                imageView2FilePath = data!!.getStringExtra("imageView2FilePath")
+                imageView3FilePath = data!!.getStringExtra("imageView3FilePath")
+
+
+                //uri1 = Uri.parse(imageView1FilePath)
+                //uri2 = Uri.parse(imageView2FilePath)
+                //uri3 = Uri.parse(imageView3FilePath)
+
+                makeToast(this, imageView1FilePath+imageView2FilePath+imageView3FilePath)
+
+                Glide.with(this).load(imageView1FilePath).into(ivArticuloImage1)
+                Glide.with(this).load(imageView2FilePath).into(ivArticuloImage2)
+                Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
             }
         }
 

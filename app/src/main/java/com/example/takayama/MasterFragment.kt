@@ -46,7 +46,8 @@ class MasterFragment : Fragment() {
         menu.apply {
             findItem(R.id.menuSearch).isVisible = true
             findItem(R.id.menuGoHome).isVisible = false
-            findItem(R.id.action_settings).isVisible = true
+            findItem(R.id.action_settings).isVisible = false
+            findItem(R.id.menuDone).isVisible = false
         }
     }
 
@@ -55,12 +56,9 @@ class MasterFragment : Fragment() {
             R.id.menuSearch -> {
                 listener!!.onSearchMenuSelected()
             }
-
         }
         return true
     }
-
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,8 +69,16 @@ class MasterFragment : Fragment() {
     }
 
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         //getItemDarListView()
 
@@ -110,11 +116,9 @@ class MasterFragment : Fragment() {
         val adapter = MyRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
         recyclerView.adapter = adapter
 
-
-
-
-
     }
+
+
 
     //不要な関数となってしまった。。。
     private fun getItemDarListView() {
@@ -168,15 +172,12 @@ class MasterFragment : Fragment() {
 
             }
 
-
             override fun onFailure(call: Call<ItemListAPIViewModel>, t: Throwable) {
                 println("onFailureの結果　：　")
                 println(t)
             }
         })
     }
-
-
 
 
     override fun onAttach(context: Context) {
