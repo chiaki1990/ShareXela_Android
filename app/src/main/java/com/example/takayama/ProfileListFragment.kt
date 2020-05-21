@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
+import com.bumptech.glide.annotation.GlideModule
 import kotlinx.android.synthetic.main.fragment_profile_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -152,7 +154,12 @@ class ProfileListFragment : Fragment() {
         tvUserName.text = sessionData.profileObj!!.user!!.username
         tvEmailAddress.text = sessionData.profileObj!!.user!!.email
         val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
-        Glide.with(MyApplication.appContext).load(imageUrl).into(imageView)
+
+        //Glide.with(MyApplication.appContext).load(imageUrl).into(imageView)
+
+        GlideApp.with(MyApplication.appContext).load(imageUrl).circleCrop().into(imageView)
+
+
         tvPais.text = sessionData.profileObj!!.adm0
         tvDepartamento.text = sessionData.profileObj!!.adm1
         tvMunicipio.text = sessionData.profileObj!!.adm2

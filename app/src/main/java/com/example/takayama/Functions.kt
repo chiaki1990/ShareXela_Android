@@ -131,6 +131,18 @@ fun sendNotificationActivity(context: Context){
 }
 
 
+fun sendSignOutActivity(context: Context){
+    val intent = Intent(context, SignOutActivity::class.java)
+    context.startActivity(intent)
+}
+
+
+fun sendFavoriteItemActivity(context: Context){
+    val intent = Intent(context, FavoriteItemActivity::class.java)
+    context.startActivity(intent)
+}
+
+
 
 /*
 fun sendDetailActivity(context: Context){

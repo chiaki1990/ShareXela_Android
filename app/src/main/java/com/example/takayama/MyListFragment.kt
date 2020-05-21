@@ -2,10 +2,8 @@ package com.example.takayama
 
 import android.content.Context
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_my_list.*
 import retrofit2.Call
@@ -45,7 +43,29 @@ class MyListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_list, container, false)
+        setHasOptionsMenu(true)
+        return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.findItem(R.id.menuSearch).isVisible = false
+        menu.findItem(R.id.menuGoHome).isVisible = true
+        menu.findItem(R.id.action_settings).isVisible = false
+        menu.findItem(R.id.menuDone).isVisible = false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.menuGoHome ->{
+                //MyListFragmentを消去してMasterFragmentを起動し直す
+                //あとで
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -85,8 +105,8 @@ class MyListFragment : Fragment() {
             override fun onResponse(call: Call<MyItemListSerializerAPIView>, response: Response<MyItemListSerializerAPIView>) {
                 println("onResponceを通る")
 
-                //List<RowModel>を生成する
-                var dataArrayList: ArrayList<ItemModel> = arrayListOf()
+
+                var dataArrayList: ArrayList<ItemSerializerModel> = arrayListOf()
                 var itemSerializerList:List<ItemSerializerModel>? = response.body()?.itemSerializer
 
                 for (numero in 0..itemSerializerList!!.size-1){
@@ -100,13 +120,13 @@ class MyListFragment : Fragment() {
                     var image = itemSerializerList[numero].image1
 
                     dataArrayList.add(
-                        ItemModel(
+                        ItemSerializerModel(
                             id = id,
                             title = title,
                             //description = description,
                             //category = category,
                             //created_at = created_at,
-                            image = image
+                            image1 = image
                         ))
 
                 }
@@ -130,7 +150,7 @@ class MyListFragment : Fragment() {
 
 
     interface OnFragmentInteractionListener {
-        fun launchDetailActivity(selectedItem: ItemModel)
+        fun launchDetailActivity(selectedItem: ItemSerializerModel)
     }
 
     companion object {

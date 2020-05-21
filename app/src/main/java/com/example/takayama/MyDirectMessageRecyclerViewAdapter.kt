@@ -34,11 +34,10 @@ class MyDirectMessageRecyclerViewAdapter(val dataArrayList: ArrayList<DirectMess
         holder.tvMessageUserName.text = dataArrayList[position].profile!!.user!!.username
         holder.tvMessageContent.text = dataArrayList[position].content
         val imageUrl = BASE_URL + dataArrayList[position].profile!!.image!!.substring(1)
-        Glide.with(MyApplication.appContext).load(imageUrl).into(holder.view.ivMessageProfileImage)
+        //Glide.with(MyApplication.appContext).load(imageUrl).into(holder.view.ivMessageProfileImage)
+        Glide.with(MyApplication.appContext).load(imageUrl).circleCrop().into(holder.view.ivMessageProfileImage)
 
-        //holder.view.setOnClickListener {
-        //    listener.
-        //}
+
     }
 
     override fun getItemCount(): Int {

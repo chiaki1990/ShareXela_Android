@@ -1,7 +1,9 @@
 package com.example.takayama
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -45,6 +50,11 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
+
+    var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    val REQUEST_CODE_PERMISSIONS = 15
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -75,6 +85,15 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         //具体的な座標データを利用する
         btnRegionDetail.setOnClickListener {
 
+
+            //位置情報のパーミッションを取得する。
+            checkPermissions()
+
+
+
+
+
+            /*
             frameLayoutGoogleMaps.visibility = View.VISIBLE
 
             val map = SupportMapFragment.newInstance()
@@ -83,6 +102,8 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             fragmentManager!!.beginTransaction().add(R.id.frameLayoutCrearArticulo, map).commit()
 
             map.getMapAsync(this)
+
+             */
         }
 
 
@@ -117,6 +138,13 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 spSelectDepartamento.adapter = ArrayAdapter(MyApplication.appContext, android.R.layout.simple_list_item_1, adm1ArrayList)
                 spSelectMunicipio.adapter = ArrayAdapter(MyApplication.appContext, android.R.layout.simple_list_item_1, adm2ArrayList)
 
+                val indexOfPais = adm0ArrayList.indexOf(sessionData.profileObj!!.adm0)
+                spSelectPais.setSelection(indexOfPais)
+                val indexOfDepartamento = adm1ArrayList.indexOf(sessionData.profileObj!!.adm1)
+                spSelectDepartamento.setSelection(indexOfDepartamento)
+                val indexOfMunicipio = adm2ArrayList.indexOf(sessionData.profileObj!!.adm2)
+                spSelectMunicipio.setSelection(indexOfMunicipio)
+
 
             }
 
@@ -127,6 +155,18 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         })
 
 
+    }
+
+    private fun showMap() {
+
+        frameLayoutGoogleMaps.visibility = View.VISIBLE
+
+        val map = SupportMapFragment.newInstance()
+        //supportFragmentManager.beginTransaction().add(R.id.googleMapsApiFrameLayout, map).commit()
+        //fragmentManager!!.beginTransaction().add(R.id.frameLayoutGoogleMaps, map).commit()
+        fragmentManager!!.beginTransaction().add(R.id.frameLayoutCrearArticulo, map).commit()
+
+        map.getMapAsync(this)
     }
 
     private fun postCrearArticuloData() {
@@ -153,9 +193,10 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
 
 
+
         //ivArticuloImageにセットされたuriをMultipartBody.Partオブジェクトに変換する
         var part1:MultipartBody.Part? = null
-        if (imageView1FilePath != null) {
+        if (imageView1FilePath != "") {
             //var filePath1 = getPathFromUri(MyApplication.appContext, uri1!!)
             //var file1 = File(filePath1)
             var file1 = File(imageView1FilePath)
@@ -166,76 +207,74 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             var fileBody1 = RequestBody.create(MediaType.parse("image/*"), file1)
             part1 = MultipartBody.Part.createFormData(IMAGE1, file1.name, fileBody1)
         }
+        println("part1の標準出力をじっこう")
+        println(part1 == null)
+        println(imageView1FilePath)
 
         var part2:MultipartBody.Part? = null
-        if (imageView2FilePath != null){
+        if (imageView2FilePath != ""){
             //var filePath2 = getPathFromUri(MyApplication.appContext, uri2!!)
             //var file2 = File(filePath2)
             var file2 = File(imageView2FilePath)
             var fileBody2 = RequestBody.create(MediaType.parse("image/*"), file2)
             part2 = MultipartBody.Part.createFormData(IMAGE2, file2.name, fileBody2)
         }
+        println("part2の標準出力を実行")
+        println(part2 == null)
+        println(imageView2FilePath)
+        println(imageView2FilePath == "")
+
 
         var part3:MultipartBody.Part? = null
-        if (imageView3FilePath != null){
+        if (imageView3FilePath != ""){
             //var filePath3 = getPathFromUri(MyApplication.appContext, uri3!!)
             //var file3 = File(filePath3)
             var file3 = File(imageView3FilePath)
             var fileBody3 = RequestBody.create(MediaType.parse("image/*"), file3)
             part3 = MultipartBody.Part.createFormData(IMAGE3, file3.name, fileBody3)
         }
-
-        println("part1"+part1.toString())
-        println("part2"+part2.toString())
-        println("part3"+part3.toString())
-
-
+        println("part3の標準出力を実行")
+        println(part3 == null)
+        println(imageView3FilePath)
+        println(imageView3FilePath == "")
 
 
+        //println("part1"+part1.toString())
+        //println("part2"+part2.toString())
+        //println("part3"+part3.toString())
 
-        //fileパスについて問題があった。
-
-        //val filePath = "/storage/self/primary/DCIM/Camera/IMG_20200330_150330.jpg"
-
-
-        //val path = filePath.toString()
-        //val file = File(path)
-
-
-
-        //val fileBody = RequestBody.create(MediaType.parse("image/*"), file)
-        //val part = MultipartBody.Part.createFormData(IMAGE1, file.name, fileBody)
-        //val part1 = MultipartBody.Part.createFormData(IMAGE2, file.name, fileBody)
-        //val part2 = MultipartBody.Part.createFormData(IMAGE3, file.name, fileBody)
-
-
-        //val reqBody :RequestBody = RequestBody.create(MediaType.parse("text/plain"), "YYYYYSDSSSSSSSSSSSDSCSCe")
-        //val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), "{'active': True, 'adm0': 'GUATEMALA', 'adm1': 'Alta Verapaz', 'adm2': 'Acatenango', 'category': {'name': 'Donar o vender'}, 'description': 'huhuhuhko', 'title': 'kokokok'}")
         val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(itemObj))
-        //val authTokenHeader = " Token ebfa00bd84de2b8f319b747636270257ec24601c"
+        println("文字ベースデータの標準出力を実行する")
+        println(reqBody == null)
+
+
+        //今わかっていることは、画像を送信しない場合はpostが成功する。
+        //また３枚送信する場合も成功する
+        //しかし、１，２枚のみ送信する場合にはjsonDataが送信されないことが明らかになった。
+        //この原因が分かっていない。
+
 
 
         val service = setService()
-        //service.postItemCreateAPIView(authTokenHeader=authTokenHeader, itemObj=itemObj).enqueue(object :Callback<ResultModel>{
+
         service.postItemCreateAPIViewMultiPart(authTokenHeader= sessionData.authTokenHeader!!, file1=part1, file2 = part2, file3 = part3, requestBody=reqBody).enqueue(object :Callback<ResultModel>{
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
-                println("onResponseを通る")
+                println("onResponseを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
                 println(call.request().body())
-
 
                 //CrearActivityを切る
                 listener!!.successCrearArticulo()
-
 
             }
 
             override fun onFailure(call: Call<ResultModel>, t: Throwable) {
 
-                println("onFailureを通る")
+                println("onFailureを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
 
-                //println(call.request().body())
-                println(call.request().headers())
+                println(call.request().body())
+                //println(call.request().headers())
                 println(t)
+                println(t.message)
             }
 
         })
@@ -256,6 +295,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
         //googleMap.addMarker(MarkerOptions().position(xela).draggable(true))
 
+        /*
         val rectOptions = PolygonOptions()
             .add(LatLng(37.35, -122.0),
                 LatLng(37.45, -122.0),
@@ -263,6 +303,8 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 LatLng(37.35, -122.2),
                 LatLng(37.35, -122.0))
         googleMap.addPolygon(rectOptions)
+
+         */
 
 
         //googleMap.minZoomLevel
@@ -298,6 +340,8 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
         //画像をImageViewにセットするためのImagesActivityを起動する
         fun onLaunchImagesActivity()
+
+
     }
 
     companion object {
@@ -312,5 +356,43 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 }
             }
     }
+
+
+
+
+    fun checkPermissions() {
+
+        if (allPermissionsGranted() != true){
+            requestPermissions(
+                REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        }
+
+
+    }
+
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            MyApplication.appContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted() != true) {
+                makeToast(MyApplication.appContext,
+                    "Permissions not granted by the user.")
+                return
+            }else{
+                showMap()
+            }
+        }
+    }
+
+
+
+
+
 
 }

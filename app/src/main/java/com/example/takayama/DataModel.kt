@@ -32,6 +32,12 @@ data class ResultModel(
     var detail: String
 )
 
+data class ItemResultModel(
+    var result: String,
+    var detail: String,
+    var ITEM_OBJ: ItemSerializerModel
+)
+
 
 data class profileResultModel(
     var result: String,
@@ -103,15 +109,6 @@ data class RegionListSimpleSet(
 )
 
 
-data class ItemModel(
-    var id: Int? = null,
-    var title: String? = null ,
-    var description: String? = null,
-    var image: String? = null,
-    var category: String? = null,
-    var created_at: String? = null
-)
-
 
 
 
@@ -121,13 +118,17 @@ data class ItemSerializerModel(
     var user: UserSerializerModel? = null, //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var title:String = "",
     var description: String = "",
-    var category:CategorySerializerModel,
-    var adm0: String,
-    var adm1: String,
-    var adm2: String,
+    var category:CategorySerializerModel? = null,
+    var adm0: String? = null,
+    var adm1: String? = null,
+    var adm2: String? = null,
     var created_at: String? = null,      //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var active: Boolean? = true ,
     var deadline: Boolean? = null,      //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
+    var favorite_users: ArrayList<UserSerializerModel>? = null,
+    var item_contacts: ArrayList<ItemContactSerializerModel>? = null,
+    var solicitudes: ArrayList<SolicitudSerializerModel>? = null,
+    var direct_message: DirectMessageSerializerModel? = null,
     var image1: String? = null,
     var image2: String? = null,         //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var image3: String? = null          //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
@@ -153,7 +154,7 @@ data class DirectMessageSerializerModel(
     var owner: ProfileSerializerModel,
     var participant: ProfileSerializerModel,
     var created_at: String
-)
+): Serializable
 
 
 
@@ -167,6 +168,15 @@ data class DirectMessageContentSerializerModel(
 )
 
 
+// django: api/serializers.py　FeedbackSerializerより
+data class FeedbackSerializerModel(
+    var id: Int? = null,
+    var evaluator: UserSerializerModel? = null,
+    var content: String? = null,
+    var level: Int? = null
+): Serializable
+
+
 
 // django: api/serializers.py　ProfileSerializerより
 data class ProfileSerializerModel(
@@ -175,6 +185,7 @@ data class ProfileSerializerModel(
     var adm1: String? = null,
     var adm2: String? = null,
     var description: String? = null,
+    var feedback: ArrayList<FeedbackSerializerModel>? = null,
     var point: Any? = null,         //これをどのように扱うか。
     var image: String? = null,
     var sex: Int? = null,
@@ -228,11 +239,12 @@ data class ItemListAPIViewModel(
 
 // django: api/views.py ItemListAPIView, ItemDarLocalListAPIView, に対応するリスト結果を受け取る
 data class ItemUniversalListAPIView(
-    var ITEM_OBJECTS: List<ItemSerializerModel>
+    var ITEM_OBJECTS: List<ItemSerializerModel>,
+    var result: String
 )
 
 //SearchActivityで得た結果をActivityに渡すためのdata class
-data class ItemObjectsSelialized(
+data class ItemObjectsSerialized(
     var itemObjects: List<ItemSerializerModel>
 ):Serializable
 
@@ -243,8 +255,8 @@ data class ItemDetailSerializerAPIViewModel(
     //var ITEM_OBJ_SERIALIZER: ItemSerializerModel これに変えておく時間があったら。
     var item_obj_serializer: ItemSerializerModel,
     var profile_obj_serializer: ProfileSerializerModel,
-    var item_contact_objects_serializer: ArrayList<ItemContactSerializerModel>,
-    var SOLICITUD_OBJECTS_SERIALIZER: ArrayList<SolicitudSerializerModel>,
+    //var item_contact_objects_serializer: ArrayList<ItemContactSerializerModel>,
+    //var SOLICITUD_OBJECTS_SERIALIZER: ArrayList<SolicitudSerializerModel>,
     var BTN_CHOICE: String = ""
 
 )
@@ -308,7 +320,6 @@ data class ChangePasswordResponseModel(
 // django: api/serializers.py SolicitudSerializerより
 data class SolicitudSerializerModel(
     var id: Int? = null,
-    var item: ItemSerializerModel? = null,
     var applicant: ProfileSerializerModel? = null,
     var message: String? = null,
     var timestamp: String? = null,
@@ -323,6 +334,11 @@ data class SolicitudAPIViewModel(
 )
 
 
+// django: api/views.py SolicitudListAPIViewBySolicitudObjAPIViewを受ける
+data class SolicitudListAPIViewBySolicitudObjAPIViewModel(
+    var SOLICITUD_OBJECTS: ArrayList<SolicitudSerializerModel>
+)
+
 
 
 
@@ -334,7 +350,7 @@ data class AvisosAllListAPIViewModel(
 
 // django: api/serializers.py AvisoSerializerより
 data class AvisoSerializerModel(
-    var aviso_user: ArrayList<ProfileSerializerModel>,
+    var aviso_user: ProfileSerializerModel,
     var content_type: String,
     var object_id: Int,
     var content_object: contentObjectModel, //djangoのAvisoObjectRelatedFieldで便宜的に返り値をstr型に変更している為

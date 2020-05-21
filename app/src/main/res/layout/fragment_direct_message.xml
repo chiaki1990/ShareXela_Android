@@ -9,7 +9,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewDirectMessage"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="529dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
@@ -18,7 +18,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="68dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"

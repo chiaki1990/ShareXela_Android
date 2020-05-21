@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile_basic.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,7 +109,8 @@ class EditProfileBasicFragment : Fragment() {
         etUserName.setText(sessionData.profileObj!!.user!!.username)
         etDescription.setText(sessionData.profileObj!!.description)
         val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
-        Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
+        //Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
+        GlideApp.with(MyApplication.appContext).load(imageUrl).circleCrop().into(ivUserProfileImage)
     }
 
 

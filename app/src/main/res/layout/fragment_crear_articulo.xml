@@ -60,7 +60,8 @@
                     android:id="@+id/etArticuloTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="textMultiLine|text"
+                    android:maxLength="45" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +93,7 @@
                         android:id="@+id/spSelectPais"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:spinnerMode="dialog" />
                 </LinearLayout>
 
@@ -112,7 +113,7 @@
                         android:id="@+id/spSelectDepartamento"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:spinnerMode="dialog" />
                 </LinearLayout>
 
@@ -132,7 +133,7 @@
                         android:id="@+id/spSelectMunicipio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:spinnerMode="dialog" />
                 </LinearLayout>
             </LinearLayout>

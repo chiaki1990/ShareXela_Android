@@ -28,6 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
+        app:fabSize="auto"
+        app:maxImageSize="24dp"
+        app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
+        app:useCompatPadding="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

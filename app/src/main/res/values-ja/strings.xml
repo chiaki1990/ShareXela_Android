@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Takayama</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+
+    <!-- カテゴリーのリスト -->
+    <string-array name="categoryList">
+        <item>Donar o vender</item>
+        <item>Buscar ayuda</item>
+        <item>Anunciate</item>
+    </string-array>
+
+
+    <!-- SharedPreferences Key -->
+    <string name="LOGIN_SHARED_PREFERENCES">LOGIN_SHARED_PREFERENCES</string>
+    <string name="SP_KEY_AUTH_TOKEN">SP_AUTH_TOKEN</string>
+    <string name="SP_KEY_LOGIN_STATUS">SP_LOGIN_STATUS</string>
+
+
+    <!-- ナビゲーションドロワー -->
+    <string name="drawer_menu_signIn">ログイン</string>
+    <string name="drawer_menu_signUp">ユーザー登録</string>
+    <string name="drawer_menu_notification">通知</string>
+    <string name="drawer_menu_myList">マイリスト</string>
+    <string name="drawer_menu_myFavorite">お気に入り</string>
+    <string name="drawer_menu_crearArticulo">お知らせを作る</string>
+    <string name="drawer_menu_profile">プロフィール</string>
+    <string name="drawer_menu_settings">設定</string>
+    <string name="drawer_menu_others">その他</string>
+    <string name="drawer_menu_signOut">サインアウト</string>
+
+
+    <!-- Master -->
+    <!--        Toast Message -->
+    <string name="login_status_true">ログイン済みです</string>
+
+
+    <!-- SearchMenu -->
+    <!--        widget -->
+    <string name="fragment_main_btn_text_donar">Donar o vender</string>
+    <string name="fragment_main_btn_text_ayudar">Buscar ayuda</string>
+    <string name="fragment_main_btn_text_anunciar">Anunciate</string>
+    <string name="fragment_main_text_guatemala">Toda Guatemala</string>
+    <string name="fragment_main_text_departament0">Tu Departamento</string>
+    <!--        toolbarタイトル -->
+    <string name="toolbar_Main_title">記事を探す</string>
+    <!--        SearchMenuFragment-Toast Message -->
+    <string name="toast_message_no_article">該当するアイテムは存在しませんでした。</string>
+
+
+    <!-- Detail -->
+    <!--        widget -->
+    <string name="fragment_detail_btn_text_btnFavorite">♡いいね</string>
+    <string name="fragment_detail_btn_text_btnComment">コメント</string>
+    <string name="fragment_detail_TextView_tvDealAreaTitle">取引場所</string>
+    <string name="fragment_detail_TextView_tvCategoryTitle">カテゴリ</string>
+    <string name="fragment_detail_btn_text_btnSolicitar">申請する</string>
+    <string name="fragment_detail_btn_text_btnSolicitado">申請済み</string>
+    <string name="fragment_detail_btn_text_btnSelectSolicitudes">取引相手を選ぶ</string>
+    <string name="fragment_detail_btn_text_btnShowFail">取引相手決定済み</string>
+    <string name="fragment_detail_TextView_text_itemDescription">説明</string>
+    <string name="toast_message_needSignIn">ログインして下さい。</string>
+
+
+
+    <!-- CrearArticulo -->
+    <!--        title -->
+    <string name="title_activity_crear_articulo">記事作成</string>
+    <!--        Toolbarタイトル -->
+    <string name="toolbar_crearArticulo_title">記事作成</string><!-- Crear Articulo -->
+    <!--        widget -->
+    <string name="fragment_crear_articulo_etArticuloTitle_hint">記事タイトル</string>
+    <string name="fragment_crear_articulo_etArticuloDescription_hint">記事説明文</string>
+    <!--        Toast Message -->
+    <string name="title_o_description_blank_message">記事タイトル、記事説明に入力がありません。記入してください。</string>
+    <string name="success_crear_articlo_message">記事を作成しました。</string>
+
+
+    <!-- Solicitar -->
+    <!--        title -->
+    <string name="title_activity_solicitar">申請</string>
+
+
+    <!-- LogIn -->
+    <!--        widget -->
+    <string name="fragment_log_in_inputLayout_hintEmail">メールアドレス</string>
+    <string name="fragment_log_in_inputLayout_hintPassword">パスワード</string>
+    <string name="fragment_log_in_btnLogIn">ログイン</string>
+    <string name="title_activity_master">MasterActivity</string>
+    <!--        Toolbarタイトル -->
+    <string name="toolbar_login_title">ログイン</string>
+    <string name="title_activity_log_in">LogInActivity</string>
+
+    <!--        Toast Massage -->
+    <string name="login_success_message">ログインしました。</string>
+    <string name="login_fail_message">認証情報に誤りがあります。</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+
+
+    <!-- SignUp -->
+    <!--        widget -->
+    <string name="fragment_sign_up_inputLayout_hintEmail">メールアドレス</string>
+    <string name="fragment_sign_up_inputLayout_hintPassword1">パスワード</string>
+    <string name="fragment_sign_up_inputLayout_hintPassword2">パスワード再入力</string>
+    <string name="fragment_sign_up_btnSignUp">登録</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+
+    <!-- Profile -->
+    <!--        widget -->
+    <string name="fragment_edit_profile_basic_inputLayout_hintUserName">ユーザーネーム</string>
+    <string name="fragment_edit_profile_basic_inputLayout_hintDescription">自己紹介</string>
+
+
+    <string name="fragment_edit_sex_rbMale_text">男性</string>
+    <string name="fragment_edit_sex_rbFemale_text">女性</string>
+    <string name="fragment_edit_sex_rbNoAnswer_text">無回答</string>
+    <string name="fragment_edit_sex_description_text">性別は公開されません</string>
+    <!--        title -->
+    <string name="title_activity_profile">プロフィール</string>
+
+
+    <!-- Solicitud -->
+    <!--        widget -->
+    <string name="fragment_solicitar_decide_btnDecideSolicitar_text">取引相手として決定する</string>
+    <string name="fragment_solicitar_decide_tvTitleMessage">メッセージ</string>
+    <!--        FragmentTag -->
+    <string name="fragment_tag_choose_solicitud">choose_solicitud</string>
+    <string name="fragment_tag_make_solicitud_message">make_solicitud_message</string>
+
+    <!-- DirectMessage -->
+    <!--         Toast Massage -->
+    <string name="toast_message_no_input_message">メッセージが入力されていません</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_sub_function">SubFunctionActivity</string>
+    <string name="title_activity_others">OthersActivity</string>
+    <string name="title_activity_direct_message">DirectMessageActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_item_contact">ItemContactActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_images">ImagesActivity</string>
+    <string name="title_activity_sign_out">SignOutActivity</string>
+    <string name="title_activity_fvorite_item">FvoriteItemActivity</string>
+    <string name="title_activity_favorite_item">FavoriteItemActivity</string>
+    <string name="fragment_detail_TextView_UsuarioInformacion">ユーザー情報</string>
+    <string name="ALL_GUATEMALA">すべての記事</string>
+</resources>

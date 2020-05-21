@@ -8,13 +8,24 @@
         android:title="@string/drawer_menu_signIn" />
     <item
         android:id="@+id/menuSignUp"
+        android:icon="@drawable/ic_add_box_black_24dp"
         android:title="@string/drawer_menu_signUp" />
     <item
         android:id="@+id/menuNotification"
+        android:icon="@drawable/ic_mail_black_24dp"
         android:title="@string/drawer_menu_notification" />
     <item
         android:id="@+id/menuMyList"
+        android:icon="@drawable/ic_featured_play_list_black_24dp"
         android:title="@string/drawer_menu_myList" />
+    <item
+        android:id="@+id/menuFavorite"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:title="@string/drawer_menu_myFavorite" />
+    <item
+        android:id="@+id/menuCrearArticulo"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/drawer_menu_crearArticulo" />
     <item
         android:id="@+id/menuProfile"
         android:icon="@drawable/ic_face_black_24dp"

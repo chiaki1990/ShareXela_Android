@@ -3,7 +3,7 @@
     package="com.example.takayama">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,9 +18,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FavoriteItemActivity"
+            android:label="@string/title_activity_favorite_item"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".SignOutActivity"
+            android:label="@string/title_activity_sign_out"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ImagesActivity"
             android:label="@string/title_activity_images"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NotificationActivity"
             android:label="@string/title_activity_notification"

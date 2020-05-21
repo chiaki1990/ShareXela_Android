@@ -78,19 +78,13 @@ class SearchMenuFragment : Fragment() {
 
 
     interface OnFragmentInteractionListener {
-        fun launchMasterActivity(itemObjectsSerialized:ItemObjectsSelialized)
+        fun launchMasterActivity(itemObjectsSerialized:ItemObjectsSerialized, stringItemObjectsCategory: String)
 
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchMenuFragment.
-         */
+
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -119,8 +113,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.DONAR_GUATEMALA.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
@@ -149,8 +144,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.AYUDAR_GUATEMALA.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
@@ -177,8 +173,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_GUATEMALA.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
 
             }
 
@@ -199,7 +196,6 @@ class SearchMenuFragment : Fragment() {
 
         service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
 
-
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
                 println("onResponseを通る_SearchMenuFragment#excuteGetItemDonarLocalListAPIView")
                 //クエリ結果を取得し、それを引数としてコールバックする。
@@ -209,8 +205,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.DONAR_LOCAL.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
@@ -239,8 +236,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.AYUDAR_LOCAL.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
@@ -267,8 +265,9 @@ class SearchMenuFragment : Fragment() {
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
-                val itemObjectsSerialized:ItemObjectsSelialized = ItemObjectsSelialized(itemObjects=itemObjects)
-                listener!!.launchMasterActivity(itemObjectsSerialized)
+                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+                val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_LOCAL.name
+                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.util.Rational
 import android.util.Size
 import android.view.*
 import android.widget.ImageButton
@@ -32,7 +33,7 @@ class ImagesActivity : AppCompatActivity() {
 
 
     private  val REQUEST_CODE_PERMISSIONS = 10
-    private  val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private  val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION)
     private  val READ_REQUEST_CODE1: Int = 42
     private  val READ_REQUEST_CODE2: Int = 44
     private  val READ_REQUEST_CODE3: Int = 46
@@ -64,6 +65,7 @@ class ImagesActivity : AppCompatActivity() {
             findItem(R.id.menuSearch).isVisible = false
             findItem(R.id.action_settings).isVisible = false
             findItem(R.id.menuDone).isVisible = true
+            findItem(R.id.menuGoHome).isVisible = false
         }
         return true
     }
@@ -207,6 +209,10 @@ class ImagesActivity : AppCompatActivity() {
         val imageCaptureConfig = ImageCaptureConfig.Builder()
             .apply {
                 setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
+                //setTargetAspectRatio(AspectRatio.values())
+                //setTargetAspectRatioCustom(Rational(1920, 1080))
+                setTargetResolution(Size(480, 640))
+                //setTargetResolution(Size(1920, 1080))
             }.build()
 
         val imageCapture = ImageCapture(imageCaptureConfig)

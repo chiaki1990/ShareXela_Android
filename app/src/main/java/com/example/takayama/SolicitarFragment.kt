@@ -83,7 +83,7 @@ class SolicitarFragment : Fragment() {
 
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(solicitud_objects: ArrayList<SolicitudSerializerModel>, param2: String) =
+        fun newInstance(solicitud_objects: ArrayList<SolicitudSerializerModel>?, param2: String?) =
             SolicitarFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_PARAM1, solicitud_objects)

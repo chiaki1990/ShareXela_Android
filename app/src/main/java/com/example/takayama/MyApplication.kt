@@ -15,9 +15,8 @@ import retrofit2.Response
 
 
 var BASE_URL: String = ""
-
 lateinit var sessionData: SessionData;
-
+var navigationDrawerInit = false //false:未実行 -> MasterFragmentで実行する
 
 /*
 MyApplicationの役割は
@@ -68,10 +67,16 @@ class MyApplication:Application() {
 
 
         val service = setService()
+
         service.loginWithAuthtoken(authTokenHeader).enqueue(object : Callback<CheckTokenResult>{
+
 
             override fun onResponse(call: Call<CheckTokenResult>, response: Response<CheckTokenResult>) {
                 println("onResponseを通る")
+
+                if (response.body()==null){
+                    return
+                }
 
                 val result = response.body()!!.result
                 if (result != "success") return
@@ -101,6 +106,8 @@ class MyApplication:Application() {
             }
 
         })
+
+
     }
 
 

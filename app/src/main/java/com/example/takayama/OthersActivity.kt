@@ -20,11 +20,6 @@ class OthersActivity : AppCompatActivity(),
             setNavigationOnClickListener { finish() }
         }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
 
         supportFragmentManager.beginTransaction()
             .add(R.id.frameLayoutOthers, OthersMenuFragment.newInstance("", ""))

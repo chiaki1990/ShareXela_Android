@@ -40,11 +40,12 @@ class SearchActivity : AppCompatActivity(),
 
 
 
-    override fun launchMasterActivity(itemObjectsSerialized: ItemObjectsSelialized) {
+    override fun launchMasterActivity(itemObjectsSerialized: ItemObjectsSerialized, itemObjectsCategory: String) {
         //MasterActivityを起動する、起動したらこのアクティビティは消去
         val intent = Intent(this@SearchActivity, MasterActivity::class.java)
         intent.apply {
             putExtra("itemObjectsSerialized", itemObjectsSerialized)
+            putExtra("itemObjectsCategory", itemObjectsCategory)
         }
         startActivity(intent)
     }

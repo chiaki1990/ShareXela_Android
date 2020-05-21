@@ -1,13 +1,17 @@
 package com.example.takayama
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 
@@ -30,6 +34,8 @@ val REQUEST_TAKE_PHOTO = 1
 
 class CrearArticuloActivity : AppCompatActivity(),
     CrearArticuloFragment.OnFragmentInteractionListener {
+
+
 
 
 
@@ -83,6 +89,8 @@ class CrearArticuloActivity : AppCompatActivity(),
         val intent = Intent(this, ImagesActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_IMAGES_ACTIVITY)
     }
+
+
 
 
     var currentPhotoPath: String = ""
@@ -141,6 +149,8 @@ class CrearArticuloActivity : AppCompatActivity(),
 
 
     }
+
+
 
 
 }

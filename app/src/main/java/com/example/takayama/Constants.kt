@@ -43,6 +43,18 @@ enum class BtnChoice{
 }
 
 
+enum class ItemObjectsCategory{
+    ALL_GUATEMALA,
+    DONAR_GUATEMALA,
+    DONAR_LOCAL,
+    AYUDAR_GUATEMALA,
+    AYUDAR_LOCAL,
+    ANUNCIO_GUATEMALA,
+    ANUNCIO_LOCAL
+
+}
+
+
 val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
 val showDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
 

@@ -57,18 +57,25 @@ interface ShareXelaService {
     @GET("api/items/ayuda_list/")
     fun getItemAyudaListAPIView():Call<ItemUniversalListAPIView>
 
+
     // api.views.ItemDonarLocalListAPIView#getに連結する
     @GET("api/items/ayuda_local_list/")
     fun getItemAyudaLocalListAPIView(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
+
 
     // api.views.ItemAnuncioListAPIView#getに連結する
     @GET("api/items/anuncio_list/")
     fun getItemAnuncioListAPIView():Call<ItemUniversalListAPIView>
 
+
     // api.views.ItemAnuncioLocalListAPIView#getに連結する
     @GET("api/items/anuncio_local_list/")
     fun getItemAnuncioLocalListAPIView(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
 
+
+    // api.Views.item_views.py ItemFavoriteListAPIVIiew#getに連結する
+    @GET("api/items/user/item_favorite_list/")
+    fun getItemFavoriteListAPIVIiew(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
 
 
 
@@ -90,8 +97,13 @@ interface ShareXelaService {
     //@Headers("Content-Type:application/json")
     @Multipart
     @POST("api/item_create_1/")
-    fun postItemCreateAPIViewMultiPart(@Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?,@Part file2:MultipartBody.Part?,@Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
+    fun postItemCreateAPIViewMultiPart(@Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?, @Part file2:MultipartBody.Part?, @Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
 
+
+    //Itemオブジェクトに対してFavoriteを追加する/削除する
+    // api.Views.item_views.py ItemFavoriteAPIView#patchに連結する
+    @PATCH("api/item/{id}/favorite/")
+    fun patchItemFavoriteAPIView(@Path("id") itemObjId: String, @Header("Authorization") authTokenHeader: String?):Call<ResultModel>
 
 
     /* Itemオブジェクトの一種 自分の記事一覧  */
@@ -215,12 +227,17 @@ interface ShareXelaService {
     fun getSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int):Call<SolicitudAPIViewModel>
 
     // api/views.SolicitudAPIView#postに連結する
-    @POST ("api/solicitud/")
-    fun postSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Body solicitudObj: SolicitudSerializerModel): Call<ResultModel>
+    @POST ("api/solicitudes/item/{id}/")
+    fun postSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Body solicitudObj: SolicitudSerializerModel, @Path("id") itemObjId: Int): Call<ResultModel>
 
     // api/views.SolicitudAPIView#patchに連結する
     @PATCH("api/solicitud/{id}/")
-    fun patchSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int): Call<ResultModel>
+    fun patchSolicitudAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int): Call<ItemResultModel>
+
+    // api/views.py SolicitudListAPIViewBySolicitudObjAPIView#getに連結する
+    @GET("api/solicitudes/solicitud/{id}/solicitud_list/")
+    fun getSolicitudListAPIViewBySolicitudObjAPIView(@Header("Authorization") authTokenHeader: String?, @Path("id") solicitudObjId: Int):Call<SolicitudListAPIViewBySolicitudObjAPIViewModel>
+
 
 
 

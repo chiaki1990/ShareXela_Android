@@ -35,7 +35,9 @@ class MyItemContactRecyclerViewAdapter(val itemContactObjects:ArrayList<ItemCont
         holder.tvMessageUserName.text = itemContactObjects[position].post_user!!.user!!.username
         holder.tvMessageContent.text  = itemContactObjects[position].message
         val imageUrl = BASE_URL + itemContactObjects[position].post_user!!.image!!.substring(1)
-        Glide.with(MyApplication.appContext).load(imageUrl).into(holder.v.ivMessageProfileImage)
+        //Glide.with(MyApplication.appContext).load(imageUrl).into(holder.v.ivMessageProfileImage)
+        Glide.with(MyApplication.appContext).load(imageUrl).circleCrop().into(holder.v.ivMessageProfileImage)
+
     }
 
 

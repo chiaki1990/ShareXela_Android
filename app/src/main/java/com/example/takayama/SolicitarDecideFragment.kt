@@ -56,7 +56,8 @@ class SolicitarDecideFragment : Fragment() {
         //取得したデータを画面へ反映
         tvSolicitarUserNameDetail.text = userName
         tvSolicitarMessageDetail.text = message
-        Glide.with(MyApplication.appContext).load(profileImageUrl).into(ivSolicitarImageDetail)
+        //Glide.with(MyApplication.appContext).load(profileImageUrl).into(ivSolicitarImageDetail)
+        GlideApp.with(MyApplication.appContext).load(profileImageUrl).circleCrop().into(ivSolicitarImageDetail)
 
         //決定するボタンを押した場合のリスナーを設置
         btnDecideSolicitar.setOnClickListener {
@@ -64,9 +65,9 @@ class SolicitarDecideFragment : Fragment() {
             //いきなりDirectMessageActivityを開いても駄目で、一度SolicitudインスタンスのacceptedをTrueに変更する必要がある。
             val service = setService()
             service.patchSolicitudAPIView(authTokenHeader= sessionData.authTokenHeader, solicitudObjId=selectedSolicitud!!.id!!).enqueue(object :
-                Callback<ResultModel>{
+                Callback<ItemResultModel>{
 
-                override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
+                override fun onResponse(call: Call<ItemResultModel>, response: Response<ItemResultModel>) {
                     println("onResponseを通る。")
 
                     if (!response.isSuccessful) return
@@ -75,18 +76,44 @@ class SolicitarDecideFragment : Fragment() {
                         //取引画面へ移動するアクティビティを起動するためにコールバックを実行する
                         //引数として渡すものを考えておく。おそらくItemSerializerModelを渡すのが良いと思われる
                         // selectedSolicitud.itemはItemSerializerModelとして使うことができる
-                        val itemObj: ItemSerializerModel = selectedSolicitud!!.item!!
+                        val itemObj: ItemSerializerModel = response.body()!!.ITEM_OBJ
                         listener!!.launchDirectMessageActivity(itemObj)
                     }
 
                 }
 
-                override fun onFailure(call: Call<ResultModel>, t: Throwable) {
+                override fun onFailure(call: Call<ItemResultModel>, t: Throwable) {
                     println("onFailureを通る。")
 
                 }
             })
         }
+
+        //申請者一覧を表示するボタンのリスナーを設置
+        btnListSolicitudes.setOnClickListener {
+
+            val service = setService()
+            service.getSolicitudListAPIViewBySolicitudObjAPIView(sessionData.authTokenHeader, selectedSolicitud!!.id!!)
+                .enqueue(object :Callback<SolicitudListAPIViewBySolicitudObjAPIViewModel>{
+
+                    override fun onResponse(call: Call<SolicitudListAPIViewBySolicitudObjAPIViewModel>, response: Response<SolicitudListAPIViewBySolicitudObjAPIViewModel>) {
+                        println("onResponseを通る : ")
+                        println(response.body())
+                        val solicitudObjects: ArrayList<SolicitudSerializerModel> = response.body()!!.SOLICITUD_OBJECTS
+                        println(solicitudObjects)
+                        listener!!.launchSolicitarFragment(solicitudObjects)
+
+                    }
+
+                    override fun onFailure(call: Call<SolicitudListAPIViewBySolicitudObjAPIViewModel>, t: Throwable) {
+                        println("onFailureを通る : ")
+                    }
+
+
+                })
+        }
+
+
     }
 
 
@@ -111,6 +138,10 @@ class SolicitarDecideFragment : Fragment() {
         //DirectMessageActivityを起動するためのメソッド
         fun launchDirectMessageActivity(itemObj: ItemSerializerModel)
 
+
+        fun launchSolicitarFragment(solicitudObjects:ArrayList<SolicitudSerializerModel>)
+
+
     }
 
     companion object {
@@ -120,8 +151,9 @@ class SolicitarDecideFragment : Fragment() {
             SolicitarDecideFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_PARAM1, selectedSolicitud)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(ARG_PARAM2, param2)
                 }
             }
     }
+
 }

@@ -18,4 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
+    <style name="heart_border_color">#EF5350</style> <!-- RED400 -->
+
+
 </resources>

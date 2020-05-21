@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.my_recyclerview_card.view.*
 //MyListRecyclerViewAdapter.kt, MyListFragment.kt, fragment_my_list.xml,
 
 
-class MyListRecyclerViewAdapter(val dataArrayList:ArrayList<ItemModel>, val myListener: MyListFragment.OnFragmentInteractionListener?):RecyclerView.Adapter<MyListRecyclerViewAdapter.MyListViewHolder>() {
+class MyListRecyclerViewAdapter(val dataArrayList:ArrayList<ItemSerializerModel>, val myListener: MyListFragment.OnFragmentInteractionListener?):RecyclerView.Adapter<MyListRecyclerViewAdapter.MyListViewHolder>() {
 
     class MyListViewHolder(val view: View): RecyclerView.ViewHolder(view){
         val itemId   : TextView;
@@ -44,8 +44,8 @@ class MyListRecyclerViewAdapter(val dataArrayList:ArrayList<ItemModel>, val myLi
         holder.view.tvItemTitle.text = item.title
 
         //確認
-        println(item.image)
-        val imageUrl: String = BASE_URL+item.image!!.substring(1)
+        println(item.image1)
+        val imageUrl: String = BASE_URL+item.image1!!.substring(1)
         Glide.with(MyApplication.appContext).load(imageUrl).into(holder.view.ivItem)
 
 

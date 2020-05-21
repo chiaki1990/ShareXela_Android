@@ -7,79 +7,148 @@
     android:layout_height="match_parent"
     tools:context=".SolicitarDecideFragment" >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivSolicitarImageDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_account_circle_black_72dp" />
+            <View
+                android:id="@+id/basicDivider60"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
 
             <TextView
-                android:id="@+id/tvSolicitarUserNameDetail"
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivSolicitarImageDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_account_circle_black_72dp" />
+
+                <TextView
+                    android:id="@+id/tvSolicitarUserNameDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:elevation="@dimen/basic_elevation"
+                android:gravity="center"
+                android:text="@string/fragment_solicitar_decide_tvTitleMessage"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tvSolicitarMessageDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:text="TextView"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/basicDivider62"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnDecideSolicitar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="30sp" />
+                android:text="@string/fragment_solicitar_decide_btnDecideSolicitar_text" />
+
+            <View
+                android:id="@+id/divider76"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:id="@+id/divider77"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:color/transparent" />
+
+            <Button
+                android:id="@+id/btnListSolicitudes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Button一dd覧にもどるｄｓｆｓｆｓ" />
+
+            <View
+                android:id="@+id/divider78"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:id="@+id/divider79"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:id="@+id/basicDivider63"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider64"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider65"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/textView23"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/fragment_solicitar_decide_tvTitleMessage" />
-
-        <TextView
-            android:id="@+id/tvSolicitarMessageDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:text="TextView"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btnDecideSolicitar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/fragment_solicitar_decide_btnDecideSolicitar_text" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

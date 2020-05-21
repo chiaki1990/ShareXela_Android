@@ -101,6 +101,7 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
                 editor.putBoolean(getString(R.string.SP_KEY_LOGIN_STATUS), true)
                 editor.apply()
 
+                finish()
 
             }
 

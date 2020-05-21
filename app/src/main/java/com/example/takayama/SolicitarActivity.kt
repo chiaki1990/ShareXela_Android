@@ -18,6 +18,9 @@ class SolicitarActivity : AppCompatActivity(),
     SolicitarDecideFragment.OnFragmentInteractionListener,
     SolicitarMessageMakingFragment.OnFragmentInteractionListener {
 
+    lateinit var itemObj: ItemSerializerModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solicitar)
@@ -37,13 +40,14 @@ class SolicitarActivity : AppCompatActivity(),
         val launchFragmentTag: String = bundle.getString("launchFragmentTag")!!
 
         if (launchFragmentTag == "notification"){
+            //通知から飛んできたものを扱う
             val solicitudObj = bundle.getSerializable("solicitudObj") as SolicitudSerializerModel
             supportFragmentManager.beginTransaction()
                 .add(R.id.frameLayoutSolicitar, SolicitarDecideFragment.newInstance(solicitudObj,""))
                 .commit()
         }
 
-        if (launchFragmentTag == getString(R.string.fragment_tag_choose_solicitud)){
+        else if (launchFragmentTag == getString(R.string.fragment_tag_choose_solicitud)){
             //取引相手を選ぶ画面を開くことを前提にする
             val solicitud_objects = bundle.getSerializable("solicitud_objects") as ArrayList<SolicitudSerializerModel>
             supportFragmentManager.beginTransaction()
@@ -51,15 +55,9 @@ class SolicitarActivity : AppCompatActivity(),
                 .commit()
             return
         }
-        if (launchFragmentTag == getString(R.string.fragment_tag_make_solicitud_message)){
-            //取引申請のためにメッセージ画面を表示させるfragmentを起動させる
-            val itemObj = bundle.getSerializable("itemObj") as ItemSerializerModel
-            supportFragmentManager.beginTransaction()
-                .add(R.id.frameLayoutSolicitar, SolicitarMessageMakingFragment.newInstance(itemObj, ""))
-                .commit()
-            return
-        }
-        if (launchFragmentTag == "SolicitarMessageMakingFragment"){
+
+
+        else if (launchFragmentTag == "SolicitarMessageMakingFragment"){
             val itemObj = bundle.getSerializable("itemObj") as ItemSerializerModel
             supportFragmentManager.beginTransaction()
                 .add(R.id.frameLayoutSolicitar, SolicitarMessageMakingFragment.newInstance(itemObj, ""))
@@ -87,6 +85,14 @@ class SolicitarActivity : AppCompatActivity(),
         finish()
 
     }
+
+    override fun launchSolicitarFragment(solicitudObjects: ArrayList<SolicitudSerializerModel>) {
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutSolicitar, SolicitarFragment.newInstance(solicitudObjects,""))
+            .commit()
+    }
+
 
     override fun finishSolicitarActivity() {
         finish()
