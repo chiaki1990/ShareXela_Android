@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Takayama</string>
+    <string name="app_name">ShareXela</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -67,8 +67,9 @@
     <string name="fragment_detail_btn_text_btnComment">Poner un Comentario</string>
     <string name="fragment_detail_TextView_tvDealAreaTitle">Lugar de entrega</string>
     <string name="fragment_detail_TextView_tvCategoryTitle">Categoría</string>
-    <string name="fragment_detail_btn_text_btnSolicitar">Aplicar</string>
-    <string name="fragment_detail_btn_text_btnSolicitado">Aplicado</string>
+    <string name="fragment_detail_btn_text_btnTransaction">Contacto con un socio comercial</string>
+    <string name="fragment_detail_btn_text_btnSolicitar">     Aplicar          </string>
+    <string name="fragment_detail_btn_text_btnSolicitado">     Aplicado        </string>
     <string name="fragment_detail_btn_text_btnSelectSolicitudes">Elige un socio comercial</string>
     <string name="fragment_detail_btn_text_btnShowFail">Socio comercial determinado</string>
     <string name="fragment_detail_TextView_UsuarioInformacion">Informacion del usuario</string>
@@ -83,6 +84,9 @@
     <!--        widget -->
     <string name="fragment_crear_articulo_etArticuloTitle_hint">Título del artículo</string>
     <string name="fragment_crear_articulo_etArticuloDescription_hint">Descripción del articulo</string>
+    <string name="fragment_crear_articulo_chooseCategory">Selección de categoría</string>
+    <string name="fragment_crear_artivulo_btnCrearArticulo">Completa el articulo</string>
+    <string name="fragment_crear_articulo_btnRegionDetail">Proporcionar datos geográficos concretos.</string>
     <!--        Toast Message -->
     <string name="title_o_description_blank_message">No hay entrada en el título del artículo y la descripción del artículo. Por favor llenalo.</string>
     <string name="success_crear_articlo_message">Creó un artículo.</string>
@@ -91,6 +95,7 @@
     <!-- Solicitar -->
     <!--        title -->
     <string name="title_activity_solicitar">Solicitud</string>
+    <string name="fragment_solicitar_message_making_btnSend">Enviar</string>
 
 
     <!-- LogIn -->
@@ -116,12 +121,25 @@
     <string name="fragment_sign_up_inputLayout_hintPassword2">Escriba la contraseña otra vez</string>
     <string name="fragment_sign_up_btnSignUp">Registro</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_signUp">Registro de usuario</string>
 
 
     <!-- Profile -->
     <!--        widget -->
     <string name="fragment_edit_profile_basic_inputLayout_hintUserName">Nombre de usuario</string>
     <string name="fragment_edit_profile_basic_inputLayout_hintDescription">Auto presentación</string>
+    <string name="fragment_profile_list_username_and_description">Usuario y Descripcion</string>
+    <string name="fragment_profile_list_area">Área de entrega</string>
+    <string name="fragment_profile_list_mailadress_and_password">Correo Electronico y Contraseña</string>
+    <string name="fragment_profile_list_sex">Género</string>
+    <string name="fragment_profile_list_phone_number">Número de teléfono</string>
+    <string name="fragment_edit_mail_password_change_mailaddress">Cambio de correo electrónico</string>
+    <string name="fragment_edit_mail_password_change_password">Cambia la contraseña</string>
+
+    <string name="fragment_edit_mail_password_TextInputEditText_Email_hint">Correo Electronico</string>
+    <string name="fragment_edit_mail_password_TextInputEditText_Current_password_hint">Contraseña actual</string>
+    <string name="fragment_edit_mail_password_TextInputEditText_New_password_hint">Nueva contraseña</string>
+    <string name="fragment_edit_mail_password_TextInputEditText_Confirm_password_hint">Repetir Ingresar nueva contraseña</string>
 
 
     <string name="fragment_edit_sex_rbMale_text">Hombre</string>
@@ -143,6 +161,14 @@
     <!-- DirectMessage -->
     <!--         Toast Massage -->
     <string name="toast_message_no_input_message">Ningún mensaje ingresado</string>
+
+
+    <!-- FirebaseCloudMessaging -->
+    <string name="default_notification_channel_id" translatable="false">test</string>
+
+
+    <!-- GetCoordinatesFragment -->
+    <string name="title_set_point_and_radius">取引場所の設定Configurar ubicación comercial</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

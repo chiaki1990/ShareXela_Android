@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:hint="メッセージ">
+            android:hint="@string/fragment_solicitar_decide_tvTitleMessage">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextDirectMessage"

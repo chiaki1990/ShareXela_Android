@@ -42,7 +42,7 @@
                     android:background="@color/backgroundColor"
                     android:paddingLeft="@dimen/startText"
                     android:paddingBottom="@dimen/titlePaddingBottom"
-                    android:text="プロフィール"
+                    android:text="@string/fragment_profile_list_username_and_description"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
@@ -103,7 +103,7 @@
                 android:background="@color/backgroundColor"
                 android:paddingLeft="@dimen/startText"
                 android:paddingBottom="@dimen/titlePaddingBottom"
-                android:text="取引エリア"
+                android:text="@string/fragment_profile_list_area"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp" />
 
@@ -169,7 +169,7 @@
                     android:background="@color/backgroundColor"
                     android:paddingLeft="@dimen/startText"
                     android:paddingBottom="@dimen/titlePaddingBottom"
-                    android:text="メール。パスワード"
+                    android:text="@string/fragment_profile_list_mailadress_and_password"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
@@ -219,7 +219,7 @@
                     android:background="@color/backgroundColor"
                     android:paddingLeft="@dimen/startText"
                     android:paddingBottom="@dimen/titlePaddingBottom"
-                    android:text="性別"
+                    android:text="@string/fragment_profile_list_sex"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
@@ -260,7 +260,7 @@
                     android:background="@color/backgroundColor"
                     android:paddingLeft="@dimen/startText"
                     android:paddingBottom="@dimen/titlePaddingBottom"
-                    android:text="電話番号確認"
+                    android:text="@string/fragment_profile_list_phone_number"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp"
                     android:visibility="visible" />

@@ -36,7 +36,7 @@
                     android:id="@+id/tvArticuloCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="カテゴリー選択" />
+                    android:text="@string/fragment_crear_articulo_chooseCategory" />
 
                 <Spinner
                     android:id="@+id/spArticuloCategory"
@@ -213,7 +213,7 @@
                 android:id="@+id/btnCrearArticulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="作成する" />
+                android:text="@string/fragment_crear_artivulo_btnCrearArticulo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +224,7 @@
                     android:id="@+id/btnRegionDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="具体的な地域データを提供する" />
+                    android:text="@string/fragment_crear_articulo_btnRegionDetail" />
 
                 <FrameLayout
                     android:id="@+id/frameLayoutGoogleMaps"

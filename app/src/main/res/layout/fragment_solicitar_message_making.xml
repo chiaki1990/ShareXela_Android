@@ -34,7 +34,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="メッセージ">
+            android:hint="@string/fragment_solicitar_decide_tvTitleMessage">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextSolicitarMessage"
@@ -47,6 +47,6 @@
             android:id="@+id/btnSolicitarMakingMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="送信" />
+            android:text="@string/fragment_solicitar_message_making_btnSend" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

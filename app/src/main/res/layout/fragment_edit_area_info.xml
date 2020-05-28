@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
@@ -204,10 +204,16 @@
                 android:layout_height="@dimen/basic_span"
                 android:background="@color/backgroundColor" />
 
-            <FrameLayout
-                android:id="@+id/framelayoutForMaps"
+            <Button
+                android:id="@+id/btnSettingAreaByMap"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:text="地図から定める" />
+
+            <FrameLayout
+                android:id="@+id/framelayoutForMapscddcdc"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
 
             </FrameLayout>
 

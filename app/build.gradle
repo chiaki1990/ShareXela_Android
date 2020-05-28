@@ -6,11 +6,15 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+//FirebaseCloudMessaging導入のため
+apply plugin: 'com.google.gms.google-services'
+
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.takayama"
+        applicationId "ga.sharexela.sharexela"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
@@ -67,6 +71,11 @@ dependencies {
 
     //swiperefreshlayoutのインストール : https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+
+    //FirebaseCloudMessaging導入の為-
+    //implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'androidx.fragment:fragment-ktx:1.2.2'
 
 
     testImplementation 'junit:junit:4.12'

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.takayama">
+    package="ga.sharexela.sharexela">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name=".MyApplication"
+        android:name="ga.sharexela.sharexela.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,60 +18,60 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".FavoriteItemActivity"
+            android:name="ga.sharexela.sharexela.FavoriteItemActivity"
             android:label="@string/title_activity_favorite_item"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".SignOutActivity"
+            android:name="ga.sharexela.sharexela.SignOutActivity"
             android:label="@string/title_activity_sign_out"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ImagesActivity"
+            android:name="ga.sharexela.sharexela.ImagesActivity"
             android:label="@string/title_activity_images"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NotificationActivity"
+            android:name="ga.sharexela.sharexela.NotificationActivity"
             android:label="@string/title_activity_notification"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ItemContactActivity"
+            android:name="ga.sharexela.sharexela.ItemContactActivity"
             android:label="@string/title_activity_item_contact"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SearchActivity"
+            android:name="ga.sharexela.sharexela.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DirectMessageActivity"
+            android:name="ga.sharexela.sharexela.DirectMessageActivity"
             android:label="@string/title_activity_direct_message"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".OthersActivity"
+            android:name="ga.sharexela.sharexela.OthersActivity"
             android:label="@string/title_activity_others"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ProfileActivity"
+            android:name="ga.sharexela.sharexela.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CrearArticuloActivity"
+            android:name="ga.sharexela.sharexela.CrearArticuloActivity"
             android:label="@string/title_activity_crear_articulo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SolicitarActivity"
+            android:name="ga.sharexela.sharexela.SolicitarActivity"
             android:label="@string/title_activity_solicitar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DetailActivity"
+            android:name="ga.sharexela.sharexela.DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SignUpActivity"
+            android:name="ga.sharexela.sharexela.SignUpActivity"
             android:label="@string/title_activity_sign_up"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MasterActivity"
-            android:label="@string/title_activity_master"
+            android:name="ga.sharexela.sharexela.MasterActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -80,13 +80,46 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LogInActivity"
+            android:name="ga.sharexela.sharexela.LogInActivity"
             android:label="@string/title_activity_log_in"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="ga.sharexela.sharexela.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!-- https://firebase.google.com/docs/cloud-messaging/android/client?hl=ja#manifest -->
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+            See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_done_black_24dp" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+
+
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
