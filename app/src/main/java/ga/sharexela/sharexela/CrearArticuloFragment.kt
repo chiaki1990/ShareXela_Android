@@ -12,6 +12,10 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
 import okhttp3.MediaType
@@ -31,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-class CrearArticuloFragment : Fragment() {
+class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
     private var itemObj: ItemSerializerModel? = null
     private var param2: String? = null
@@ -144,6 +148,15 @@ class CrearArticuloFragment : Fragment() {
 
         if (imageView3FilePath != null && imageView3FilePath != "") Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
 
+        //pointがある場合にはgoogleMapsに描画する
+        frameLayoutCrearMap.visibility = View.GONE
+        if (itemObj?.point != null) {
+            frameLayoutCrearMap.visibility = View.VISIBLE
+            val map = SupportMapFragment.newInstance()
+            childFragmentManager.beginTransaction().add(R.id.frameLayoutCrearMap, map)
+                .commit()
+            map.getMapAsync(this@CrearArticuloFragment)
+        }
     }
 
 
@@ -156,7 +169,7 @@ class CrearArticuloFragment : Fragment() {
                 tvCrearArticuloPoint, tvCrearArticuloRadius)
 
         //もしデータが必要ならこのitemObjを使用する
-        listener!!.launchGetCoordinatesFragment(itemObj, FragmentTag.FROM_CREAR_ARTICULO.name)
+        listener!!.launchGetCoordinatesFragment(itemObj, FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name)
     }
 
 
@@ -211,7 +224,6 @@ class CrearArticuloFragment : Fragment() {
                 println(t)
                 println(t.message)
             }
-
         })
     }
 
@@ -273,6 +285,23 @@ class CrearArticuloFragment : Fragment() {
         }
     }
 
+    override fun onMapReady(googleMap: GoogleMap) {
+        //描画したいこと mapの縮尺, mapの中心設定, pointまたはradiusの描画
+        //mapの縮尺
+        if (itemObj?.point == null) return
+        val latLng = getLatLng(itemObj!!)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
+        googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isZoomGesturesEnabled = true
+
+        if (itemObj!!.radius != 0){
+            drawingCircle(latLng, itemObj!!.radius.toString(), googleMap)
+        }else if (itemObj!!.radius == 0){
+            drawingPoint(latLng, googleMap)
+        }
+    }
+
 }
 
 
@@ -310,7 +339,7 @@ fun retrieveArticuloData(etArticuloTitle:EditText, etArticuloDescription: EditTe
                          spSelectMunicipio:Spinner, tvCrearArticuloPoint:TextView, tvCrearArticuloRadius: TextView)
         :ItemSerializerModel {
 
-        //入力データの取得
+        //入力データの取得 //なんでpoontとradiusを追加していないのか理由がわかっていない。。。
         val title           = etArticuloTitle.text.toString()
         val description     = etArticuloDescription.text.toString()
         val category:String = spArticuloCategory.selectedItem.toString()
@@ -322,7 +351,7 @@ fun retrieveArticuloData(etArticuloTitle:EditText, etArticuloDescription: EditTe
         //CategorySerializerModelオブジェクトの生成
         val categoryObj     = CategorySerializerModel(name=category)
         //ItemSerializerModelオブジェクトの作成
-        val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2 )
+        val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2, point=point, radius=radius )
 
         return itemObj
     }

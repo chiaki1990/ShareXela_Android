@@ -218,4 +218,8 @@ class ProfileActivity : AppCompatActivity(),
         //使わない CrearArticuloFragmentで使うもの
     }
 
+    override fun sendEditarArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
+        //使わない EditarArticuloFragmentで使うもの
+    }
+
 }

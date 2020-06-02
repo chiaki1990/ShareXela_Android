@@ -267,6 +267,19 @@
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/divider81"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/backgroundColor" />
+
+            <FrameLayout
+                android:id="@+id/frameLayoutCrearMap"
+                android:layout_width="match_parent"
+                android:layout_height="240dp">
+
+            </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -19,16 +19,14 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-
-
 class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
 
     private var itemObj: ItemSerializerModel? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
-    var marker: Marker? = null
-    var circle: Circle? = null
+    //var marker: Marker? = null
+    //var circle: Circle? = null
     var profileObj: ProfileSerializerModel? = null
     var point: String = ""
 
@@ -76,11 +74,11 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                 if (point == "") return true
 
                 //記事新規作成の地理データを更新する
-                if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name) != null){
                     updateRegionDataByPoint(itemObj)
                 }
                 //記事編集の地理データを更新する
-                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name) != null){
                     updateRegionDataByPoint(itemObj)
                 }
 
@@ -124,7 +122,10 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
 
 
     interface OnFragmentInteractionListener {
+
         fun sendCrearArticuloFragmentAgain(itemObj:ItemSerializerModel?)
+
+        fun sendEditarArticuloFragmentAgain(itemObj:ItemSerializerModel?)
     }
 
     companion object {
@@ -172,12 +173,12 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                     //ProfileSerializerModelオブジェクトを生成
                     profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
                 }
-                if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name) != null){
                     //ItemSerializerModelオブジェクト(itemObj)の更新
                     itemObj!!.point  = point
                     itemObj!!.radius = radiusLength.toInt()
                 }
-                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name) != null){
                     //ItemSerializerModelオブジェクト(itemObj)の更新
                     itemObj!!.point  = point
                     itemObj!!.radius = radiusLength.toInt()
@@ -192,12 +193,12 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                 //ProfileSerializerModelオブジェクトを生成
                 profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
             }
-            if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+            if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name) != null){
                 //ItemSerializerModelオブジェクト(itemObj)の更新
                 itemObj!!.point  = point
                 itemObj!!.radius = radiusLength.toInt()
             }
-            if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+            if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name) != null){
                 //ItemSerializerModelオブジェクト(itemObj)の更新
                 itemObj!!.point  = point
                 itemObj!!.radius = radiusLength.toInt()
@@ -222,6 +223,11 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
         listener!!.sendCrearArticuloFragmentAgain(itemObj)
     }
 
+    private fun backToEditarArticuloFragment(itemObj: ItemSerializerModel){
+
+        listener!!.sendEditarArticuloFragmentAgain(itemObj)
+    }
+
 
 
     private fun updateRegionDataByPoint(itemObj: ItemSerializerModel?){
@@ -242,8 +248,13 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                 if (adm1 != null) itemObj.adm1 = adm1
                 if (adm2 != null) itemObj.adm2 = adm2
 
-                //CrearArticuloFragmentを再度開く
-                backToCrearArticuloFragment(itemObj)
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name) != null) {
+                    //CrearArticuloFragmentを再度開く
+                    backToCrearArticuloFragment(itemObj)
+                }else if(parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name) != null){
+                    //EditarArticuloFragmentを再度開く
+                    backToEditarArticuloFragment(itemObj)
+                }
 
                 //このフラグメントを閉じる
                 parentFragmentManager.beginTransaction()

@@ -113,6 +113,7 @@ fun sendProfileActivity(context: Context){
 
 fun sendCrearArticuloActivity(context: Context){
     val intent = Intent(context, CrearArticuloActivity::class.java)
+    intent.putExtra(IntentKey.FragmentTag.name, FragmentTag.TO_CREAR_ARTICULO.name)
     context.startActivity(intent)
 }
 

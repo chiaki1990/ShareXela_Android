@@ -72,8 +72,9 @@
     <string name="fragment_detail_btn_text_btnShowFail">Socio comercial determinado</string>
     <string name="fragment_detail_TextView_UsuarioInformacion">Informacion del usuario</string>
     <string name="toast_message_needSignIn">Por favor Iniciar sesión.</string>
-    <string name="fragment_detail_btn_detail_active_to_deactive">この記事の公開を中止する</string>
-    <string name="fragment_detail_btn_detail_active_to_active">この記事の公開を再開する</string>
+    <string name="fragment_detail_btn_detail_active_to_deactive">Deje de publicar este artículo.</string>
+    <string name="fragment_detail_btn_detail_active_to_active">Reanudar la publicación de este artículo.</string>
+    <string name="fragment_detail_toast_message_applicado">Ya se ha solicitado.</string>
 
 
     <!-- CrearArticulo -->

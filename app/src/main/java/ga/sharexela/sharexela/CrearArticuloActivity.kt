@@ -72,7 +72,7 @@ class CrearArticuloActivity : AppCompatActivity(),
 
 
         if (intent.extras?.getString(IntentKey.FragmentTag.name) == FragmentTag.EDITAR_ARTICULO.name){
-
+            println("EditarArticuloFragentを起動する@CrearArticuloActicity#OnCreate")
 
             toolbar.title = getString(R.string.editar_articulo_title)
 
@@ -83,13 +83,17 @@ class CrearArticuloActivity : AppCompatActivity(),
             return
         }
 
+        if (intent.extras?.getString(IntentKey.FragmentTag.name) == FragmentTag.TO_CREAR_ARTICULO.name){
+            println("CrearArticuloFragentを起動する@CrearArticuloActicity#OnCreate")
 
-        toolbar.title = getString(R.string.toolbar_crearArticulo_title)
+            toolbar.title = getString(R.string.toolbar_crearArticulo_title)
 
-        //フラグメントの起動
-        supportFragmentManager.beginTransaction()
-            .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(null, "param2"))
-            .commit()
+            //フラグメントの起動
+            supportFragmentManager.beginTransaction()
+                .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(null, "param2"))
+                .commit()
+        }
+
     }
 
 
@@ -111,12 +115,12 @@ class CrearArticuloActivity : AppCompatActivity(),
     //CrearArticuloFragment.OnFragmentInteractionListener#launchGetCoordinatesFragment
     override fun launchGetCoordinatesFragment(itemObj: ItemSerializerModel, launchFrom: String){
 
-        if (launchFrom == FragmentTag.FROM_CREAR_ARTICULO.name) {
+        if (launchFrom == FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance(itemObj, ""), "fromCrearArticuloFragment")
+                .replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance(itemObj, ""), launchFrom)
                 .commit()
             return
-        } else if (launchFrom == FragmentTag.FROM_EDITAR_ARTICULO.name){
+        } else if (launchFrom == FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name){
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance(itemObj, ""), launchFrom)
                 .commit()
@@ -132,11 +136,17 @@ class CrearArticuloActivity : AppCompatActivity(),
             .replace(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(itemObj, ""))
             .commit()
 
-        //supportFragmentManager.beginTransaction().remove()
+        //タグ入れないとやばい
 
     }
 
+    override fun sendEditarArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
+        //GoogleMapから得たデータ(point, radius)も含めたitemObjをEditarArticuloFragmentに反映する
 
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutCrearArticulo, EditarArticuloFragment.newInstance(itemObj!!, ""))
+            .commit()
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

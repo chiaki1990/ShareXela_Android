@@ -214,9 +214,12 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
 
                     //GoogleMapsを描画する
-                    val map = SupportMapFragment.newInstance()
-                    childFragmentManager.beginTransaction().add(R.id.frameLayoutAreaMap, map).commit()
-                    map.getMapAsync(this@DetailFragment)
+                    if (itemObj.point != null) {
+                        val map = SupportMapFragment.newInstance()
+                        childFragmentManager.beginTransaction().add(R.id.frameLayoutAreaMap, map)
+                            .commit()
+                        map.getMapAsync(this@DetailFragment)
+                    }
 
 
 
@@ -564,7 +567,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         btnSolicitar.visibility = View.GONE
         btnCommentBottom.visibility = View.VISIBLE
 
-        btnSolicitado.setOnClickListener { makeToast(MyApplication.appContext, "すでに申請済みです。") }
+        btnSolicitado.setOnClickListener { makeToast(MyApplication.appContext, getString(R.string.fragment_detail_toast_message_applicado)) }
 
         btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
         btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }

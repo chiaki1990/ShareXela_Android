@@ -192,4 +192,7 @@
     <string name="editar_articulo_title">記事編集</string>
     <string name="fragment_profile_list_counfigured_sex">設定済み</string>
     <string name="fragment_profile_list_no_counfigured_sex">未設定</string>
+    <string name="fragment_detail_btn_detail_active_to_deactive">この記事の公開を中止する</string>
+    <string name="fragment_detail_btn_detail_active_to_active">この記事の公開を再開する</string>
+    <string name="fragment_detail_toast_message_applicado">すでに申請済みです。</string>
 </resources>

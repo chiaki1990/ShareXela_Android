@@ -93,8 +93,8 @@ interface ShareXelaService {
     //Itemオブジェクトを生成する
     //認証ユーザーのみリクエスト送れる仕組みが必要
     //@Headers("Content-Type:application/json")
-    @POST("api/item_create/")
-    fun postItemCreateAPIView(@Header("Authorization") authTokenHeader: String, @Body itemObj:ItemSerializerModel):Call<ResultModel>
+    //@POST("api/item_create/")
+    //fun postItemCreateAPIView(@Header("Authorization") authTokenHeader: String, @Body itemObj:ItemSerializerModel):Call<ResultModel>
 
 
     //Itemオブジェクトを生成する
@@ -103,7 +103,6 @@ interface ShareXelaService {
     @Multipart
     @POST("api/item_create_1/")
     fun postItemCreateAPIViewMultiPart(@Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?, @Part file2:MultipartBody.Part?, @Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
-
 
 
 

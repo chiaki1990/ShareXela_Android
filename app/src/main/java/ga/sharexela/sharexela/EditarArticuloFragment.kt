@@ -100,7 +100,7 @@ class EditarArticuloFragment : Fragment() {
             //位置情報のパーミッション状態を取得する
             var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
 
-            if (permissionStatus == true) return@setOnClickListener listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO.name)
+            if (permissionStatus == true) return@setOnClickListener listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name)
             // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
@@ -186,7 +186,7 @@ class EditarArticuloFragment : Fragment() {
                 return
             }
 
-            listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO.name)
+            listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name)
         }
     }
 
@@ -220,7 +220,7 @@ class EditarArticuloFragment : Fragment() {
         service.patchItemDetailSerializerAPIView(itemObj!!.id.toString(), sessionData.authTokenHeader!!, part1, part2, part3, reqBody ).enqueue(object :Callback<ResultModel>{
 
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
-                println("onResponseを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
+                println("onResponseを通る : EditarFragment#patchItemDetailSerializerAPIView")
                 println(call.request().body())
 
                 //EsitarArticuloFragmentを切る
@@ -228,7 +228,7 @@ class EditarArticuloFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResultModel>, t: Throwable) {
-                println("onFailureを通る : EditarArticuloFragment#patchItemDetailSerializerAPIViewMultiPart")
+                println("onFailureを通る : EditarArticuloFragment#patchItemDetailSerializerAPIView")
                 println(call.request().body())
                 println(t)
                 println(t.message)
