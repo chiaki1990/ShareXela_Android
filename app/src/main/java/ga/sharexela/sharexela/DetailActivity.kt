@@ -1,5 +1,6 @@
 package ga.sharexela.sharexela
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +11,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.Serializable
+
+
+
 
 class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteractionListener {
 
@@ -67,8 +71,19 @@ class DetailActivity : AppCompatActivity(), DetailFragment.OnFragmentInteraction
 
     }
 
+    override fun launchEditarFragment(itemObj: ItemSerializerModel) {
+        // 最初にCrearArticuloActtivityに渡してから記事編集を行うフラグメントの起動 -> タイトルの変更 EditarFragmentの起動
 
+        val intent = Intent(this@DetailActivity, CrearArticuloActivity::class.java)
+        intent.putExtra(IntentKey.FragmentTag.name, FragmentTag.EDITAR_ARTICULO.name)
+        intent.putExtra(IntentKey.ItemObj.name, itemObj)
+        startActivity(intent)
+        //toolbar.title = "Ediatar Articulo"
 
+        //supportFragmentManager.beginTransaction()
+        //    .replace(R.id.frameLayoutDetail, EditarArticuloFragment.newInstance(itemObj, ""))
+        //    .commit()
+    }
 
 
     //DetailFragment.OnFragmentInteractionListener#launchDirectMessageActivity

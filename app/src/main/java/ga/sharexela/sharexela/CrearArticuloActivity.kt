@@ -16,6 +16,11 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+// このアクティビティはCrearActivityからCrearArticuloFragmentoまたは
+// EditarAriticuloFragmentoを起動させる。まずEditarArticuloFragmentのIntentKeyが
+// 存在するか調べ、あればEditarArticuloFragmentを起動させる
+
+
 var uri1:Uri? = null
 var uri2:Uri? = null
 var uri3:Uri? = null
@@ -23,11 +28,12 @@ var imageView1FilePath: String? = null
 var imageView2FilePath: String? = null
 var imageView3FilePath: String? = null
 
-val REQUEST_TAKE_PHOTO = 1
+//val REQUEST_TAKE_PHOTO = 1
 
 
 class CrearArticuloActivity : AppCompatActivity(),
     CrearArticuloFragment.OnFragmentInteractionListener,
+    EditarArticuloFragment.OnFragmentInteractionListener,
     GetCoordinatesFragment.OnFragmentInteractionListener{
 
 
@@ -52,10 +58,12 @@ class CrearArticuloActivity : AppCompatActivity(),
         uri1 = null
         uri2 = null
         uri3 = null
+        imageView1FilePath = null
+        imageView2FilePath = null
+        imageView3FilePath = null
 
 
 
-        toolbar.title = getString(R.string.toolbar_crearArticulo_title)
 
         toolbar.apply {
             setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
@@ -63,14 +71,25 @@ class CrearArticuloActivity : AppCompatActivity(),
         }
 
 
-        //カメラを起動する流れを忘れてしまった。onCreateでまずカメラを起動して、onActivityResultで受け取る感じ？
-        // だとしたら最初に記事作成フラグメントを起動するのは間違いか。。。
+        if (intent.extras?.getString(IntentKey.FragmentTag.name) == FragmentTag.EDITAR_ARTICULO.name){
+
+
+            toolbar.title = getString(R.string.editar_articulo_title)
+
+            val itemObj = intent.extras!!.getSerializable(IntentKey.ItemObj.name) as ItemSerializerModel
+            supportFragmentManager.beginTransaction()
+                .add(R.id.frameLayoutCrearArticulo, EditarArticuloFragment.newInstance(itemObj, ""))
+                .commit()
+            return
+        }
+
+
+        toolbar.title = getString(R.string.toolbar_crearArticulo_title)
 
         //フラグメントの起動
         supportFragmentManager.beginTransaction()
-            .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance("param1", "param2"))
+            .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(null, "param2"))
             .commit()
-
     }
 
 
@@ -81,38 +100,43 @@ class CrearArticuloActivity : AppCompatActivity(),
     }
 
 
-
-
+    //CrearArticuloFragment.OnFragmentInteractionListener#onLaunchImagesActivity
     override fun onLaunchImagesActivity() {
-
-        //後にuriを引っ張るためにstartActivityForResultに改修する
-        //val intent = Intent(this, ImagesActivity::class.java)
-        //startActivity(intent)
 
         val intent = Intent(this, ImagesActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_IMAGES_ACTIVITY)
     }
 
 
-    override fun launchGetCoordinatesFragment(){
+    //CrearArticuloFragment.OnFragmentInteractionListener#launchGetCoordinatesFragment
+    override fun launchGetCoordinatesFragment(itemObj: ItemSerializerModel, launchFrom: String){
 
-        supportFragmentManager!!.beginTransaction().replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance("", "")).commit()
-
-    }
-
-
-
-
-    var currentPhotoPath: String = ""
-
-    fun createImageFile():File{
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
-            currentPhotoPath = absolutePath
+        if (launchFrom == FragmentTag.FROM_CREAR_ARTICULO.name) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance(itemObj, ""), "fromCrearArticuloFragment")
+                .commit()
+            return
+        } else if (launchFrom == FragmentTag.FROM_EDITAR_ARTICULO.name){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayoutCrearArticulo, GetCoordinatesFragment.newInstance(itemObj, ""), launchFrom)
+                .commit()
+            return
         }
+    }
+
+
+    //GetCoordinatesFragment.OnFragmentInteractionListener#updateItemObj
+    override fun sendCrearArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
+        //GoogleMapから得たデータ(point, radius)も含めたitemObjをCrearArticuloFragmentに反映する
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(itemObj, ""))
+            .commit()
+
+        //supportFragmentManager.beginTransaction().remove()
 
     }
+
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -140,8 +164,8 @@ class CrearArticuloActivity : AppCompatActivity(),
             REQUEST_CODE_IMAGES_ACTIVITY -> {
 
                 imageView1FilePath = data!!.getStringExtra("imageView1FilePath")
-                imageView2FilePath = data!!.getStringExtra("imageView2FilePath")
-                imageView3FilePath = data!!.getStringExtra("imageView3FilePath")
+                imageView2FilePath = data.getStringExtra("imageView2FilePath")
+                imageView3FilePath = data.getStringExtra("imageView3FilePath")
 
 
                 //uri1 = Uri.parse(imageView1FilePath)
@@ -155,8 +179,6 @@ class CrearArticuloActivity : AppCompatActivity(),
                 Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
             }
         }
-
-
     }
 
 

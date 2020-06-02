@@ -124,9 +124,8 @@ class ProfileActivity : AppCompatActivity(),
         //タイトルを編集
         toolbar.title = getString(R.string.title_set_point_and_radius) //"取引場所の設定"
 
-
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayoutProfile, GetCoordinatesFragment.newInstance("", ""))
+            .replace(R.id.frameLayoutProfile, GetCoordinatesFragment.newInstance(null, ""),"fromEditAreaInfoFragment")
             .commit()
     }
 
@@ -212,6 +211,11 @@ class ProfileActivity : AppCompatActivity(),
                 println(t.localizedMessage)
             }
         })
+    }
+
+    //GetCoordinatesFragment.OnFragmentInteractionListener#updateItemObj
+    override fun sendCrearArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
+        //使わない CrearArticuloFragmentで使うもの
     }
 
 }

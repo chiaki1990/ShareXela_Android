@@ -155,9 +155,9 @@ class ProfileListFragment : Fragment() {
         tvDepartamento.text = sessionData.profileObj!!.adm1
         tvMunicipio.text = sessionData.profileObj!!.adm2
         if (sessionData.profileObj!!.sex == 0){
-            tvSex.text = "未設定"
+            tvSex.text = getString(R.string.fragment_profile_list_no_counfigured_sex) //"未設定"
         }else{
-            tvSex.text = "設定済み"
+            tvSex.text = getString(R.string.fragment_profile_list_counfigured_sex) //"設定済み"
         }
 
     }
@@ -174,6 +174,7 @@ class ProfileListFragment : Fragment() {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
     }
+
 
     override fun onDetach() {
         super.onDetach()
@@ -198,14 +199,7 @@ class ProfileListFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileListFragment.
-         */
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

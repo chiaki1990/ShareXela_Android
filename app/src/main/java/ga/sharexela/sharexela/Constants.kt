@@ -11,15 +11,21 @@ import java.text.SimpleDateFormat
 
 enum class IntentKey{
     ItemId,
+    ItemObj,
     FragmentTag
 }
 
 
 enum class FragmentTag{
+    EDITAR_ARTICULO,
     PROFILE_LIST,
     PROFILE_EDIT_AREA,
     PROFILE_EDIT_AREA_NEW,
-    PROFILE_EDIT_AREA_CHANGE
+    PROFILE_EDIT_AREA_CHANGE,
+    FROM_CREAR_ARTICULO,
+    FROM_EDITAR_ARTICULO
+
+
 }
 
 enum class BtnChoice{

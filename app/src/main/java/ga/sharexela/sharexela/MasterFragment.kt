@@ -79,11 +79,6 @@ class MasterFragment : Fragment(){
         super.onActivityCreated(savedInstanceState)
 
 
-
-
-
-
-
         setUpRecyclerView()
         swiperefresh.setOnRefreshListener { updateItemObjects(itemObjectsCategory!!) }
 
@@ -224,7 +219,7 @@ class MasterFragment : Fragment(){
 
 
         }else if (sessionData.profileObj == null){
-            tv_userName.setText("未ログイン") //text = "未ログイン"
+            tv_userName.setText(getString(R.string.drawer_header_logOutStatus)) //"未ログイン"
             tv_emailAddress.visibility = View.GONE
             //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
             //val menu = nav_view.menu

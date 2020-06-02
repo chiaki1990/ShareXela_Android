@@ -51,6 +51,13 @@ data class CheckTokenResult(
 )
 
 
+
+data class ResultRegionModel(
+    var adm1: String?,
+    var adm2: String?
+)
+
+
 data class AuthModel(
     var key:String?,
     var non_field_errors: String?,
@@ -59,22 +66,6 @@ data class AuthModel(
     //{ "key": "ebfa00bd84de2b8f319b747636270257ec24601c" }
     //{ "non_field_errors": [ "Unable to log in with provided credentials." ] }
 )
-
-/*
-email ishiharasatomi@gmail.com
-password1 1234tweet
-password2 1234tweet
- */
-
-
-/*
-data class AreaSet(
-
-    var ADM0_LIST: ArrayList<String>,
-    var ADM1_LIST: ArrayList<String>,
-    var ADM2_LIST: ArrayList<String>
-)
-*/
 
 
 
@@ -98,7 +89,7 @@ data class RegionListSet(
     var muniGeoJson: String
 )
 
-
+/*
 data class RegionListSimpleSet(
 
     var ADM0_LIST: ArrayList<String>,
@@ -107,6 +98,7 @@ data class RegionListSimpleSet(
 
 )
 
+ */
 
 
 
@@ -121,6 +113,8 @@ data class ItemSerializerModel(
     var adm0: String? = null,
     var adm1: String? = null,
     var adm2: String? = null,
+    var point: String? = null,
+    var radius: Int? = null,
     var created_at: String? = null,      //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var active: Boolean? = true ,
     var deadline: Boolean? = null,      //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？

@@ -38,7 +38,7 @@
                 android:background="@color/backgroundColor"
                 android:paddingLeft="@dimen/startText"
                 android:paddingBottom="@dimen/titlePaddingBottom"
-                android:text="ログイン"
+                android:text="@string/drawer_menu_signIn"
                 android:textColor="@color/colorAccent" />
 
             <View
@@ -174,7 +174,7 @@
                     android:background="@color/backgroundColor"
                     android:paddingLeft="@dimen/startText"
                     android:paddingBottom="@dimen/titlePaddingBottom"
-                    android:text="パスワードを忘れてしまった"
+                    android:text="@string/tv_forget_password"
                     android:textColor="@color/colorAccent" />
 
                 <View
@@ -189,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:text="パスワードを忘れてしまった" />
+                    android:text="@string/tv_forget_password" />
 
                 <View
                     android:id="@+id/divider40"

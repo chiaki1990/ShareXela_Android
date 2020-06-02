@@ -1,32 +1,37 @@
 package ga.sharexela.sharexela
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.tvItemTitle
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [DetailFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 
 
@@ -48,7 +53,7 @@ BtnChoice.CANNOT_TRANSACTION
 
 
 
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var itemId: String = ""
     private var param2: String? = null
@@ -60,7 +65,7 @@ class DetailFragment : Fragment() {
     lateinit var solicitud_objects: ArrayList<SolicitudSerializerModel>
     lateinit var favorite_users: ArrayList<UserSerializerModel>
 
-    //カルーセルテスト
+    //カルーセル用
     lateinit var imageUrls:ArrayList<String>
 
 
@@ -110,8 +115,26 @@ class DetailFragment : Fragment() {
 
 
         btnDetailFavorite.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener
             onClickFavBtn()
         }
+
+        btnDetailEditarArticulo.setOnClickListener {
+            if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username!!) return@setOnClickListener
+            listener!!.launchEditarFragment(itemObj)
+        }
+
+        btnDetailActive.setOnClickListener {
+            println("反応すれば良い")
+            changeActiveStatus()
+        }
+
+        //adMob
+        //val ad1View = findViewById<AdView>(R.id.adView)
+        //MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+        adView2.loadAd(adRequest)
 
     }
 
@@ -147,6 +170,8 @@ class DetailFragment : Fragment() {
                     val itemAdm0 = itemObj.adm0
                     val itemAdm1 = itemObj.adm1
                     val itemAdm2 = itemObj.adm2
+                    val itemPoint: String? = itemObj.point
+                    val itemRadius: Int? = itemObj.radius
 
 
 
@@ -165,8 +190,7 @@ class DetailFragment : Fragment() {
 
 
 
-                    //pointは今後実装する
-                    //val itemPoint = response.body()!!.item_obj_serializer.
+
 
                     val itemCategory = itemObj!!.category!!.name
 
@@ -183,21 +207,16 @@ class DetailFragment : Fragment() {
                     //画面にデータを描画する
                     tvItemTitle.text = itemTitle
                     tvItemDescription.text = itemDescription
-                    //tvCreatedAt.text = itemCreatedAt
                     tvCreatedAt.text = strDate
                     tvCategoryContent.text = itemCategory
                     tvDealAreaAdm1.text = itemAdm1
                     tvDealAreaAdm2.text = itemAdm2
 
-                    /*
-                    val imageUrl = BASE_URL + itemImage1!!.substring(1)
-                    println(imageUrl)
-                    Glide.with(MyApplication.appContext).load(Uri.parse(imageUrl)).into(ivItemDetail)
-                    */
 
-
-
-                    //カルーセル実装テスト
+                    //GoogleMapsを描画する
+                    val map = SupportMapFragment.newInstance()
+                    childFragmentManager.beginTransaction().add(R.id.frameLayoutAreaMap, map).commit()
+                    map.getMapAsync(this@DetailFragment)
 
 
 
@@ -222,25 +241,23 @@ class DetailFragment : Fragment() {
                     });
                     carouselView.setPageCount(imageUrls.size);
 
-                    /*
-                    var imageListener: ImageListener = object : ImageListener {
-                        override fun setImageForPosition(position: Int, imageView: ImageView) {
-                            // You can use Glide or Picasso here
-                            //imageView.setImageResource(sampleImages[position])
-                            Glide.with(MyApplication.appContext).load(imageUrls[position]).into(imageView)
-                        }
-                    }
-
-                     */
-
-
-
-
-
 
                     //btnDetailFavを押してるなら赤色に変更する
                     favSetting()
 
+                    //記事作成者以外のアクセスの場合には記事編集ボタンを非表示にする/作成者の場合には記事の変更表示を変更する
+                    if (sessionData.logInStatus == false ) btnDetailEditarArticulo.visibility = View.GONE
+                    if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailEditarArticulo.visibility = View.GONE
+
+
+
+                    //記事作成者以外のアクセスの場合にはアクティブを変更するボタンを非表示にする
+                    if (sessionData.logInStatus == false ) btnDetailActive.visibility = View.GONE
+                    if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailActive.visibility = View.GONE
+                    if (sessionData.profileObj!!.user!!.username == itemObj.user!!.username){
+                        if (itemObj.active == true) btnDetailActive.text = getString(R.string.fragment_detail_btn_detail_active_to_deactive) //"この記事の公開を中止する"
+                        if (itemObj.active == false) btnDetailActive.text = getString(R.string.fragment_detail_btn_detail_active_to_active)  //"この記事の公開を再開する"
+                    }
 
                     //postUserのデータを表示
                     tvDetailUsername.text = postUserUsername
@@ -308,26 +325,20 @@ class DetailFragment : Fragment() {
 
                     //ユーザー認証され、ユーザーが出品者以外の場合 && 取引相手が他人に決まっている場合
                     if (btnChoice == BtnChoice.CANNOT_TRANSACTION.name){
-
-
                         //描画内容 -> "申請する"を表示するがボタン押せない(申請済みだから)
                         showForCANNOT_TRANSACTION()
-
                     }
 
                     //ユーザーが出品者である場合&&申請者が現れていない場合
                     if (btnChoice == BtnChoice.NO_SOLICITUDES.name){
                         //"コメント"を表示させる
                         showForNO_SOLICITUDES()
-
                     }
 
                     //ユーザーが出品者である場合&&申請者が現われ、申請者を選ぶ場合
                     if (btnChoice == BtnChoice.SELECT_SOLICITUDES.name){
                         //"申請者を選ぶボタン"を表示させる
                         showForSELECT_SOLICITUDES()
-
-
                     }
 
                     if (btnChoice == BtnChoice.GO_TRANSACTION.name){
@@ -336,9 +347,7 @@ class DetailFragment : Fragment() {
                         showForGO_TRANSACTION()
 
                     }
-
                 }
-
             }
 
             override fun onFailure(call: Call<ItemDetailSerializerAPIViewModel>, t: Throwable) {
@@ -409,20 +418,18 @@ class DetailFragment : Fragment() {
         // ItemContactActivityに画面遷移させるためのコールバック
         fun launchItemContactActivity(itemObj: ItemSerializerModel)
 
-        //fun launchSolicitar
+        // SolicitarMessageMakingFragmentを起動させるためのコールバック
         fun launchSolicitarMessageMakingFragment(itemObj:ItemSerializerModel, tag: String)
+
+        // EditarArticuloFragmentを起動させるためのコールバック
+        fun launchEditarFragment(itemObj: ItemSerializerModel)
+
+        //fun successPatchArticulo()
+
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(itemId: String, param2: String) =
             DetailFragment().apply {
@@ -435,6 +442,9 @@ class DetailFragment : Fragment() {
 
 
     private fun favSetting(){
+
+        if (sessionData.logInStatus == false) return
+
         //favのカウントを表示
         if (favorite_users.size == 0) return
         tvDetailFavCount.text = favorite_users.size.toString()
@@ -495,7 +505,6 @@ class DetailFragment : Fragment() {
 
         })
 
-
     }
 
 
@@ -511,8 +520,10 @@ class DetailFragment : Fragment() {
         btnSelectSolicitudes.visibility = View.GONE
 
         //コメントを一覧するビューを作成するそして、その画面へ遷移させる
-        btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
-        btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
+        //btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
+        //btnComment.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
+        btnCommentBottom.setOnClickListener { makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn)) }
+        btnComment.setOnClickListener { makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn)) }
 
         //申請するボタンを押すとwarningをToastで表示する
         btnSolicitar.setOnClickListener { makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn)) }
@@ -624,6 +635,57 @@ class DetailFragment : Fragment() {
         btnCommentBottom.setOnClickListener { listener!!.launchItemContactActivity(itemObj) }
     }
 
+
+    private fun changeActiveStatus(){
+        val activeStatus = itemObj.active!!
+        val activateTo: Boolean = !activeStatus
+        val itemObjId = itemObj.id
+
+        val itemObjData = ItemSerializerModel(id=itemObjId,title=itemObj.title, description=itemObj.description, active=activateTo)
+        val part1: MultipartBody.Part? = null
+        val part2: MultipartBody.Part? = null
+        val part3: MultipartBody.Part? = null
+        val reqBody : RequestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(itemObjData))
+
+        val service = setService()
+        service.patchItemDetailSerializerAPIView(itemId, sessionData.authTokenHeader!! ,part1, part2, part3, reqBody).enqueue(object :Callback<ResultModel>{
+
+            override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
+                println("onResponseを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
+                println(call.request().body())
+
+                //更新する
+                this@DetailFragment.onResume()
+
+            }
+
+            override fun onFailure(call: Call<ResultModel>, t: Throwable) {
+                println("onFailureを通る : EditarArticuloFragment#patchItemDetailSerializerAPIViewMultiPart")
+                println(call.request().body())
+                println(t)
+                println(t.message)
+            }
+        })
+    }
+
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        //描画したいこと mapの縮尺, mapの中心設定, pointまたはradiusの描画
+        //mapの縮尺
+        if (itemObj.point == null) return
+        val latLng = getLatLng(itemObj)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
+        googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isZoomGesturesEnabled = true
+
+
+        if (itemObj.radius != 0){
+            drawingCircle(latLng, itemObj.radius.toString(), googleMap)
+        }else if (itemObj.radius == 0){
+            drawingPoint(latLng, googleMap)
+        }
+    }
 
 
 }

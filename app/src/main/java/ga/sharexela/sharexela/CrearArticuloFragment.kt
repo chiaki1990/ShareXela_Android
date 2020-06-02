@@ -2,19 +2,16 @@ package ga.sharexela.sharexela
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
 import okhttp3.MediaType
@@ -24,9 +21,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -35,10 +33,9 @@ private const val ARG_PARAM2 = "param2"
 
 class CrearArticuloFragment : Fragment() {
 
-    private var param1: String? = null
+    private var itemObj: ItemSerializerModel? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-
 
     val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     val REQUEST_CODE_PERMISSIONS = 15
@@ -49,7 +46,7 @@ class CrearArticuloFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            itemObj = it.getSerializable(ARG_PARAM1) as ItemSerializerModel?
             param2 = it.getString(ARG_PARAM2)
         }
     }
@@ -69,22 +66,18 @@ class CrearArticuloFragment : Fragment() {
 
 
         //spinner(Articuloの記事カテゴリ)の選択肢をセットする
-        val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.categoryList, android.R.layout.simple_list_item_1)
-        spArticuloCategory.adapter = adapter
+        setAdapterToCategotySpinner(spArticuloCategory)
 
 
         //具体的な座標データを利用する
-        btnRegionDetail.setOnClickListener {
+        btnCrearArticuloLaunchMap.setOnClickListener {
 
-
-            //位置情報のパーミッションを取得する。
-            //var permissionStatus:Boolean = checkPermissions()
+            //位置情報のパーミッション状態を取得する
             var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
 
             if (permissionStatus == true) return@setOnClickListener showMap()
-
+            // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-
         }
 
 
@@ -95,54 +88,81 @@ class CrearArticuloFragment : Fragment() {
             postCrearArticuloData()
         }
 
-
+        //画像をタップするとギャラリーからデータを引っ張る
         ivArticuloImage1.setOnClickListener { listener!!.onLaunchImagesActivity() }
         ivArticuloImage2.setOnClickListener { listener!!.onLaunchImagesActivity() }
         ivArticuloImage3.setOnClickListener { listener!!.onLaunchImagesActivity() }
 
 
 
-        //Regionデータを取得してRegionをセット
-        val service = setService()
-        service.getAreaSettingsAPIView().enqueue(object :Callback<RegionListSet>{
-
-            override fun onResponse(call: Call<RegionListSet>, response: Response<RegionListSet>) {
-                println("onResponse を通る")
-
-                val adm0ArrayList: ArrayList<String> = response.body()!!.ADM0_LIST
-                val adm1ArrayList: ArrayList<String> = response.body()!!.ADM1_LIST
-                val adm2ArrayList: ArrayList<String> = response.body()!!.ADM2_LIST
-
-                spSelectPais.adapter = ArrayAdapter(MyApplication.appContext, android.R.layout.simple_list_item_1, adm0ArrayList)
-                spSelectDepartamento.adapter = ArrayAdapter(MyApplication.appContext, android.R.layout.simple_list_item_1, adm1ArrayList)
-                spSelectMunicipio.adapter = ArrayAdapter(MyApplication.appContext, android.R.layout.simple_list_item_1, adm2ArrayList)
-
-                val indexOfPais = adm0ArrayList.indexOf(sessionData.profileObj!!.adm0)
-                spSelectPais.setSelection(indexOfPais)
-                val indexOfDepartamento = adm1ArrayList.indexOf(sessionData.profileObj!!.adm1)
-                spSelectDepartamento.setSelection(indexOfDepartamento)
-                val indexOfMunicipio = adm2ArrayList.indexOf(sessionData.profileObj!!.adm2)
-                spSelectMunicipio.setSelection(indexOfMunicipio)
-
-
-            }
-
-            override fun onFailure(call: Call<RegionListSet>, t: Throwable) {
-                println("onFailure を通る")
-                println(t)
-            }
-        })
-
+        //Regionデータをareing.xmlから取得してRegionをセット
+        setRegionSpinner(itemObj)
 
     }
+
+
+
+    fun setRegionSpinner(itemObj: ItemSerializerModel?){
+
+        setAdapterToPaisSpinner(spSelectPais)
+        setAdapterToDepartamentoSpinner(spSelectDepartamento)
+        setAdapterToMunicipioSpinner(spSelectMunicipio)
+
+        if (itemObj == null){
+            setValueToPaisSpinner(sessionData.profileObj!!.adm0!!, spSelectPais)
+            setValueToDepartamentoSpinner(sessionData.profileObj!!.adm1!!, spSelectDepartamento)
+            setValueToMunicipioSpinner(sessionData.profileObj!!.adm2!!, spSelectMunicipio)
+            return
+        }
+        setValueToPaisSpinner(itemObj.adm0!!, spSelectPais)
+        setValueToDepartamentoSpinner(itemObj.adm1!!, spSelectDepartamento)
+        setValueToMunicipioSpinner(itemObj.adm2!!, spSelectMunicipio)
+        return
+
+    }
+
+
+
+
+
+
+    override fun onResume() {
+
+        super.onResume()
+        if (itemObj == null) return
+
+        //画面に再反映させる
+        setValueToCategotySpinner(itemObj!!, spArticuloCategory)
+        etArticuloTitle.setText(itemObj!!.title)
+        etArticuloDescription.setText(itemObj!!.description)
+        tvCrearArticuloPoint.text = itemObj?.point
+        tvCrearArticuloRadius.text = itemObj!!.radius.toString()
+        setRegionSpinner(itemObj)
+        if (imageView1FilePath != null && imageView1FilePath != "") Glide.with(this).load(imageView1FilePath).into(ivArticuloImage1)
+
+        if (imageView2FilePath != null && imageView2FilePath != "") Glide.with(this).load(imageView2FilePath).into(ivArticuloImage2)
+
+        if (imageView3FilePath != null && imageView3FilePath != "") Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
+
+    }
+
 
     private fun showMap() {
+
         //データをとる関数を実施
-        //var itemObj = ItemSerializerModel()
+        val itemObj = retrieveArticuloData(
+                etArticuloTitle, etArticuloDescription, spArticuloCategory,
+                spSelectPais, spSelectDepartamento,spSelectMunicipio,
+                tvCrearArticuloPoint, tvCrearArticuloRadius)
 
-        listener!!.launchGetCoordinatesFragment()
-
+        //もしデータが必要ならこのitemObjを使用する
+        listener!!.launchGetCoordinatesFragment(itemObj, FragmentTag.FROM_CREAR_ARTICULO.name)
     }
+
+
+
+
+
 
     private fun postCrearArticuloData() {
 
@@ -150,81 +170,27 @@ class CrearArticuloFragment : Fragment() {
         //入力データの取得
         val title = etArticuloTitle.text.toString()
         val description = etArticuloDescription.text.toString()
-        val category:String = spArticuloCategory.selectedItem.toString()
 
-        val adm0: String = spSelectPais.selectedItem.toString()
-        val adm1: String = spSelectDepartamento.selectedItem.toString()
-        val adm2: String = spSelectMunicipio.selectedItem.toString()
 
-        val categoryObj = CategorySerializerModel(name=category)
-
-        //タイトルや説明欄に入力データデータがないときにメッセージを表示する
+        //タイトルや説明欄に入力データデータがないときにメッセージを表示する(バリデーション)
         if (title == "" || description == "") {
             makeToast(MyApplication.appContext, getString(R.string.title_o_description_blank_message))
             return
         }
-        val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2 )
+
+
+        val retrievedItemObj = retrieveArticuloData(
+                etArticuloTitle, etArticuloDescription, spArticuloCategory,
+                spSelectPais, spSelectDepartamento,spSelectMunicipio,
+                tvCrearArticuloPoint, tvCrearArticuloRadius)
 
 
         //ivArticuloImageにセットされたuriをMultipartBody.Partオブジェクトに変換する
-        var part1:MultipartBody.Part? = null
-        if (imageView1FilePath != "") {
-            //var filePath1 = getPathFromUri(MyApplication.appContext, uri1!!)
-            //var file1 = File(filePath1)
-            var file1 = File(imageView1FilePath)
+        var part1 = makeImgagePartForRetrofit(imageView1FilePath, IMAGE1)
+        var part2 = makeImgagePartForRetrofit(imageView2FilePath, IMAGE2)
+        var part3 = makeImgagePartForRetrofit(imageView3FilePath, IMAGE3)
 
-            println("FILEの内容チェック")
-            println(file1)
-
-            var fileBody1 = RequestBody.create(MediaType.parse("image/*"), file1)
-            part1 = MultipartBody.Part.createFormData(IMAGE1, file1.name, fileBody1)
-        }
-        println("part1の標準出力をじっこう")
-        println(part1 == null)
-        println(imageView1FilePath)
-
-        var part2:MultipartBody.Part? = null
-        if (imageView2FilePath != ""){
-            //var filePath2 = getPathFromUri(MyApplication.appContext, uri2!!)
-            //var file2 = File(filePath2)
-            var file2 = File(imageView2FilePath)
-            var fileBody2 = RequestBody.create(MediaType.parse("image/*"), file2)
-            part2 = MultipartBody.Part.createFormData(IMAGE2, file2.name, fileBody2)
-        }
-        println("part2の標準出力を実行")
-        println(part2 == null)
-        println(imageView2FilePath)
-        println(imageView2FilePath == "")
-
-
-        var part3:MultipartBody.Part? = null
-        if (imageView3FilePath != ""){
-            //var filePath3 = getPathFromUri(MyApplication.appContext, uri3!!)
-            //var file3 = File(filePath3)
-            var file3 = File(imageView3FilePath)
-            var fileBody3 = RequestBody.create(MediaType.parse("image/*"), file3)
-            part3 = MultipartBody.Part.createFormData(IMAGE3, file3.name, fileBody3)
-        }
-        println("part3の標準出力を実行")
-        println(part3 == null)
-        println(imageView3FilePath)
-        println(imageView3FilePath == "")
-
-
-        //println("part1"+part1.toString())
-        //println("part2"+part2.toString())
-        //println("part3"+part3.toString())
-
-        val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(itemObj))
-        println("文字ベースデータの標準出力を実行する")
-        println(reqBody == null)
-
-
-        //今わかっていることは、画像を送信しない場合はpostが成功する。
-        //また３枚送信する場合も成功する
-        //しかし、１，２枚のみ送信する場合にはjsonDataが送信されないことが明らかになった。
-        //この原因が分かっていない。
-
+        val reqBody :RequestBody = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(retrievedItemObj))
 
 
         val service = setService()
@@ -240,11 +206,8 @@ class CrearArticuloFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResultModel>, t: Throwable) {
-
                 println("onFailureを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
-
                 println(call.request().body())
-                //println(call.request().headers())
                 println(t)
                 println(t.message)
             }
@@ -262,6 +225,7 @@ class CrearArticuloFragment : Fragment() {
         }
     }
 
+
     override fun onDetach() {
         super.onDetach()
         listener = null
@@ -277,17 +241,18 @@ class CrearArticuloFragment : Fragment() {
         fun onLaunchImagesActivity()
 
         //取引エリア、地点を取得するフラグメントを起動する
-        fun launchGetCoordinatesFragment()
+        fun launchGetCoordinatesFragment(itemObj: ItemSerializerModel, launchFrom: String)
 
     }
 
+
     companion object {
-        
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(itemObj: ItemSerializerModel?, param2: String) =
             CrearArticuloFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putSerializable(ARG_PARAM1, itemObj)
                     putString(ARG_PARAM2, param2)
                 }
             }
@@ -309,3 +274,110 @@ class CrearArticuloFragment : Fragment() {
     }
 
 }
+
+
+
+//CrearArticuloFragmentとEditarArticuloFragmentで使用している
+fun makeImgagePartForRetrofit(imageViewFilePath:String?, formName:String): MultipartBody.Part?{
+    var part:MultipartBody.Part? = null
+
+    if (imageViewFilePath != ""){
+
+        try {
+            var file = File(imageViewFilePath)
+
+            println("FILEの内容チェック")
+            println(file)
+
+            var fileBody = RequestBody.create(MediaType.parse("image/*"), file)
+            part = MultipartBody.Part.createFormData(formName, file.name, fileBody)
+        }catch (e:NullPointerException){
+            println(e)
+        }
+    }
+
+    println("part1の標準出力をじっこう")
+    println(part == null)
+    println(imageViewFilePath)
+    return part
+}
+
+
+
+//CrearArticuloFragmentとEditarArticuloFragmentで使用している
+fun retrieveArticuloData(etArticuloTitle:EditText, etArticuloDescription: EditText,
+                         spArticuloCategory: Spinner, spSelectPais:Spinner, spSelectDepartamento:Spinner,
+                         spSelectMunicipio:Spinner, tvCrearArticuloPoint:TextView, tvCrearArticuloRadius: TextView)
+        :ItemSerializerModel {
+
+        //入力データの取得
+        val title           = etArticuloTitle.text.toString()
+        val description     = etArticuloDescription.text.toString()
+        val category:String = spArticuloCategory.selectedItem.toString()
+        val adm0: String    = spSelectPais.selectedItem.toString()
+        val adm1: String    = spSelectDepartamento.selectedItem.toString()
+        val adm2: String    = spSelectMunicipio.selectedItem.toString()
+        val point: String   = tvCrearArticuloPoint.text.toString()
+        val radius: Int     = tvCrearArticuloRadius.text.toString().toInt()
+        //CategorySerializerModelオブジェクトの生成
+        val categoryObj     = CategorySerializerModel(name=category)
+        //ItemSerializerModelオブジェクトの作成
+        val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2 )
+
+        return itemObj
+    }
+
+
+
+fun setAdapterToCategotySpinner(spinner: Spinner){
+    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.categoryList, android.R.layout.simple_list_item_1)
+    //spArticuloCategory.adapter = adapter
+    spinner.adapter = adapter
+}
+
+fun setValueToCategotySpinner(itemObj: ItemSerializerModel, spinner:Spinner) {
+    val categoryList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.categoryList)
+    val indexOfCategory = categoryList.indexOf(itemObj.category!!.name)
+    //spArticuloCategory.setSelection(indexOfCategory)
+    spinner.setSelection(indexOfCategory)
+}
+
+fun setAdapterToPaisSpinner(spinner: Spinner){
+    // R.id.spSelectPais用の関数
+    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.paisList, android.R.layout.simple_list_item_1)
+    spinner.adapter = adapter
+}
+
+fun setValueToPaisSpinner(strPais: String, spinner:Spinner) {
+    val paisList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.paisList)
+    val indexOfPais = paisList.indexOf(strPais)
+    spinner.setSelection(indexOfPais)
+}
+
+fun setAdapterToDepartamentoSpinner(spinner: Spinner){
+    //R.id.spSelectDepartamento用の関数
+    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.departamentoList, android.R.layout.simple_list_item_1)
+    spinner.adapter = adapter
+}
+
+fun setValueToDepartamentoSpinner(strDepartamento: String, spinner:Spinner) {
+    val departamentoList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.departamentoList)
+    val indexOfDepartamentos = departamentoList.indexOf(strDepartamento)
+    spinner.setSelection(indexOfDepartamentos)
+}
+
+fun setAdapterToMunicipioSpinner(spinner: Spinner){
+    //R.id.spSelectMunicipio用の関数
+    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.municipioList, android.R.layout.simple_list_item_1)
+    spinner.adapter = adapter
+}
+
+fun setValueToMunicipioSpinner(strMunicipio: String, spinner:Spinner) {
+    val municipioList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.municipioList)
+    val indexOfMunicipos = municipioList.indexOf(strMunicipio)
+    spinner.setSelection(indexOfMunicipos)
+}
+
+
+
+

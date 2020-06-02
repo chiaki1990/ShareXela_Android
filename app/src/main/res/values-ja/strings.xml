@@ -42,6 +42,8 @@
     <string name="drawer_menu_others">その他</string>
     <string name="drawer_menu_signOut">サインアウト</string>
 
+    <string name="drawer_header_logOutStatus">未ログイン</string>
+
 
     <!-- Master -->
     <!--        Toast Message -->
@@ -146,6 +148,13 @@
     <string name="toast_message_no_input_message">メッセージが入力されていません</string>
 
 
+    <!-- Notification -->
+    <string name="notification_recyclerview_adapter_recieve_solicitud">"取引申請がきました。　　　　"</string>
+    <string name="notification_recyclerview_adapter_recieve_commento">"コメントが付きました。　　　"</string>
+    <string name="notification_recyclerview_adapter_begin_transaction">"取引を始めてください。　　　"</string>
+    <string name="notification_recyclerview_adapter_recieve_message">"取引相手から連絡が来ました。"</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_sub_function">SubFunctionActivity</string>
@@ -162,7 +171,6 @@
     <string name="ALL_GUATEMALA">すべての記事</string>
     <string name="fragment_crear_articulo_chooseCategory">カテゴリーの選択</string>
     <string name="fragment_crear_artivulo_btnCrearArticulo">記事を作成する</string>
-    <string name="fragment_crear_articulo_btnRegionDetail">具体的な地理データを提供する</string>
     <string name="fragment_solicitar_message_making_btnSend">送信</string>
     <string name="fragment_detail_btn_text_btnTransaction">取引画面へ移る</string>
     <string name="fragment_profile_list_area">取引エリア</string>
@@ -178,4 +186,10 @@
     <string name="fragment_edit_mail_password_TextInputEditText_New_password_hint">現在のパスワード</string>
     <string name="title_set_point_and_radius">取引場所の設定</string>
     <string name="title_activity_signUp">ユーザー登録</string>
+    <string name="fragment_crear_articulo_btnCrearArticuloLaunchMap">(オプション)具体的な地理データを提供する</string>
+    <string name="drawer_menu_response_no_logIn">ログインしていません</string>
+    <string name="tv_forget_password">パスワードを忘れてしまった</string>
+    <string name="editar_articulo_title">記事編集</string>
+    <string name="fragment_profile_list_counfigured_sex">設定済み</string>
+    <string name="fragment_profile_list_no_counfigured_sex">未設定</string>
 </resources>

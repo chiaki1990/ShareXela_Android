@@ -5,17 +5,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.fragment_get_coordinates.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
-
-
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -26,21 +23,22 @@ private const val ARG_PARAM2 = "param2"
 
 class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
 
-    private var param1: String? = null
+    private var itemObj: ItemSerializerModel? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
     var marker: Marker? = null
     var circle: Circle? = null
     var profileObj: ProfileSerializerModel? = null
+    var point: String = ""
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            itemObj = it.getSerializable(ARG_PARAM1) as ItemSerializerModel?
+            param2  = it.getString(ARG_PARAM2)
         }
     }
 
@@ -71,12 +69,26 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.menuDone -> {
-                //ProfileActivityからの場合       -> Profileオブジェクトの更新のためHttp通信を実行
                 //CrearArticuloActivityからの場合 -> CrearArticuloActivityにデータを引き渡す
+                //ProfileActivityからの場合       -> Profileオブジェクトの更新のためHttp通信を実行
+
+                println("反応するか")
+                if (point == "") return true
+
+                //記事新規作成の地理データを更新する
+                if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+                    updateRegionDataByPoint(itemObj)
+                }
+                //記事編集の地理データを更新する
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+                    updateRegionDataByPoint(itemObj)
+                }
 
                 //地理データを送信する
-                if (profileObj == null) return true
-                sendGeoDataToProfile(profileObj!!)
+                if (parentFragmentManager.findFragmentByTag("fromEditAreaInfoFragment") != null){
+                    if (profileObj == null) return true
+                    sendGeoDataToProfile(profileObj!!)
+                }
             }
         }
         return true
@@ -112,26 +124,29 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
 
 
     interface OnFragmentInteractionListener {
-
+        fun sendCrearArticuloFragmentAgain(itemObj:ItemSerializerModel?)
     }
 
     companion object {
 
-
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(itemObj: ItemSerializerModel?, param2: String) =
             GetCoordinatesFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putSerializable(ARG_PARAM1, itemObj)
                     putString(ARG_PARAM2, param2)
                 }
             }
     }
 
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
 
-        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(14.845833, -91.518889), 12.0f))
+
+
+        googleMap.uiSettings.isMapToolbarEnabled = false
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(14.845833, -91.518889), 12.0f))
 
         //CrearArticuloActivityから来た場合は位置情報を描画する
         googleMap.isMyLocationEnabled = true
@@ -141,7 +156,7 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
 
             // Pointテンプレート: "SRID=4326;POINT (-92.53475189208982(Lng) 16.7240018958819(Lat))"
             var pointFormat = "SRID=4326;POINT (%s %s)"
-            var point = pointFormat.format(it.longitude.toString(), it.latitude.toString())
+            point = pointFormat.format(it.longitude.toString(), it.latitude.toString())
 
 
             //まず入力数値を取得する
@@ -150,72 +165,51 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                 radiusLength = "0"
 
                 drawingPoint(it, googleMap)
-                //ProfileSerializerModelオブジェクトを生成
-                profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
+
+
+                //ここでProfileObjに変換するかItemObjに変換するかの分岐がほしい
+                if (parentFragmentManager.findFragmentByTag("fromEditAreaInfoFragment") != null){
+                    //ProfileSerializerModelオブジェクトを生成
+                    profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
+                }
+                if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+                    //ItemSerializerModelオブジェクト(itemObj)の更新
+                    itemObj!!.point  = point
+                    itemObj!!.radius = radiusLength.toInt()
+                }
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+                    //ItemSerializerModelオブジェクト(itemObj)の更新
+                    itemObj!!.point  = point
+                    itemObj!!.radius = radiusLength.toInt()
+                }
+
 
             }
             drawingCircle(it, radiusLength, googleMap)
-            //ProfileSerializerModelオブジェクトを生成
-            profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
 
+            //ここでProfileObjに変換するかItemObjに変換するかの分岐がほしい
+            if (parentFragmentManager.findFragmentByTag("fromEditAreaInfoFragment") != null){
+                //ProfileSerializerModelオブジェクトを生成
+                profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
+            }
+            if (parentFragmentManager.findFragmentByTag("fromCrearArticuloFragment") != null){
+                //ItemSerializerModelオブジェクト(itemObj)の更新
+                itemObj!!.point  = point
+                itemObj!!.radius = radiusLength.toInt()
+            }
+            if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDITAR_ARTICULO.name) != null){
+                //ItemSerializerModelオブジェクト(itemObj)の更新
+                itemObj!!.point  = point
+                itemObj!!.radius = radiusLength.toInt()
+            }
         }
     }
-
-
-    private fun drawingPoint(latLng: LatLng, googleMap:GoogleMap){
-        if (marker == null){
-            marker = googleMap.addMarker(MarkerOptions()
-                .position(LatLng(latLng.latitude, latLng.longitude)))
-        }else if (marker != null){
-            marker!!.remove()
-            marker = googleMap.addMarker(MarkerOptions()
-                .position(LatLng(latLng.latitude, latLng.longitude)))
-        }
-        return
-    }
-
-    private fun drawingCircle(latLng: LatLng, radiusLength: String, googleMap:GoogleMap){
-
-        if (circle == null){
-
-            marker = googleMap.addMarker(MarkerOptions()
-                .position(LatLng(latLng.latitude, latLng.longitude)))
-
-            circle = googleMap.addCircle(
-                CircleOptions().
-                center(LatLng(latLng.latitude, latLng.longitude ))
-                    .radius(radiusLength.toDouble())
-                    .strokeColor(Color.RED)
-                    .fillColor(0x220000FF))
-
-        }else if (circle != null){
-
-            marker!!.remove()
-            marker = googleMap.addMarker(MarkerOptions()
-                .position(LatLng(latLng.latitude, latLng.longitude)))
-
-            circle!!.remove()
-            circle = googleMap.addCircle(
-                CircleOptions().
-                center(LatLng(latLng.latitude, latLng.longitude ))
-                    .radius(radiusLength.toDouble())
-                    .strokeColor(Color.RED)
-                    .fillColor(0x220000FF))
-        }
-        return
-    }
-
-
-
-
 
 
 
 
     private fun sendGeoDataToProfile(profileObj:ProfileSerializerModel){
-
-        //val service = setService()
-        //service.patchProfile(sessionData.authTokenHeader!!, profileObj)
+        //機能: pointをもとにadm1, adm2に変更を反映する(django:post_save(update_fields)を通じてpointに依拠したadm1,adm2に変更する)
 
         if (sessionData.authTokenHeader == null) return
         ServiceProfile.patchProfile(sessionData.authTokenHeader!!, profileObj, MyApplication.appContext)
@@ -223,16 +217,81 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-    private fun backCrearArticuloFragment(){
-        //何がしたいか？画面の復元と取得したデータの反映
-        //取得したデータ
-        var radiusLength = etRadiusLength.text.toString()
-        if (radiusLength == "") {
-            radiusLength = "0"
-        }
+    private fun backToCrearArticuloFragment(itemObj: ItemSerializerModel){
+
+        listener!!.sendCrearArticuloFragmentAgain(itemObj)
+    }
 
 
+
+    private fun updateRegionDataByPoint(itemObj: ItemSerializerModel?){
+
+        if (sessionData.authTokenHeader == null) return
+
+        //point値からadm1, adm2を取得
+        val service = setService()
+        service.postGetRegionDataByPointAPIView(sessionData.authTokenHeader, itemObj!!.point!!).enqueue(object :Callback<ResultRegionModel>{
+
+            override fun onResponse(call: Call<ResultRegionModel>, response: Response<ResultRegionModel>) {
+                println("onResponseを通過 :GetCoordinatesFragment#updateRegionDataByPoint")
+
+                val adm1: String? = response.body()!!.adm1
+                val adm2: String? = response.body()!!.adm2
+
+                //itemObjのadm1,adm2を更新
+                if (adm1 != null) itemObj.adm1 = adm1
+                if (adm2 != null) itemObj.adm2 = adm2
+
+                //CrearArticuloFragmentを再度開く
+                backToCrearArticuloFragment(itemObj)
+
+                //このフラグメントを閉じる
+                parentFragmentManager.beginTransaction()
+                    .remove(this@GetCoordinatesFragment)
+                    .commit()
+
+            }
+
+            override fun onFailure(call: Call<ResultRegionModel>, t: Throwable) {
+                println("onFailureを通過 :GetCoordinatesFragment#updateRegionDataByPoint")
+                println(t)
+                println(t.message)
+            }
+        })
     }
 
 
 }
+
+
+
+
+
+fun drawingPoint(latLng: LatLng, googleMap:GoogleMap) {
+    googleMap.clear()
+    googleMap.addMarker(MarkerOptions().position(LatLng(latLng.latitude, latLng.longitude)))
+}
+
+
+fun drawingCircle(latLng: LatLng, radiusLength: String, googleMap:GoogleMap){
+
+    googleMap.clear()
+    googleMap.addMarker(MarkerOptions().position(LatLng(latLng.latitude, latLng.longitude)))
+
+    googleMap.addCircle(
+            CircleOptions().
+            center(LatLng(latLng.latitude, latLng.longitude ))
+                .radius(radiusLength.toDouble())
+                .strokeColor(Color.RED)
+                .fillColor(0x220000FF))
+}
+
+fun getLatLng(itemObj: ItemSerializerModel):LatLng{
+    val itemPoint = itemObj.point
+    val lng = itemPoint!!.split(" ")[1].substring(1).toDouble()
+    val lat_base = itemPoint.split(" ")[2]
+    val lat = itemPoint.split(" ")[2].substring(0, lat_base.length-1).toDouble()
+    return LatLng(lat, lng)
+}
+
+

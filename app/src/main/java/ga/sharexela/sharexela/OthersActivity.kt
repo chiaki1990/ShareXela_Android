@@ -33,11 +33,21 @@ class OthersActivity : AppCompatActivity(),
     }
 
     override fun launchHowToFragment() {
-        //supportFragmentManager.beginTransaction().replace().commit()
+        toolbar.title = "Como usar"
+
+        val howToUrl = "https://sharexela.ga/howto/"
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutOthers, WebViewFragment.newInstance(howToUrl, ""))
+            .commit()
     }
 
     override fun launchPoliticaFragment() {
-        //supportFragmentManager.beginTransaction().replace().commit()
+        toolbar.title = "Política de privacidad"
+
+        val policyUrl = "https://sharexela.ga/privacy"
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayoutOthers, WebViewFragment.newInstance(policyUrl, ""))
+            .commit()
     }
 
     override fun successContactInstance() {

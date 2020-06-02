@@ -54,13 +54,13 @@ class MyNotificationRecyclerViewAdapter(val avisoObjects: ArrayList<AvisoSeriali
             holder.tvNotificationStatus.text = "☐" //"🌴読"
         }
         if (avisoObjects[position].content_object?.modelName == "Solicitud"){
-            holder.tvNotificationType.text = "取引申請がきました。　　　　"
+            holder.tvNotificationType.text = MyApplication.appContext.getString(R.string.notification_recyclerview_adapter_recieve_solicitud) //"取引申請がきました。　　　　"
         }else if (avisoObjects[position].content_object?.modelName == "ItemContact"){
-            holder.tvNotificationType.text = "コメントが付きました。　　　"
+            holder.tvNotificationType.text = MyApplication.appContext.getString(R.string.notification_recyclerview_adapter_recieve_commento) //"コメントが付きました。　　　"
         }else if (avisoObjects[position].content_object?.modelName == "DirectMessage"){
-            holder.tvNotificationType.text = "取引を始めてください。　　　"
+            holder.tvNotificationType.text = MyApplication.appContext.getString(R.string.notification_recyclerview_adapter_begin_transaction)  //"取引を始めてください。　　　"
         }else if (avisoObjects[position].content_object?.modelName == "DirectMessageContent"){
-            holder.tvNotificationType.text = "取引相手から連絡が来ました。"
+            holder.tvNotificationType.text = MyApplication.appContext.getString(R.string.notification_recyclerview_adapter_recieve_message) //"取引相手から連絡が来ました。"
         }
 
 

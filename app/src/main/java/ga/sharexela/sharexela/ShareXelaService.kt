@@ -85,6 +85,11 @@ interface ShareXelaService {
     fun getItemDetailSerializerAPIView(@Path("id") itemId: String, @Header("Authorization") authTokenHeader: String?):Call<ItemDetailSerializerAPIViewModel>
 
 
+    @Multipart
+    @PATCH("api/items/{id}/")
+    fun patchItemDetailSerializerAPIView(@Path("id") itemId: String, @Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?, @Part file2:MultipartBody.Part?, @Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
+
+
     //Itemオブジェクトを生成する
     //認証ユーザーのみリクエスト送れる仕組みが必要
     //@Headers("Content-Type:application/json")
@@ -98,6 +103,9 @@ interface ShareXelaService {
     @Multipart
     @POST("api/item_create_1/")
     fun postItemCreateAPIViewMultiPart(@Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?, @Part file2:MultipartBody.Part?, @Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
+
+
+
 
 
     //Itemオブジェクトに対してFavoriteを追加する/削除する
@@ -254,14 +262,20 @@ interface ShareXelaService {
     /* django: api/models.py DeviceToken     */
 
     /* django: api/Views.fcm_views DeviceTokenDealAPIVeiw#patchに連結する */
+    @FormUrlEncoded
     @PATCH("api/fcm/user/device_token/")
-    fun patchDeviceTokenDealAPIVeiw(@Header("Authorization") authTokenHeader: String?, @Body deviceToken: String):Call<ResultModel>
-
+    fun patchDeviceTokenDealAPIVeiw(@Header("Authorization") authTokenHeader: String?, @Field("deviceToken") deviceToken: String):Call<ResultModel>
 
 
 
     @GET("api/multipoly_test/")
     fun getMultipolygon():Call<Multipolygon>
+
+
+    /* django: api/views.py GetRegionDataByPointAPIView#postに連結する */
+    @FormUrlEncoded
+    @POST("api/util/region/")
+    fun postGetRegionDataByPointAPIView(@Header("Authorization") authTokenHeader: String?, @Field("wkt_point") wkt_point: String):Call<ResultRegionModel>
 
 }
 

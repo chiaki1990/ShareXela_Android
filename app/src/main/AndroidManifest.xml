@@ -88,6 +88,13 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
+
+        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8726407510970827~4826767457"/>
+
+
         <service
             android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -125,5 +132,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA4Oce5aN3ID2lGL9lS9Qm9amXEwmzaDus" />
     </application>
+
+
 
 </manifest>

@@ -40,7 +40,10 @@ class MasterActivity : AppCompatActivity(),
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
 
-            //ログインユーザーかチェックするのが終わっていない。
+            if (sessionData.logInStatus == false) {
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+                return@setOnClickListener
+            }
             sendCrearArticuloActivity(context=this@MasterActivity)
         }
 
@@ -82,7 +85,7 @@ class MasterActivity : AppCompatActivity(),
 
 
         }else if (sessionData.profileObj == null){
-            tv_userName.setText("未ログイン") //text = "未ログイン"
+            tv_userName.setText(getString(R.string.drawer_header_logOutStatus)) //"未ログイン"
             tv_emailAddress.visibility = View.GONE
             Glide.with(MyApplication.appContext).load(R.drawable.ic_account_circle_black_72dp).into(userProfileImageView)
 
@@ -263,7 +266,7 @@ class MasterActivity : AppCompatActivity(),
             R.id.menuSignOut -> {
                 //logoutを実行してToastで表示する
                 if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, "ログインしていません。")
+                    makeToast(this@MasterActivity, getString(R.string.drawer_menu_response_no_logIn))
                     return true
                 }
 
