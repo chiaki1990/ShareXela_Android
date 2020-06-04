@@ -124,11 +124,10 @@ class LogInFragment : Fragment() {
             //入力データの取得
             var inputEmailAddress:String = etEmailAddressLogIn.text.toString()
             var inputPassword:String = etPasswordLogIn.text.toString()
+            progressBarLogIn.visibility = View.VISIBLE
             logInByBasicAuth(inputEmailAddress, inputPassword)
         }
     }
-
-
 
 
     private fun logInByBasicAuth(email: String, password: String) {
@@ -138,6 +137,7 @@ class LogInFragment : Fragment() {
         println(email+" : "+ password)
         service.login(email, password).enqueue(object: Callback<AuthModel> {
             override fun onResponse(call: Call<AuthModel>, response: Response<AuthModel>) {
+
                 println("onResponseを通る")
                 println(call.request().headers())
                 println(call.request().body())
@@ -178,6 +178,7 @@ class LogInFragment : Fragment() {
 
 
                 } else if (response.isSuccessful == false) {
+                    progressBarLogIn.visibility = View.GONE
                     //nullが返される
                     println(response.errorBody())//?.non_field_errors
                     println(response.message())
@@ -194,6 +195,7 @@ class LogInFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<AuthModel>, t: Throwable) {
+                progressBarLogIn.visibility = View.GONE
                 println("エラーハンドリング")
                 //認証情報が正しくありませんと表示するか?
             }

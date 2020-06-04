@@ -17,6 +17,18 @@
 
     <!-- Toolbar Title -->
     <string name="editar_articulo_title">Editar Articulo</string>
+    <string name="user_profile_title">Perfil de usuario</string>
+    <string name="set_area_title">configuración de área</string>
+    <string name="set_sex_title">Elección del género</string>
+    <string name="set_mail_password_title">correo electrónico y contraseña</string>
+
+
+
+    <!-- Toast Message -->
+    <string name="fail_crear_articulo">falló al crear el artículo.</string>
+    <string name="fail_editar_articulo">falló al editar el artículo.</string>
+    <string name="success_logOut">ha cerrado la sesión con éxito.</string>
+    <string name="success_change_profile_image">La imagen ha sido cambiada.</string>
 
 
 
@@ -147,6 +159,8 @@
     <string name="fragment_edit_mail_password_TextInputEditText_Confirm_password_hint">Repetir Ingresar nueva contraseña</string>
 
 
+    <string name="fragment_edit_area_info_btn_btnSettingAreaByMap">establece desde el mapa.</string>
+
     <string name="fragment_edit_sex_rbMale_text">Hombre</string>
     <string name="fragment_edit_sex_rbFemale_text">Mujer</string>
     <string name="fragment_edit_sex_rbNoAnswer_text">Sin respuesta</string>
@@ -189,9 +203,9 @@
 
     <!-- adMob unit_id -->
     <!-- test -->
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <!-- product >
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-8726407510970827/9887522441</string-->
+    <string name="banner_ad_unit_id_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- product -->
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-8726407510970827/9887522441</string>
 
 
 

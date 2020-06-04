@@ -25,7 +25,7 @@ class SignOutActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferencesInstance()
         val editor = sharedPreferences.edit()
         editor.putBoolean(getString(R.string.SP_KEY_LOGIN_STATUS), false).apply()
-        makeToast(this@SignOutActivity, "ログアウトしました。")
+        makeToast(this@SignOutActivity, getString(R.string.success_logOut))
 
         //アクティビティを閉じる
         finish()

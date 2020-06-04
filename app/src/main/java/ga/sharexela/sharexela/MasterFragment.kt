@@ -171,7 +171,7 @@ class MasterFragment : Fragment(){
 
             dataArrayList.add(
                 ItemSerializerModel(
-                    id = id,
+                    id    = id,
                     title = title,
                     //description = description,
                     //category = category,
@@ -198,7 +198,7 @@ class MasterFragment : Fragment(){
         if (navigationDrawerInit == true) return
 
         //ナビゲーションドロワーの編集
-        val nav_view = activity!!.findViewById<NavigationView>(R.id.nav_view)
+        val nav_view = requireActivity().findViewById<NavigationView>(R.id.nav_view)
         val h_view = nav_view.getHeaderView(0)
         val userProfileImageView = h_view.findViewById<ImageView>(R.id.iv_profile)
         val tv_userName = h_view.findViewById<TextView>(R.id.tv_userName)

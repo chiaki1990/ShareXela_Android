@@ -48,7 +48,7 @@ class ProfileActivity : AppCompatActivity(),
                     return@setNavigationOnClickListener
                 }
 
-                supportActionBar?.title = "ユーザープロフィール"
+                supportActionBar?.title = getString(R.string.user_profile_title)
                 supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayoutProfile, ProfileListFragment.newInstance("", ""), FragmentTag.PROFILE_LIST.name)
                 .commit()
@@ -61,7 +61,7 @@ class ProfileActivity : AppCompatActivity(),
         //intentKeyがFragmentTag.PROFILE_EDIT_AREA.name -> 取引エリア設定画面を表示する
         if (intentKey == FragmentTag.PROFILE_EDIT_AREA.name){
 
-            supportActionBar?.title = "取引エリア設定"
+            supportActionBar?.title = getString(R.string.set_area_title)//"取引エリア設定"
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.frameLayoutProfile, EditAreaInfoFragment.newInstance("",""), FragmentTag.PROFILE_EDIT_AREA_NEW.name)
@@ -73,7 +73,7 @@ class ProfileActivity : AppCompatActivity(),
         //intentKeyがFragmentTag.PROFILE_LIST.name場合 -> Profileの一覧を表示する
         if (intentKey == FragmentTag.PROFILE_LIST.name){
 
-            supportActionBar?.title = "ユーザープロフィール"
+            supportActionBar?.title = getString(R.string.user_profile_title)
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.frameLayoutProfile, ProfileListFragment.newInstance("", ""), FragmentTag.PROFILE_LIST.name)
@@ -110,7 +110,7 @@ class ProfileActivity : AppCompatActivity(),
 
     override fun editAreaInfo() {
         //新たなフラグメントを上から起動する
-        supportActionBar?.title = "取引エリア設定"
+        supportActionBar?.title = getString(R.string.set_area_title)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayoutProfile, EditAreaInfoFragment.newInstance("", ""), FragmentTag.PROFILE_EDIT_AREA_CHANGE.name)
@@ -129,7 +129,7 @@ class ProfileActivity : AppCompatActivity(),
 
     override fun editMailPassword() {
         //新たなフラグメントを上から起動する
-        supportActionBar!!.title = "メールアドレス、パスワード設定"
+        supportActionBar!!.title = getString(R.string.set_mail_password_title) //"メールアドレス、パスワード設定"
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayoutProfile, EditMailPasswordFragment.newInstance("", ""))
@@ -138,7 +138,7 @@ class ProfileActivity : AppCompatActivity(),
 
     override fun editSex() {
         //新たなフラグメントを上から起動する
-        supportActionBar!!.title = "性別設定"
+        supportActionBar!!.title = getString(R.string.set_sex_title)//"性別設定"//Elección del género
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayoutProfile, EditSexFragment.newInstance("", ""))
@@ -190,7 +190,7 @@ class ProfileActivity : AppCompatActivity(),
                 println("onResponseを通る")
 
                 if (response.isSuccessful){
-                    makeToast(this@ProfileActivity, "画像を変更しました。")
+                    makeToast(this@ProfileActivity, getString(R.string.success_change_profile_image))
 
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frameLayoutProfile, ProfileListFragment.newInstance("", ""), FragmentTag.PROFILE_LIST.name)

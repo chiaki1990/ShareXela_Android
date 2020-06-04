@@ -20,26 +20,6 @@ fun isAllPermissionsGranted(REQUIRED_PERMISSIONS: Array<String>) = REQUIRED_PERM
 }
 
 
-//fun isNeedDialogExplanation(REQUIRED_PERMISSIONS: Array<String>,  fragment:Fragment) = REQUIRED_PERMISSIONS.all{
-//    ActivityCompat.shouldShowRequestPermissionRationale(fragment.requireActivity(), it) == false
-//}
-
-/*
-fun requestPermissionsByDialog(REQUIRED_PERMISSIONS: Array<String>, REQUEST_CODE_PERMISSIONS: Int, fragment:Fragment, function:String, description:String){
-
-    AlertDialog.Builder(fragment.requireActivity())
-        .setTitle(function)
-        .setMessage(description)
-        .setPositiveButton(fragment.requireActivity().getString(R.string.allow)){dialog, which ->
-            fragment.requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-
-        }.setNegativeButton(fragment.requireActivity().getString(R.string.deny)){dialog, which ->
-            makeToast(MyApplication.appContext, fragment.requireActivity().getString(R.string.deny_message))
-
-        }.show()
-}
-*/
-
 
 // https://blog.usejournal.com/method-to-detect-if-user-has-selected-dont-ask-again-while-requesting-for-permission-921b95ded536
 class PermissionUtils{
@@ -68,14 +48,14 @@ fun displayNeverAskAgainDialog(fragment: Fragment) {
     val builder = AlertDialog.Builder(fragment.requireActivity())
     builder.setMessage(
         """
-            We need to send SMS for performing necessary task. Please permit the permission through Settings screen.
+            Please permit the permission through Settings screen.
             
-            Select Permissions -> Enable permission
+            Select Permisos -> Habilitar el permiso
             """.trimIndent()
     )
     builder.setCancelable(false)
     builder.setPositiveButton(
-        "Permit Manually"
+        "Permiso manual"
     ) { dialog, which ->
         dialog.dismiss()
         val intent = Intent()
@@ -85,7 +65,7 @@ fun displayNeverAskAgainDialog(fragment: Fragment) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         MyApplication.appContext.startActivity(intent)
     }
-    builder.setNegativeButton("Cancel", null)
+    builder.setNegativeButton("Cancelar", null)
     builder.show()
 }
 

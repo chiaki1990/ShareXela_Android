@@ -213,6 +213,8 @@ class EditarArticuloFragment : Fragment() {
             return
         }
 
+        progressBar.visibility = View.VISIBLE
+
         val retrievedItemObj = retrieveArticuloData(
             etArticuloTitle, etArticuloDescription, spArticuloCategory,
             spSelectPais, spSelectDepartamento,spSelectMunicipio,
@@ -230,6 +232,7 @@ class EditarArticuloFragment : Fragment() {
         service.patchItemDetailSerializerAPIView(itemObj!!.id.toString(), sessionData.authTokenHeader!!, part1, part2, part3, reqBody ).enqueue(object :Callback<ResultModel>{
 
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
+                progressBar.visibility = View.GONE
                 println("onResponseを通る : EditarFragment#patchItemDetailSerializerAPIView")
                 println(call.request().body())
 
@@ -242,6 +245,8 @@ class EditarArticuloFragment : Fragment() {
                 println(call.request().body())
                 println(t)
                 println(t.message)
+                progressBar.visibility = View.GONE
+                makeToast(MyApplication.appContext, getString(R.string.fail_editar_articulo))
             }
 
         })

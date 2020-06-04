@@ -3,9 +3,11 @@ package ga.sharexela.sharexela
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_log_in.*
+import kotlinx.android.synthetic.main.fragment_log_in.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,6 +84,7 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
 
         service.readProfile(sessionData.authTokenHeader!!).enqueue(object :Callback<ProfileSerializerModel>{
             override fun onResponse(call: Call<ProfileSerializerModel>, response: Response<ProfileSerializerModel>) {
+                progressBarLogIn.visibility = View.GONE
                 println("onResponseを通る")
 
                 makeToast(this@LogInActivity, getString(R.string.login_success_message))
@@ -103,6 +106,7 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
             }
 
             override fun onFailure(call: Call<ProfileSerializerModel>, t: Throwable) {
+                progressBarLogIn.visibility = View.GONE
                 println("onFailureを通る")
                 println(t)
                 println(t.message)

@@ -198,4 +198,13 @@
     <string name="allow">許可する</string>
     <string name="deny">拒否する</string>
     <string name="deny_message">機能は実行されません</string>
+    <string name="fail_crear_articulo">記事を作成できませんでした</string>
+    <string name="fail_editar_articulo">記事を編集できませんでした</string>
+    <string name="success_logOut">ログアウトしました</string>
+    <string name="user_profile_title">ユーザープロフィール</string>
+    <string name="set_area_title">取引エリア設定</string>
+    <string name="set_sex_title">性別設定</string>
+    <string name="set_mail_password_title">メール・パスワード設定</string>
+    <string name="success_change_profile_image">画像を変更しました</string>
+    <string name="fragment_edit_area_info_btn_btnSettingAreaByMap">地図から定める</string>
 </resources>

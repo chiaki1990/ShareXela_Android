@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -113,28 +114,26 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
+        //Favボタンのリスナー設置
         btnDetailFavorite.setOnClickListener {
             if (sessionData.logInStatus == false) return@setOnClickListener
             onClickFavBtn()
         }
 
+        //記事編集ボタンのリスナー設置
         btnDetailEditarArticulo.setOnClickListener {
             if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username!!) return@setOnClickListener
             listener!!.launchEditarFragment(itemObj)
         }
 
+        //記事のアクティブステータスを変更するリスナーを設置
         btnDetailActive.setOnClickListener {
-            println("反応すれば良い")
+            //println("反応すれば良い")
             changeActiveStatus()
         }
 
-        //adMob
-        //val ad1View = findViewById<AdView>(R.id.adView)
-        //MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
-        adView2.loadAd(adRequest)
+        //adMobの設定(unitidとサイズをdev,pro環境で変更する)
+        setUpAdmob()
 
     }
 
@@ -182,7 +181,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
                     val postUserFeedbackPoints = getFeedbackTotalPoints(postUserProfile)//関数
                     val postUserFeedbackAve = getFeedbackAve(postUserProfile)//関数
-                    val postUserFeedbackFormat = "$postUserFeedbackPoints 平均 $postUserFeedbackAve"
+                    val postUserFeedbackFormat = "$postUserFeedbackPoints promedio $postUserFeedbackAve"
 
 
                     val postUserProfileImage = postUserProfile.image
@@ -303,6 +302,9 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
 
+                    //プログレスバーの解除
+                    progressBarDetail.visibility = View.GONE
+
 
                     //btnChoiceによって下部バーボタンの内容を表示する
                     if (btnChoice == BtnChoice.ANONYMOUS_USER_ACCESS.name){
@@ -373,9 +375,6 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         }
         var ave = points/feedbackList!!.size
         return ave.toString()
-
-
-
     }
 
     private fun getFeedbackTotalPoints(postUserProfile: ProfileSerializerModel): String {
@@ -386,6 +385,26 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
             points += ele.level!!
         }
         return points.toString()
+    }
+
+
+    private fun setUpAdmob(){
+        //unitidとサイズをdev,pro環境で変更する
+
+        val adRequest = AdRequest.Builder().build()
+        //サイズ
+        adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        adView2.setAdSize(AdSize.SMART_BANNER)
+        //unitid
+        if (devEnv == true){
+            adView.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
+            adView2.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
+        }else if (devEnv == false){
+            adView.setAdUnitId(getString(R.string.banner_ad_unit_id))
+            adView2.setAdUnitId(getString(R.string.banner_ad_unit_id))
+        }
+        adView.loadAd(adRequest)
+        adView2.loadAd(adRequest)
     }
 
 

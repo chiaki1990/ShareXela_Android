@@ -117,6 +117,13 @@
                     android:layout_height="@dimen/midium_span"
                     android:background="@android:drawable/screen_background_light_transparent" />
 
+                <ProgressBar
+                    android:id="@+id/progressBarLogIn"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
                 <Button
                     android:id="@+id/btnLogIn"
                     android:layout_width="wrap_content"

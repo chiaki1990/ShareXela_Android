@@ -233,6 +233,13 @@
                 android:layout_height="15dp"
                 android:background="@color/backgroundColor" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/btnCrearArticulo"
                 android:layout_width="match_parent"

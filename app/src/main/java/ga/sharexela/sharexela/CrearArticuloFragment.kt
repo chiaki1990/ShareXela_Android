@@ -187,6 +187,9 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             return
         }
 
+        //プログレスバーを表示
+        progressBar.visibility = View.VISIBLE
+
 
         val retrievedItemObj = retrieveArticuloData(
                 etArticuloTitle, etArticuloDescription, spArticuloCategory,
@@ -206,12 +209,13 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
         service.postItemCreateAPIViewMultiPart(authTokenHeader= sessionData.authTokenHeader!!, file1=part1, file2 = part2, file3 = part3, requestBody=reqBody).enqueue(object :Callback<ResultModel>{
             override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
+                progressBar.visibility = View.GONE
                 println("onResponseを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
                 println(call.request().body())
 
+
                 //CrearActivityを切る
                 listener!!.successCrearArticulo()
-
             }
 
             override fun onFailure(call: Call<ResultModel>, t: Throwable) {
@@ -219,6 +223,8 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 println(call.request().body())
                 println(t)
                 println(t.message)
+                progressBar.visibility = View.GONE
+                makeToast(MyApplication.appContext, getString(R.string.fail_crear_articulo))
             }
         })
     }
