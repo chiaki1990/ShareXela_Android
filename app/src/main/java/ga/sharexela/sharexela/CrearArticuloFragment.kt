@@ -2,6 +2,7 @@ package ga.sharexela.sharexela
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -41,10 +42,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
-    val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-    val REQUEST_CODE_PERMISSIONS = 15
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +73,14 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         //具体的な座標データを利用する
         btnCrearArticuloLaunchMap.setOnClickListener {
 
-            //位置情報のパーミッション状態を取得する
-            var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
-
+            // 位置情報のパーミッション状態を取得する
+            var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS_LOCATION)
             if (permissionStatus == true) return@setOnClickListener showMap()
             // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
-            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+            val neverAskAgainSelectedStatus = PermissionUtils().neverAskAgainSelected(REQUIRED_PERMISSIONS_LOCATION[0], this)
+            if (!neverAskAgainSelectedStatus ) return@setOnClickListener this.requestPermissions(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION)
+            //if (neverAskAgainSelectedStatus  ) return@setOnClickListener requestPermissionsByDialog(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION, this, "map機能", "map機能を実現するには許可が必要です。" )
+            if (neverAskAgainSelectedStatus  ) return@setOnClickListener displayNeverAskAgainDialog(this)
         }
 
 
@@ -92,11 +91,14 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             postCrearArticuloData()
         }
 
-        //画像をタップするとギャラリーからデータを引っ張る
-        ivArticuloImage1.setOnClickListener { listener!!.onLaunchImagesActivity() }
-        ivArticuloImage2.setOnClickListener { listener!!.onLaunchImagesActivity() }
-        ivArticuloImage3.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        //画像をタップするとギャラリーからデータを引っ張る checkImagePermissionsにリファクタリング
+        ivArticuloImage1.setOnClickListener { checkImagePermissions() }
+        ivArticuloImage2.setOnClickListener { checkImagePermissions() }
+        ivArticuloImage3.setOnClickListener { checkImagePermissions() }
 
+        //ivArticuloImage1.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        //ivArticuloImage2.setOnClickListener { listener!!.onLaunchImagesActivity() }
+        //ivArticuloImage3.setOnClickListener { listener!!.onLaunchImagesActivity() }
 
 
         //Regionデータをareing.xmlから取得してRegionをセット
@@ -124,9 +126,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         return
 
     }
-
-
-
 
 
 
@@ -171,9 +170,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         //もしデータが必要ならこのitemObjを使用する
         listener!!.launchGetCoordinatesFragment(itemObj, FragmentTag.FROM_CREAR_ARTICULO_FRAGMENT.name)
     }
-
-
-
 
 
 
@@ -244,6 +240,22 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+
+    fun checkImagePermissions(){
+        //パーミッションのチェック
+        val permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS_IMAGES)
+
+        //大丈夫ならアクティビティを起動する準備を行う
+        if (permissionStatus == true) return listener!!.onLaunchImagesActivity()
+        //パーミッションが取れていないならdon't ask againに該当するかチェック
+        for (permission in REQUIRED_PERMISSIONS_IMAGES){
+            val neverAskAgainSelectedStatus = PermissionUtils().neverAskAgainSelected(permission, this)
+            if (neverAskAgainSelectedStatus) return displayNeverAskAgainDialog(this)
+        }
+        return this.requestPermissions(REQUIRED_PERMISSIONS_IMAGES, REQUEST_CODE_PERMISSIONS_IMAGES)
+    }
+
+
     interface OnFragmentInteractionListener {
 
         //CrearArticuloActivityに戻し、Activityをfinish()する
@@ -273,15 +285,32 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        println("パーミッションのここ")
+        println(requestCode.toString())
+        if (requestCode != REQUEST_CODE_PERMISSIONS_LOCATION || requestCode != REQUEST_CODE_PERMISSIONS_IMAGES ) return
 
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-
-            if (isAllPermissionsGranted(REQUIRED_PERMISSIONS) != true) {
-
+        // requestCode == REQUEST_CODE_PERMISSIONS_LOCATIONの場合
+        if (requestCode == REQUEST_CODE_PERMISSIONS_LOCATION) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED } ){
+                println("パーミッションのここ2")
+                showMap()
+                return
+            }else{
                 makeToast(MyApplication.appContext, "Permissions not granted by the user.")
+                PermissionUtils().setShouldShowStatus(permissions[0])
                 return
             }
-            showMap()
+
+        }else if (requestCode == REQUEST_CODE_PERMISSIONS_IMAGES){
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED } ){
+                listener!!.onLaunchImagesActivity()
+            } else{
+                makeToast(MyApplication.appContext, "Permissions not granted by the user.")
+                for (permission in permissions){
+                    PermissionUtils().setShouldShowStatus(permission)
+                }
+                return
+            }
         }
     }
 
@@ -289,7 +318,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         //描画したいこと mapの縮尺, mapの中心設定, pointまたはradiusの描画
         //mapの縮尺
         if (itemObj?.point == null) return
-        val latLng = getLatLng(itemObj!!)
+        val latLng = getLatLng(itemObj!!.point!!)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         googleMap.uiSettings.isMapToolbarEnabled = false
         googleMap.uiSettings.isZoomControlsEnabled = true
@@ -302,109 +331,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-}
-
-
-
-//CrearArticuloFragmentとEditarArticuloFragmentで使用している
-fun makeImgagePartForRetrofit(imageViewFilePath:String?, formName:String): MultipartBody.Part?{
-    var part:MultipartBody.Part? = null
-
-    if (imageViewFilePath != ""){
-
-        try {
-            var file = File(imageViewFilePath)
-
-            println("FILEの内容チェック")
-            println(file)
-
-            var fileBody = RequestBody.create(MediaType.parse("image/*"), file)
-            part = MultipartBody.Part.createFormData(formName, file.name, fileBody)
-        }catch (e:NullPointerException){
-            println(e)
-        }
-    }
-
-    println("part1の標準出力をじっこう")
-    println(part == null)
-    println(imageViewFilePath)
-    return part
-}
-
-
-
-//CrearArticuloFragmentとEditarArticuloFragmentで使用している
-fun retrieveArticuloData(etArticuloTitle:EditText, etArticuloDescription: EditText,
-                         spArticuloCategory: Spinner, spSelectPais:Spinner, spSelectDepartamento:Spinner,
-                         spSelectMunicipio:Spinner, tvCrearArticuloPoint:TextView, tvCrearArticuloRadius: TextView)
-        :ItemSerializerModel {
-
-        //入力データの取得 //なんでpoontとradiusを追加していないのか理由がわかっていない。。。
-        val title           = etArticuloTitle.text.toString()
-        val description     = etArticuloDescription.text.toString()
-        val category:String = spArticuloCategory.selectedItem.toString()
-        val adm0: String    = spSelectPais.selectedItem.toString()
-        val adm1: String    = spSelectDepartamento.selectedItem.toString()
-        val adm2: String    = spSelectMunicipio.selectedItem.toString()
-        val point: String   = tvCrearArticuloPoint.text.toString()
-        val radius: Int     = tvCrearArticuloRadius.text.toString().toInt()
-        //CategorySerializerModelオブジェクトの生成
-        val categoryObj     = CategorySerializerModel(name=category)
-        //ItemSerializerModelオブジェクトの作成
-        val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2, point=point, radius=radius )
-
-        return itemObj
-    }
-
-
-
-fun setAdapterToCategotySpinner(spinner: Spinner){
-    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.categoryList, android.R.layout.simple_list_item_1)
-    //spArticuloCategory.adapter = adapter
-    spinner.adapter = adapter
-}
-
-fun setValueToCategotySpinner(itemObj: ItemSerializerModel, spinner:Spinner) {
-    val categoryList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.categoryList)
-    val indexOfCategory = categoryList.indexOf(itemObj.category!!.name)
-    //spArticuloCategory.setSelection(indexOfCategory)
-    spinner.setSelection(indexOfCategory)
-}
-
-fun setAdapterToPaisSpinner(spinner: Spinner){
-    // R.id.spSelectPais用の関数
-    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.paisList, android.R.layout.simple_list_item_1)
-    spinner.adapter = adapter
-}
-
-fun setValueToPaisSpinner(strPais: String, spinner:Spinner) {
-    val paisList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.paisList)
-    val indexOfPais = paisList.indexOf(strPais)
-    spinner.setSelection(indexOfPais)
-}
-
-fun setAdapterToDepartamentoSpinner(spinner: Spinner){
-    //R.id.spSelectDepartamento用の関数
-    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.departamentoList, android.R.layout.simple_list_item_1)
-    spinner.adapter = adapter
-}
-
-fun setValueToDepartamentoSpinner(strDepartamento: String, spinner:Spinner) {
-    val departamentoList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.departamentoList)
-    val indexOfDepartamentos = departamentoList.indexOf(strDepartamento)
-    spinner.setSelection(indexOfDepartamentos)
-}
-
-fun setAdapterToMunicipioSpinner(spinner: Spinner){
-    //R.id.spSelectMunicipio用の関数
-    val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.municipioList, android.R.layout.simple_list_item_1)
-    spinner.adapter = adapter
-}
-
-fun setValueToMunicipioSpinner(strMunicipio: String, spinner:Spinner) {
-    val municipioList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.municipioList)
-    val indexOfMunicipos = municipioList.indexOf(strMunicipio)
-    spinner.setSelection(indexOfMunicipos)
 }
 
 

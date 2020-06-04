@@ -83,7 +83,7 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 //地理データを送信する
-                if (parentFragmentManager.findFragmentByTag("fromEditAreaInfoFragment") != null){
+                if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDIT_AREA_INFO_FRAGMENAT.name) != null){
                     if (profileObj == null) return true
                     sendGeoDataToProfile(profileObj!!)
                 }
@@ -189,7 +189,7 @@ class GetCoordinatesFragment : Fragment(), OnMapReadyCallback {
             drawingCircle(it, radiusLength, googleMap)
 
             //ここでProfileObjに変換するかItemObjに変換するかの分岐がほしい
-            if (parentFragmentManager.findFragmentByTag("fromEditAreaInfoFragment") != null){
+            if (parentFragmentManager.findFragmentByTag(FragmentTag.FROM_EDIT_AREA_INFO_FRAGMENAT.name) != null){
                 //ProfileSerializerModelオブジェクトを生成
                 profileObj = ProfileSerializerModel(point=point, radius=radiusLength.toInt())
             }
@@ -297,12 +297,13 @@ fun drawingCircle(latLng: LatLng, radiusLength: String, googleMap:GoogleMap){
                 .fillColor(0x220000FF))
 }
 
-fun getLatLng(itemObj: ItemSerializerModel):LatLng{
-    val itemPoint = itemObj.point
-    val lng = itemPoint!!.split(" ")[1].substring(1).toDouble()
-    val lat_base = itemPoint.split(" ")[2]
-    val lat = itemPoint.split(" ")[2].substring(0, lat_base.length-1).toDouble()
+
+fun getLatLng(wkt_point: String):LatLng{
+    val lng = wkt_point.split(" ")[1].substring(1).toDouble()
+    val lat_base = wkt_point.split(" ")[2]
+    val lat = wkt_point.split(" ")[2].substring(0, lat_base.length-1).toDouble()
     return LatLng(lat, lng)
 }
+
 
 

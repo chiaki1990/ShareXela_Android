@@ -112,6 +112,7 @@ class CrearArticuloActivity : AppCompatActivity(),
     }
 
 
+
     //CrearArticuloFragment.OnFragmentInteractionListener#launchGetCoordinatesFragment
     override fun launchGetCoordinatesFragment(itemObj: ItemSerializerModel, launchFrom: String){
 
@@ -137,7 +138,6 @@ class CrearArticuloActivity : AppCompatActivity(),
             .commit()
 
         //タグ入れないとやばい
-
     }
 
     override fun sendEditarArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
@@ -190,6 +190,7 @@ class CrearArticuloActivity : AppCompatActivity(),
             }
         }
     }
+
 
 
 

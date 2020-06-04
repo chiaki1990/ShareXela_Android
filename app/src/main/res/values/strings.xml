@@ -194,6 +194,15 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-8726407510970827/9887522441</string-->
 
 
+
+    <!-- requestPermissionDialog -->
+    <string name="allow">Aprobar</string>
+    <string name="deny">Rechazar</string>
+    <string name="deny_message">No va a funcionar porque no dio permiso.</string>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_sub_function">SubFunctionActivity</string>

@@ -323,7 +323,6 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
                         //描画内容 -> "申請する"を表示するがボタン押せない(申請済みだから)
                         showForSOLICITADO()
-
                     }
 
                     //ユーザー認証され、ユーザーが出品者以外の場合 && 取引相手が他人に決まっている場合
@@ -348,7 +347,6 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                         //"取引画面へ移動するボタン"を表示させる
 
                         showForGO_TRANSACTION()
-
                     }
                 }
             }
@@ -676,7 +674,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
         //描画したいこと mapの縮尺, mapの中心設定, pointまたはradiusの描画
         //mapの縮尺
         if (itemObj.point == null) return
-        val latLng = getLatLng(itemObj)
+        val latLng = getLatLng(itemObj.point!!)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
         googleMap.uiSettings.isMapToolbarEnabled = false
         googleMap.uiSettings.isZoomControlsEnabled = true

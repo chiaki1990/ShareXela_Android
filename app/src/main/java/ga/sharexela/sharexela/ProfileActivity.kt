@@ -18,8 +18,6 @@ import java.io.File
 
 
 
-
-
 class ProfileActivity : AppCompatActivity(),
     ProfileListFragment.OnFragmentInteractionListener,
     EditProfileBasicFragment.OnFragmentInteractionListener,
@@ -125,7 +123,7 @@ class ProfileActivity : AppCompatActivity(),
         toolbar.title = getString(R.string.title_set_point_and_radius) //"取引場所の設定"
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayoutProfile, GetCoordinatesFragment.newInstance(null, ""),"fromEditAreaInfoFragment")
+            .replace(R.id.frameLayoutProfile, GetCoordinatesFragment.newInstance(null, ""), FragmentTag.FROM_EDIT_AREA_INFO_FRAGMENAT.name)
             .commit()
     }
 
@@ -167,10 +165,6 @@ class ProfileActivity : AppCompatActivity(),
         if (requestCode != REQUEST_CODE_IMAGE) return println("REQUEST_CODEが異なる")
         if (resultCode != Activity.RESULT_OK) return println("RESULT_OKじゃない")
 
-
-
-
-        println("実際のコードを走らす")
 
 
         val uri = data!!.data

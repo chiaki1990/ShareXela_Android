@@ -31,8 +31,7 @@ import java.util.concurrent.Executors
 class ImagesActivity : AppCompatActivity() {
 
 
-    private  val REQUEST_CODE_PERMISSIONS = 10
-    private  val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION)
+
     private  val READ_REQUEST_CODE1: Int = 42
     private  val READ_REQUEST_CODE2: Int = 44
     private  val READ_REQUEST_CODE3: Int = 46
@@ -92,7 +91,7 @@ class ImagesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_images)
         setSupportActionBar(toolbar)
 
-        //toolbarの完了ボタンを設定する
+        //toolbarのアローバックを設定する
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { finish() }
 
@@ -180,7 +179,7 @@ class ImagesActivity : AppCompatActivity() {
             viewFinder.post { startCamera(emptyImageView) }
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS_IMAGES, REQUEST_CODE_PERMISSIONS_IMAGES)
         }
         // Every time the provided texture view changes, recompute layout
         viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
@@ -320,7 +319,7 @@ class ImagesActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS_IMAGES) {
             if (allPermissionsGranted()) {
                 viewFinder.post { startCamera(emptyImageView!!) }
             } else {
@@ -331,10 +330,12 @@ class ImagesActivity : AppCompatActivity() {
     }
 
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS_IMAGES.all {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
+
 
 
 

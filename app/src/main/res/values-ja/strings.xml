@@ -195,4 +195,7 @@
     <string name="fragment_detail_btn_detail_active_to_deactive">この記事の公開を中止する</string>
     <string name="fragment_detail_btn_detail_active_to_active">この記事の公開を再開する</string>
     <string name="fragment_detail_toast_message_applicado">すでに申請済みです。</string>
+    <string name="allow">許可する</string>
+    <string name="deny">拒否する</string>
+    <string name="deny_message">機能は実行されません</string>
 </resources>

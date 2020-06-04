@@ -31,8 +31,8 @@ class EditarArticuloFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
 
-    val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-    val REQUEST_CODE_PERMISSIONS = 15
+    //val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    //val REQUEST_CODE_PERMISSIONS = 15
 
 
 
@@ -98,11 +98,21 @@ class EditarArticuloFragment : Fragment() {
         //具体的な座標データを利用する
         btnCrearArticuloLaunchMap.setOnClickListener{
             //位置情報のパーミッション状態を取得する
-            var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
+            //var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
+            //if (permissionStatus == true) return@setOnClickListener listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name)
+            // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
+            //requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
 
+
+            // 位置情報のパーミッション状態を取得する
+            var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS_LOCATION)
             if (permissionStatus == true) return@setOnClickListener listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name)
             // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
-            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+            val neverAskAgainSelectedStatus = PermissionUtils().neverAskAgainSelected(REQUIRED_PERMISSIONS_LOCATION[0], this)
+            if (!neverAskAgainSelectedStatus ) return@setOnClickListener this.requestPermissions(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION)
+            //if (neverAskAgainSelectedStatus  ) return@setOnClickListener requestPermissionsByDialog(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION, this, "map機能", "map機能を実現するには許可が必要です。" )
+            if (neverAskAgainSelectedStatus  ) return@setOnClickListener displayNeverAskAgainDialog(this)
+
         }
 
         //btnCrearArticuloのリスナーセット
@@ -178,9 +188,9 @@ class EditarArticuloFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS_LOCATION) {
 
-            if (isAllPermissionsGranted(REQUIRED_PERMISSIONS) != true) {
+            if (isAllPermissionsGranted(REQUIRED_PERMISSIONS_LOCATION) != true) {
 
                 makeToast(MyApplication.appContext, "Permissions not granted by the user.")
                 return

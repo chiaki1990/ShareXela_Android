@@ -1,12 +1,6 @@
 package ga.sharexela.sharexela
+import android.Manifest
 import java.text.SimpleDateFormat
-
-
-
-
-
-
-
 
 
 enum class IntentKey{
@@ -24,8 +18,8 @@ enum class FragmentTag{
     PROFILE_EDIT_AREA_CHANGE,
     FROM_CREAR_ARTICULO_FRAGMENT,
     FROM_EDITAR_ARTICULO_FRAGMENT,
+    FROM_EDIT_AREA_INFO_FRAGMENAT,
     TO_CREAR_ARTICULO
-
 
 }
 
@@ -51,6 +45,7 @@ enum class BtnChoice{
 
 
 enum class ItemObjectsCategory{
+    //どこで使っている？？どう使っている？
     ALL_GUATEMALA,
     DONAR_GUATEMALA,
     DONAR_LOCAL,
@@ -78,4 +73,13 @@ val REQUEST_CODE_ARTICULO_IMAGE3 = 4
 
 val REQUEST_CODE_IMAGES_ACTIVITY = 5
 
+
+//パーミッション関係
+    //GoogleMapsを記事作成、記事編集、(Profile)で使う。そのためのパーミッション
+val REQUIRED_PERMISSIONS_LOCATION = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+val REQUEST_CODE_PERMISSIONS_LOCATION = 15
+
+    //写真を記事作成、編集に使うためのパーミッション
+val REQUEST_CODE_PERMISSIONS_IMAGES = 10
+val REQUIRED_PERMISSIONS_IMAGES = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION)
 
