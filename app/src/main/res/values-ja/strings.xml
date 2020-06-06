@@ -207,4 +207,10 @@
     <string name="set_mail_password_title">メール・パスワード設定</string>
     <string name="success_change_profile_image">画像を変更しました</string>
     <string name="fragment_edit_area_info_btn_btnSettingAreaByMap">地図から定める</string>
+    <string name="fragment_detail_TextView_ItemPrice">価格</string>
+    <string name="fragment_get_coordinates_radius">取引範囲(m)</string>
+    <string name="fragment_main_btn_text_buscar_habitacion">busca una habitación</string>
+    <string name="fragment_main_btn_text_alquilar_habitacion">alquila una habitación</string>
+    <string name="fragment_main_btn_text_buscar_trabajo">busca trabajo</string>
+    <string name="fragment_main_btn_text_buscar_trabajador">busca trabajador</string>
 </resources>

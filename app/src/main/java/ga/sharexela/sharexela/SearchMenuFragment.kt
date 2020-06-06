@@ -3,6 +3,7 @@ package ga.sharexela.sharexela
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_search_menu.*
 import retrofit2.Call
@@ -46,14 +47,49 @@ class SearchMenuFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //各buttonのリスナーをセットする
 
-        btnDonarGuatemala.setOnClickListener { excuteGetItemDonarListAPIView() }
-        btnDonarDepartamento.setOnClickListener { executeGetItemDonarLocalListAPIView() }
-        btnAyudaGuatemala.setOnClickListener { executeGetItemAyudaListAPIView() }
-        btnAyudaDepartamento.setOnClickListener { executeGetItemAyudaLocalAPIView() }
-        btnAnunciateGuatemala.setOnClickListener { executeGetItemAnuncioListAPIView() }
-        btnAnunciateDepartament.setOnClickListener { executeGetItemAnuncioLocalListAPIView() }
+        //各buttonのリスナーをセットする
+        btnDonarGuatemala.setOnClickListener { executeGetItemCategoryListAPIView(btnDonarGuatemala) }
+        btnDonarDepartamento.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnDonarGuatemala)
+        }
+
+        btnAyudaGuatemala.setOnClickListener { executeGetItemCategoryListAPIView(btnAyudaGuatemala) }
+        btnAyudaDepartamento.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnAyudaGuatemala)
+        }
+
+        btnAnunciateGuatemala.setOnClickListener { executeGetItemCategoryListAPIView(btnAnunciateGuatemala) }
+        btnAnunciateDepartament.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnAnunciateGuatemala)
+        }
+
+        btnBuscarHabitacion.setOnClickListener { executeGetItemCategoryListAPIView(btnBuscarHabitacion) }
+        btnBuscarHabitacionLocal.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnBuscarHabitacionLocal)
+        }
+
+        btnAlquilarHabitacion.setOnClickListener { executeGetItemCategoryListAPIView(btnAlquilarHabitacion) }
+        btnAlquilarHabitacionLocal.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnAlquilarHabitacionLocal)
+        }
+
+        btnBuscarTrabajo.setOnClickListener { executeGetItemCategoryListAPIView(btnBuscarTrabajo) }
+        btnBuscarTrabajoLocal.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnBuscarTrabajoLocal)
+        }
+
+        btnBuscarTrabajador.setOnClickListener { executeGetItemCategoryListAPIView(btnBuscarTrabajador) }
+        btnBuscarTrabajadorLocal.setOnClickListener {
+            if (sessionData.logInStatus == false) return@setOnClickListener makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+            executeGetItemCategoryLocalListAPIView(btnBuscarTrabajadorLocal)
+        }
     }
 
 
@@ -77,14 +113,12 @@ class SearchMenuFragment : Fragment() {
 
 
     interface OnFragmentInteractionListener {
-        fun launchMasterActivity(itemObjectsSerialized:ItemObjectsSerialized, stringItemObjectsCategory: String)
+        fun launchMasterActivity(itemObjectsSerialized:ItemObjectsSerialized, stringItemObjectsCategory: String, localStatus:Boolean)
 
     }
 
     companion object {
 
-
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SearchMenuFragment().apply {
@@ -97,15 +131,20 @@ class SearchMenuFragment : Fragment() {
 
 
 
-    private fun excuteGetItemDonarListAPIView() {
-        //クエリ結果を取得して、MasterFragmentを起動する。
-        //ただしフラグメントの起動はSearchActivityで起動するのでコールバックすることになる。
+    private fun executeGetItemCategoryListAPIView(selectedButton:Button){
+
+        val textBtn: String = selectedButton.text.toString().toLowerCase()
+        println(textBtn)
+        val categoryList = MyApplication.appContext.resources.getStringArray(R.array.categoryListForButton)
+        println(categoryList)
+        val categoryNumber = (categoryList.indexOf(textBtn) + 1).toString()
+
+        println(categoryNumber)
 
         val service = setService()
-        service.getItemDonarListAPIView().enqueue(object : Callback<ItemUniversalListAPIView>{
-
+        service.getItemCategoryListAPIView(categoryNumber).enqueue(object: Callback<ItemUniversalListAPIView>{
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemDonarListAPIView")
+                println("onResponseを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
                 //クエリ結果を取得し、それを引数としてコールバックする。
                 val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
                 if (itemObjects.size == 0){
@@ -113,167 +152,238 @@ class SearchMenuFragment : Fragment() {
                     return
                 }
                 val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.DONAR_GUATEMALA.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+                val localStatus = false
+                listener!!.launchMasterActivity(itemObjectsSerialized, categoryNumber, localStatus)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemDonarListAPIView")
-                println(t)
-            }
-        })
-    }
-
-    private fun executeGetItemAyudaListAPIView(){
-        //クエリ結果を取得して、MasterFragmentを起動する。
-        //ただしフラグメントの起動はSearchActivityで起動するのでコールバックすることになる。
-
-        val service = setService()
-        service.getItemAyudaListAPIView().enqueue(object :Callback<ItemUniversalListAPIView>{
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
-                //クエリ結果を取得し、それを引数としてコールバックする。
-
-                println("API叩かれている？")
-                println(response.body())
-
-                val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
-                if (itemObjects.size == 0){
-                    makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
-                    return
-                }
-                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.AYUDAR_GUATEMALA.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
-                println(t)
-            }
-        })
-    }
-
-    private fun executeGetItemAnuncioListAPIView(){
-
-        val service = setService()
-        service.getItemAnuncioListAPIView().enqueue(object :Callback<ItemUniversalListAPIView>{
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemAnuncioListAPIView")
-                //クエリ結果を取得し、それを引数としてコールバックする。
-
-                //println("API叩かれている？")
-                //println(response.body())
-
-                val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
-                if (itemObjects.size == 0){
-                    makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
-                    return
-                }
-                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_GUATEMALA.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
-
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
+                println("onFailureを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
                 println(t)
             }
         })
     }
 
 
-    private fun executeGetItemDonarLocalListAPIView(){
+
+    private fun executeGetItemCategoryLocalListAPIView(selectedButton:Button){
+
+        val textBtn: String = selectedButton.text.toString().toLowerCase()
+        println(textBtn)
+        val categoryList = MyApplication.appContext.resources.getStringArray(R.array.categoryListForButton)
+        println(categoryList)
+        val categoryNumber = (categoryList.indexOf(textBtn) + 1).toString()
+
+        println(categoryNumber)
+
         val service = setService()
-        if (sessionData.authTokenHeader == null){
-            makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
-            return
-        }
-
-        service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
-
+        service.getItemCategoryLocalListAPIView(sessionData.authTokenHeader!! ,categoryNumber).enqueue(object: Callback<ItemUniversalListAPIView>{
             override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemDonarLocalListAPIView")
+                println("onResponseを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
                 //クエリ結果を取得し、それを引数としてコールバックする。
-
                 val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
                 if (itemObjects.size == 0){
                     makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
                     return
                 }
                 val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.DONAR_LOCAL.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+
+                val localStatus = true
+                listener!!.launchMasterActivity(itemObjectsSerialized, categoryNumber, localStatus)
             }
 
             override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
-                println(t)
-            }
-        })
-    }
-
-
-    private fun executeGetItemAyudaLocalAPIView(){
-        val service = setService()
-        if (sessionData.authTokenHeader == null){
-            makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
-            return
-        }
-        service.getItemAyudaLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object:Callback<ItemUniversalListAPIView>{
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemAyudaLocalListAPIView")
-                //クエリ結果を取得し、それを引数としてコールバックする。
-
-                val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
-                if (itemObjects.size == 0){
-                    makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
-                    return
-                }
-                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.AYUDAR_LOCAL.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaLocalListAPIView")
-                println(t)
-            }
-        })
-    }
-
-    private fun executeGetItemAnuncioLocalListAPIView(){
-        val service = setService()
-        if (sessionData.authTokenHeader == null){
-            makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
-            return
-        }
-        service.getItemAnuncioLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_SearchMenuFragment#excuteGetItemAnuncioLocalListAPIView")
-                //クエリ結果を取得し、それを引数としてコールバックする。
-
-                val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
-                if (itemObjects.size == 0){
-                    makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
-                    return
-                }
-                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_LOCAL.name
-                listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#excuteGetItemAnuncioLocalListAPIView")
+                println("onFailureを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
                 println(t)
             }
         })
     }
 
 }
+
+
+
+
+
+
+
+/*
+private fun excuteGetItemDonarListAPIView() {
+    //クエリ結果を取得して、MasterFragmentを起動する。
+    //ただしフラグメントの起動はSearchActivityで起動するのでコールバックすることになる。
+
+    val service = setService()
+    service.getItemDonarListAPIView().enqueue(object : Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemDonarListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.DONAR_GUATEMALA.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemDonarListAPIView")
+            println(t)
+        }
+    })
+}
+
+private fun executeGetItemAyudaListAPIView(){
+    //クエリ結果を取得して、MasterFragmentを起動する。
+    //ただしフラグメントの起動はSearchActivityで起動するのでコールバックすることになる。
+
+    val service = setService()
+    service.getItemAyudaListAPIView().enqueue(object :Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+
+            println("API叩かれている？")
+            println(response.body())
+
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.AYUDAR_GUATEMALA.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
+            println(t)
+        }
+    })
+}
+
+private fun executeGetItemAnuncioListAPIView(){
+
+    val service = setService()
+    service.getItemAnuncioListAPIView().enqueue(object :Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemAnuncioListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+
+            //println("API叩かれている？")
+            //println(response.body())
+
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_GUATEMALA.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
+            println(t)
+        }
+    })
+}
+
+
+private fun executeGetItemDonarLocalListAPIView(){
+    val service = setService()
+    if (sessionData.authTokenHeader == null){
+        makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+        return
+    }
+
+    service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemDonarLocalListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.DONAR_LOCAL.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaListAPIView")
+            println(t)
+        }
+    })
+}
+
+
+private fun executeGetItemAyudaLocalAPIView(){
+    val service = setService()
+    if (sessionData.authTokenHeader == null){
+        makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+        return
+    }
+    service.getItemAyudaLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object:Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemAyudaLocalListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.AYUDAR_LOCAL.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemAyudaLocalListAPIView")
+            println(t)
+        }
+    })
+}
+
+private fun executeGetItemAnuncioLocalListAPIView(){
+    val service = setService()
+    if (sessionData.authTokenHeader == null){
+        makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+        return
+    }
+    service.getItemAnuncioLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object :Callback<ItemUniversalListAPIView>{
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+            println("onResponseを通る_SearchMenuFragment#excuteGetItemAnuncioLocalListAPIView")
+            //クエリ結果を取得し、それを引数としてコールバックする。
+
+            val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+            if (itemObjects.size == 0){
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
+                return
+            }
+            val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
+            val itemObjectsCategory = ItemObjectsCategory.ANUNCIO_LOCAL.name
+            listener!!.launchMasterActivity(itemObjectsSerialized, itemObjectsCategory)
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureを通る_SearchMenuFragment#excuteGetItemAnuncioLocalListAPIView")
+            println(t)
+        }
+    })
+}
+
+ */

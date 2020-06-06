@@ -17,9 +17,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/nav_header_vertical_spacing">
+
+            <View
+                android:id="@+id/divider92"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
 
             <TextView
                 android:id="@+id/tv_span1"
@@ -60,14 +66,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <View
+                android:id="@+id/divider83"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
             <TableRow
                 android:id="@+id/tableRowDonar"
                 android:layout_width="match_parent"
-                android:layout_height="84dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="81dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <Button
@@ -75,7 +87,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Donar o vender" />
+                        android:text="@string/fragment_main_btn_text_donar" />
 
                     <Button
                         android:id="@+id/btnDonarDepartamento"
@@ -84,12 +96,19 @@
                         android:layout_weight="1"
                         android:text="@string/fragment_main_btn_text_donar" />
                 </LinearLayout>
+
             </TableRow>
+
+            <View
+                android:id="@+id/divider87"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
 
             <TableRow
                 android:id="@+id/tableRowAyuda"
                 android:layout_width="match_parent"
-                android:layout_height="81dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -114,10 +133,16 @@
 
             </TableRow>
 
+            <View
+                android:id="@+id/divider91"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
             <TableRow
                 android:id="@+id/tableRowAuncio"
                 android:layout_width="match_parent"
-                android:layout_height="81dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -138,7 +163,146 @@
                         android:layout_weight="1"
                         android:text="@string/fragment_main_btn_text_anunciar" />
                 </LinearLayout>
+
             </TableRow>
+
+            <View
+                android:id="@+id/divider94"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:id="@+id/tableRowBuscarHabitacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnBuscarHabitacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_habitacion" />
+
+                    <Button
+                        android:id="@+id/btnBuscarHabitacionLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_habitacion" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <View
+                android:id="@+id/divider89"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:id="@+id/tableRowAlquilarHabitacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnAlquilarHabitacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_alquilar_habitacion" />
+
+                    <Button
+                        android:id="@+id/btnAlquilarHabitacionLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_alquilar_habitacion" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <View
+                android:id="@+id/divider93"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:id="@+id/tableRowBuscarTrabajo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnBuscarTrabajo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_trabajo" />
+
+                    <Button
+                        android:id="@+id/btnBuscarTrabajoLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_trabajo" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <View
+                android:id="@+id/divider88"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:id="@+id/tableRowBuscarTrabajador"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnBuscarTrabajador"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_trabajador" />
+
+                    <Button
+                        android:id="@+id/btnBuscarTrabajadorLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fragment_main_btn_text_buscar_trabajador" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <View
+                android:id="@+id/divider90"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
 
         </LinearLayout>
     </ScrollView>

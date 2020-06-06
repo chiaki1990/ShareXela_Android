@@ -24,6 +24,7 @@ import retrofit2.Response
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM3 = "param3"
 
 
 
@@ -31,7 +32,8 @@ private const val ARG_PARAM2 = "param2"
 class MasterFragment : Fragment(){
 
     private var itemObjectsSerialized: ItemObjectsSerialized? = null
-    private var itemObjectsCategory: String? = null
+    private var categoryNumber: String? = null
+    private var localStatus: Boolean? = null
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -40,7 +42,8 @@ class MasterFragment : Fragment(){
         super.onCreate(savedInstanceState)
         arguments?.let {
             itemObjectsSerialized = it.getSerializable(ARG_PARAM1) as ItemObjectsSerialized
-            itemObjectsCategory = it.getString(ARG_PARAM2)
+            categoryNumber = it.getString(ARG_PARAM2)
+            localStatus = it.getBoolean(ARG_PARAM3)
         }
     }
 
@@ -80,7 +83,7 @@ class MasterFragment : Fragment(){
 
 
         setUpRecyclerView()
-        swiperefresh.setOnRefreshListener { updateItemObjects(itemObjectsCategory!!) }
+        swiperefresh.setOnRefreshListener { updateItemObjects() }
 
     }
 
@@ -121,35 +124,72 @@ class MasterFragment : Fragment(){
     companion object {
 
         @JvmStatic
-        fun newInstance(itemObjectsSerialized: ItemObjectsSerialized?, itemObjectsCategory: String?) =
+        fun newInstance(itemObjectsSerialized: ItemObjectsSerialized?, categoryNumber: String?, localStatus: Boolean) =
             MasterFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_PARAM1, itemObjectsSerialized)
-                    putString(ARG_PARAM2, itemObjectsCategory)
+                    putString(ARG_PARAM2, categoryNumber)
+                    putBoolean(ARG_PARAM3, localStatus)
                 }
             }
     }
 
 
-    fun updateItemObjects(itemObjectsCategory:String) {
+    fun updateItemObjects() {
         //データの更新
         print("ココは通るか？")
-        println(itemObjectsCategory)
+        println(categoryNumber)
 
-        //今なんのカテゴリーを表示しているかを認識したい。
         //そのカテゴリーに応じて取得するデータを変更したい
-
-        when(itemObjectsCategory) {
-            ItemObjectsCategory.ALL_GUATEMALA.name -> { updateAllGuatemala() } //済
-            ItemObjectsCategory.DONAR_GUATEMALA.name -> { updateDonarGuatemala() } //済
-            ItemObjectsCategory.AYUDAR_GUATEMALA.name -> { updateAyudarGuatemala() } //済
-            ItemObjectsCategory.ANUNCIO_GUATEMALA.name -> { updateAnuncioGuatemala() } //済
-            ItemObjectsCategory.DONAR_LOCAL.name -> { updateDaonarLocal() } //済
-            ItemObjectsCategory.AYUDAR_LOCAL.name -> { updateAyudarLocal() }
-            ItemObjectsCategory.ANUNCIO_LOCAL.name -> { updateAnuncioLocal() }
-        }
-
+        if (localStatus == false) retrieveItemObjects()
+        if (localStatus == true ) retrieveItemObjectsLocal()
+        
     }
+
+
+    fun retrieveItemObjects(){
+        println("通信テスト")
+
+        val service = setService()
+        service.getItemCategoryListAPIView(categoryName=categoryNumber!!).enqueue(object : Callback<ItemUniversalListAPIView> {
+
+            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+                setUpRecyclerView()
+                swiperefresh.isRefreshing = false
+            }
+
+            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+                println("onFailureの結果　：　")
+                println(t)
+            }
+        })
+    }
+
+
+    fun retrieveItemObjectsLocal(){
+        println("通信テスト")
+
+        val service = setService()
+        service.getItemCategoryLocalListAPIView(categoryName=categoryNumber!!, authTokenHeader=sessionData.authTokenHeader!! ).enqueue(object : Callback<ItemUniversalListAPIView> {
+
+            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+                setUpRecyclerView()
+                swiperefresh.isRefreshing = false
+            }
+
+            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+                println("onFailureの結果　：　")
+                println(t)
+            }
+        })
+    }
+
 
 
 
@@ -181,6 +221,10 @@ class MasterFragment : Fragment(){
                 ))
 
         }
+        val divider = androidx.recyclerview.widget.DividerItemDecoration(MyApplication.appContext, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL)
+        recyclerView.apply {
+            addItemDecoration(divider)
+        }
 
         //val layoutManager = GridLayoutManager(this@MasterFragment.context, 3)
         val layoutManager = GridLayoutManager(this@MasterFragment.activity, 3)
@@ -188,6 +232,8 @@ class MasterFragment : Fragment(){
 
         val adapter = MyRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
         recyclerView.adapter = adapter
+
+
     }
 
 
@@ -230,144 +276,146 @@ class MasterFragment : Fragment(){
 
     }
 
-
-
-    fun updateAllGuatemala(){ //済
-        println("通信テスト")
-        val service = setService()
-        service.getItemListAPIView().enqueue(object : Callback<ItemListAPIViewModel> {
-
-            override fun onResponse(call: Call<ItemListAPIViewModel>, response: Response<ItemListAPIViewModel>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemListAPIViewModel>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-    fun updateDonarGuatemala(){ //済
-        val service = setService()
-        service.getItemDonarListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-    fun updateAyudarGuatemala(){
-        val service = setService()
-        service.getItemAyudaListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-    fun updateAnuncioGuatemala(){
-        val service = setService()
-        service.getItemAnuncioListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-
-    fun updateDaonarLocal(){
-        val service = setService()
-        service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-    fun updateAyudarLocal(){
-        val service = setService()
-        service.getItemAyudaLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-    fun updateAnuncioLocal(){
-        val service = setService()
-        service.getItemAnuncioLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                setUpRecyclerView()
-                swiperefresh.isRefreshing = false
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureの結果　：　")
-                println(t)
-            }
-        })
-    }
-
-
-
-
 }
+
+
+
+
+
+/*
+fun updateAllGuatemala(){ //済
+    println("通信テスト")
+    val service = setService()
+    service.getItemListAPIView().enqueue(object : Callback<ItemListAPIViewModel> {
+
+        override fun onResponse(call: Call<ItemListAPIViewModel>, response: Response<ItemListAPIViewModel>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemListAPIViewModel>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+fun updateDonarGuatemala(){ //済
+    val service = setService()
+    service.getItemDonarListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+fun updateAyudarGuatemala(){
+    val service = setService()
+    service.getItemAyudaListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+fun updateAnuncioGuatemala(){
+    val service = setService()
+    service.getItemAnuncioListAPIView().enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+
+fun updateDaonarLocal(){
+    val service = setService()
+    service.getItemDonarLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+fun updateAyudarLocal(){
+    val service = setService()
+    service.getItemAyudaLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+fun updateAnuncioLocal(){
+    val service = setService()
+    service.getItemAnuncioLocalListAPIView(sessionData.authTokenHeader!!).enqueue(object : Callback<ItemUniversalListAPIView> {
+
+        override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
+
+            var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
+            itemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+            setUpRecyclerView()
+            swiperefresh.isRefreshing = false
+        }
+
+        override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+            println("onFailureの結果　：　")
+            println(t)
+        }
+    })
+}
+
+ */

@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
 import okhttp3.MediaType
@@ -24,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-class EditarArticuloFragment : Fragment() {
+class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
 
     private var itemObj: ItemSerializerModel? = null
     private var param2: String? = null
@@ -130,6 +134,38 @@ class EditarArticuloFragment : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+
+        if (itemObj == null) return
+
+        //画面に再反映させる
+        setValueToCategotySpinner(itemObj!!, spArticuloCategory)
+        etArticuloTitle.setText(itemObj!!.title)
+        etArticuloDescription.setText(itemObj!!.description)
+        if (itemObj!!.price != null) etArticuloPrice.setText(itemObj!!.price!!)
+        tvCrearArticuloPoint.text = itemObj?.point
+        tvCrearArticuloRadius.text = itemObj!!.radius.toString()
+        setRegionSpinner(itemObj, spSelectPais, spSelectDepartamento, spSelectMunicipio)
+        if (imageView1FilePath != null && imageView1FilePath != "") Glide.with(this).load(imageView1FilePath).into(ivArticuloImage1)
+
+        if (imageView2FilePath != null && imageView2FilePath != "") Glide.with(this).load(imageView2FilePath).into(ivArticuloImage2)
+
+        if (imageView3FilePath != null && imageView3FilePath != "") Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
+
+        //pointがある場合にはgoogleMapsに描画する
+        //frameLayoutCrearMap.visibility = View.GONE
+        if (itemObj?.point != null) {
+            frameLayoutCrearMap.visibility = View.VISIBLE
+            val map = SupportMapFragment.newInstance()
+            childFragmentManager.beginTransaction().add(R.id.frameLayoutCrearMap, map)
+                .commit()
+            map.getMapAsync(this@EditarArticuloFragment)
+        }
+    }
+
+
+
     companion object {
 
 
@@ -216,7 +252,7 @@ class EditarArticuloFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
 
         val retrievedItemObj = retrieveArticuloData(
-            etArticuloTitle, etArticuloDescription, spArticuloCategory,
+            etArticuloTitle, etArticuloDescription, etArticuloPrice, spArticuloCategory,
             spSelectPais, spSelectDepartamento,spSelectMunicipio,
             tvCrearArticuloPoint, tvCrearArticuloRadius)
 
@@ -250,6 +286,24 @@ class EditarArticuloFragment : Fragment() {
             }
 
         })
+
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        //描画したいこと mapの縮尺, mapの中心設定, pointまたはradiusの描画
+        //mapの縮尺
+        if (itemObj?.point == null) return
+        val latLng = getLatLng(itemObj!!.point!!)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
+        googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isZoomGesturesEnabled = true
+
+        if (itemObj!!.radius != 0){
+            drawingCircle(latLng, itemObj!!.radius.toString(), googleMap)
+        }else if (itemObj!!.radius == 0){
+            drawingPoint(latLng, googleMap)
+        }
 
     }
 

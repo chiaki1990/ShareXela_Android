@@ -70,7 +70,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         setAdapterToCategotySpinner(spArticuloCategory)
 
 
-        //具体的な座標データを利用する
+        //具体的な座標データ取得するためにGoogleMapsを開く。このきのうのためにパーミションチェックを実装
         btnCrearArticuloLaunchMap.setOnClickListener {
 
             // 位置情報のパーミッション状態を取得する
@@ -79,7 +79,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
             val neverAskAgainSelectedStatus = PermissionUtils().neverAskAgainSelected(REQUIRED_PERMISSIONS_LOCATION[0], this)
             if (!neverAskAgainSelectedStatus ) return@setOnClickListener this.requestPermissions(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION)
-            //if (neverAskAgainSelectedStatus  ) return@setOnClickListener requestPermissionsByDialog(REQUIRED_PERMISSIONS_LOCATION, REQUEST_CODE_PERMISSIONS_LOCATION, this, "map機能", "map機能を実現するには許可が必要です。" )
             if (neverAskAgainSelectedStatus  ) return@setOnClickListener displayNeverAskAgainDialog(this)
         }
 
@@ -96,36 +95,12 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         ivArticuloImage2.setOnClickListener { checkImagePermissions() }
         ivArticuloImage3.setOnClickListener { checkImagePermissions() }
 
-        //ivArticuloImage1.setOnClickListener { listener!!.onLaunchImagesActivity() }
-        //ivArticuloImage2.setOnClickListener { listener!!.onLaunchImagesActivity() }
-        //ivArticuloImage3.setOnClickListener { listener!!.onLaunchImagesActivity() }
 
-
-        //Regionデータをareing.xmlから取得してRegionをセット
-        setRegionSpinner(itemObj)
+        //Regionデータをstring.xmlから取得してRegionをセット
+        setRegionSpinner(itemObj, spSelectPais, spSelectDepartamento, spSelectMunicipio)
 
     }
 
-
-
-    fun setRegionSpinner(itemObj: ItemSerializerModel?){
-
-        setAdapterToPaisSpinner(spSelectPais)
-        setAdapterToDepartamentoSpinner(spSelectDepartamento)
-        setAdapterToMunicipioSpinner(spSelectMunicipio)
-
-        if (itemObj == null){
-            setValueToPaisSpinner(sessionData.profileObj!!.adm0!!, spSelectPais)
-            setValueToDepartamentoSpinner(sessionData.profileObj!!.adm1!!, spSelectDepartamento)
-            setValueToMunicipioSpinner(sessionData.profileObj!!.adm2!!, spSelectMunicipio)
-            return
-        }
-        setValueToPaisSpinner(itemObj.adm0!!, spSelectPais)
-        setValueToDepartamentoSpinner(itemObj.adm1!!, spSelectDepartamento)
-        setValueToMunicipioSpinner(itemObj.adm2!!, spSelectMunicipio)
-        return
-
-    }
 
 
 
@@ -138,17 +113,17 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         setValueToCategotySpinner(itemObj!!, spArticuloCategory)
         etArticuloTitle.setText(itemObj!!.title)
         etArticuloDescription.setText(itemObj!!.description)
+        if (itemObj!!.price != null) etArticuloPrice.setText(Integer.toString(itemObj!!.price!!))
         tvCrearArticuloPoint.text = itemObj?.point
         tvCrearArticuloRadius.text = itemObj!!.radius.toString()
-        setRegionSpinner(itemObj)
+        setRegionSpinner(itemObj, spSelectPais, spSelectDepartamento, spSelectMunicipio)
+
         if (imageView1FilePath != null && imageView1FilePath != "") Glide.with(this).load(imageView1FilePath).into(ivArticuloImage1)
-
         if (imageView2FilePath != null && imageView2FilePath != "") Glide.with(this).load(imageView2FilePath).into(ivArticuloImage2)
-
         if (imageView3FilePath != null && imageView3FilePath != "") Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
 
         //pointがある場合にはgoogleMapsに描画する
-        frameLayoutCrearMap.visibility = View.GONE
+        //frameLayoutCrearMap.visibility = View.GONE
         if (itemObj?.point != null) {
             frameLayoutCrearMap.visibility = View.VISIBLE
             val map = SupportMapFragment.newInstance()
@@ -156,6 +131,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 .commit()
             map.getMapAsync(this@CrearArticuloFragment)
         }
+
     }
 
 
@@ -163,7 +139,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
         //データをとる関数を実施
         val itemObj = retrieveArticuloData(
-                etArticuloTitle, etArticuloDescription, spArticuloCategory,
+                etArticuloTitle, etArticuloDescription, etArticuloPrice, spArticuloCategory,
                 spSelectPais, spSelectDepartamento,spSelectMunicipio,
                 tvCrearArticuloPoint, tvCrearArticuloRadius)
 
@@ -192,7 +168,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
 
         val retrievedItemObj = retrieveArticuloData(
-                etArticuloTitle, etArticuloDescription, spArticuloCategory,
+                etArticuloTitle, etArticuloDescription, etArticuloPrice, spArticuloCategory,
                 spSelectPais, spSelectDepartamento,spSelectMunicipio,
                 tvCrearArticuloPoint, tvCrearArticuloRadius)
 
@@ -338,7 +314,3 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     }
 
 }
-
-
-
-

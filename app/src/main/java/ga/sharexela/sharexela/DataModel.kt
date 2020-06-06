@@ -70,16 +70,6 @@ data class AuthModel(
 
 
 
-/*
-data class RegionListSet(
-
-    var ADM0_LIST: ArrayList<String>,
-    var ADM1_LIST: ArrayList<String>,
-    var ADM2_LIST: ArrayList<String>
-)
-*/
-
-
 data class RegionListSet(
 
     var ADM0_LIST: ArrayList<String>,
@@ -109,6 +99,7 @@ data class ItemSerializerModel(
     var user: UserSerializerModel? = null, //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var title:String = "",
     var description: String = "",
+    var price:Int? = null,
     var category:CategorySerializerModel? = null,
     var adm0: String? = null,
     var adm1: String? = null,
@@ -125,8 +116,7 @@ data class ItemSerializerModel(
     var image1: String? = null,
     var image2: String? = null,         //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
     var image3: String? = null          //nullにしておくと記事生成時に都合がいいけど、読み込み時は都合が悪いか？
-    //今後point(geoデータ)を実装する
-    //今後priceを実装する
+
 
 ): Serializable
 
@@ -135,7 +125,7 @@ data class ItemSerializerModel(
 
 // django: api/serializers.py CategorySerializerより
 data class CategorySerializerModel(
-    var name: String
+    var number: String
 ): Serializable
 
 

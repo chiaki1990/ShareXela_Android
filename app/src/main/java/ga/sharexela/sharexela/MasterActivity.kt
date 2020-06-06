@@ -101,21 +101,22 @@ class MasterActivity : AppCompatActivity(),
         println( intent.extras)
         if (intent.extras != null){
             val itemObjectsSerialized = intent.extras?.getSerializable("itemObjectsSerialized") as ItemObjectsSerialized
-            val itemObjectsCategory = intent.extras?.getString("itemObjectsCategory")
+            val categoryNumber = intent.extras?.getString("categoryNumber")
+            val localStatus = intent.extras?.getBoolean("localStatus", false)
             //fragmentの起動でデータを受け渡す。。。
 
             //タイトルの変更
-            when(itemObjectsCategory){
-                ItemObjectsCategory.DONAR_GUATEMALA.name -> {toolbar.title= "DONAR O VENDER"}
-                ItemObjectsCategory.DONAR_LOCAL.name -> {toolbar.title= "DONAR O VENDER"}
-                ItemObjectsCategory.AYUDAR_GUATEMALA.name -> {toolbar.title= "BUSCAR AYUDA"}
-                ItemObjectsCategory.AYUDAR_LOCAL.name -> {toolbar.title= "BUSCAR AYUDA"}
-                ItemObjectsCategory.ANUNCIO_GUATEMALA.name -> {toolbar.title= "ANUNCIATE"}
-                ItemObjectsCategory.ANUNCIO_LOCAL.name -> {toolbar.title= "ANUNCIATE"}
+            when(categoryNumber){
+                //ItemObjectsCategory.DONAR_GUATEMALA.name -> {toolbar.title= "DONAR O VENDER"}
+                //ItemObjectsCategory.DONAR_LOCAL.name -> {toolbar.title= "DONAR O VENDER"}
+                //ItemObjectsCategory.AYUDAR_GUATEMALA.name -> {toolbar.title= "BUSCAR AYUDA"}
+                //ItemObjectsCategory.AYUDAR_LOCAL.name -> {toolbar.title= "BUSCAR AYUDA"}
+                //ItemObjectsCategory.ANUNCIO_GUATEMALA.name -> {toolbar.title= "ANUNCIATE"}
+                //ItemObjectsCategory.ANUNCIO_LOCAL.name -> {toolbar.title= "ANUNCIATE"}
             }
 
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSerialized, itemObjectsCategory))
+                .replace(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSerialized, categoryNumber, localStatus!!))
                 .commit()
             return
         }
@@ -145,9 +146,11 @@ class MasterActivity : AppCompatActivity(),
                 //修正前var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
                 var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
                 val itemObjectsSelialized: ItemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
+                val localStatus = false
+                val categoryNumber = "999"
 
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSelialized, itemObjectsCategory))
+                    .add(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSelialized, categoryNumber, localStatus))
                     //.commit()
                     .commitAllowingStateLoss( );
 

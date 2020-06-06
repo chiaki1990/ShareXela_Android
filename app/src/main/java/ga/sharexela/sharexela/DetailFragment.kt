@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -171,6 +172,7 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                     val itemAdm2 = itemObj.adm2
                     val itemPoint: String? = itemObj.point
                     val itemRadius: Int? = itemObj.radius
+                    val itemPrice: Int? = itemObj.price
 
 
 
@@ -191,7 +193,8 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
 
 
-                    val itemCategory = itemObj!!.category!!.name
+                    val itemCategory = itemObj.category!!.number
+                    val itemCategoryDisplay = categoryDisplayMaker(itemCategory)
 
                     //val ItemContactObjects = response.body()!!.item_contact_objects_serializer
                     val ItemContactObjects = itemObj.item_contacts
@@ -207,9 +210,10 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
                     tvItemTitle.text = itemTitle
                     tvItemDescription.text = itemDescription
                     tvCreatedAt.text = strDate
-                    tvCategoryContent.text = itemCategory
+                    tvCategoryContent.text = itemCategoryDisplay
                     tvDealAreaAdm1.text = itemAdm1
                     tvDealAreaAdm2.text = itemAdm2
+                    tvDetailPrice.text = itemPrice.toString()
 
 
                     //GoogleMapsを描画する
@@ -393,18 +397,30 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
         val adRequest = AdRequest.Builder().build()
         //サイズ
-        adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
-        adView2.setAdSize(AdSize.SMART_BANNER)
+        val adViewCenter = AdView(MyApplication.appContext)
+        val adViewBottom = AdView(MyApplication.appContext)
+        adViewCenter.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        adViewBottom.setAdSize(AdSize.SMART_BANNER)
+
         //unitid
         if (devEnv == true){
-            adView.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
-            adView2.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
+            adViewCenter.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
+            adViewBottom.setAdUnitId(getString(R.string.banner_ad_unit_id_test))
         }else if (devEnv == false){
-            adView.setAdUnitId(getString(R.string.banner_ad_unit_id))
-            adView2.setAdUnitId(getString(R.string.banner_ad_unit_id))
+            adViewCenter.setAdUnitId(getString(R.string.banner_ad_unit_id))
+            adViewBottom.setAdUnitId(getString(R.string.banner_ad_unit_id))
         }
-        adView.loadAd(adRequest)
-        adView2.loadAd(adRequest)
+        adViewCenter.loadAd(adRequest)
+        adViewBottom.loadAd(adRequest)
+
+
+        linearLayoutBottomLayer.addView(adViewBottom)
+
+        linearLayoutCenterForAd.addView(adViewCenter)
+        val spaceView = View(MyApplication.appContext)
+        spaceView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 15)
+        linearLayoutCenterForAd.addView(spaceView)
+
     }
 
 

@@ -63,6 +63,17 @@ interface ShareXelaService {
     fun getItemAyudaLocalListAPIView(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
 
 
+    // api.Views.item_views.py ItemCategoryListAPIView#getに連結する
+    @GET("api/items/category/{categoryNumber}/items/list/")
+    fun getItemCategoryListAPIView(@Path("categoryNumber") categoryName: String):Call<ItemUniversalListAPIView>
+
+
+    // api.Views.item_views.py ItemCategoryLocalListAPIView#getに連結する
+    @GET("api/items/category/{categoryNumber}/items/list/local/")
+    fun getItemCategoryLocalListAPIView(@Header("Authorization") authTokenHeader: String, @Path("categoryNumber") categoryName: String):Call<ItemUniversalListAPIView>
+
+
+
     // api.views.ItemAnuncioListAPIView#getに連結する
     @GET("api/items/anuncio_list/")
     fun getItemAnuncioListAPIView():Call<ItemUniversalListAPIView>

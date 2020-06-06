@@ -61,11 +61,17 @@
 
     <!-- SearchMenu -->
     <!--        widget -->
-    <string name="fragment_main_btn_text_donar">Donar o vender</string>
-    <string name="fragment_main_btn_text_ayudar">Buscar ayuda</string>
-    <string name="fragment_main_btn_text_anunciar">Anunciate</string>
     <string name="fragment_main_text_guatemala">Toda Guatemala</string>
     <string name="fragment_main_text_departament0">Tu Departamento</string>
+    <string name="fragment_main_btn_text_donar">quiere donar o vender</string>
+    <string name="fragment_main_btn_text_ayudar"> busca donante</string>
+    <string name="fragment_main_btn_text_anunciar">quiere avisar</string>
+    <string name="fragment_main_btn_text_buscar_habitacion">busca una habitación</string>
+    <string name="fragment_main_btn_text_alquilar_habitacion">alquila una habitación</string>
+    <string name="fragment_main_btn_text_buscar_trabajo">busca trabajo</string>
+    <string name="fragment_main_btn_text_buscar_trabajador">busca trabajador</string>
+
+
     <!--        toolbarタイトル -->
     <string name="toolbar_Main_title">Encuentra artículos</string>
     <!--        SearchMenuFragment-Toast Message -->
@@ -83,6 +89,7 @@
     <string name="fragment_detail_btn_text_btnSelectSolicitudes">Elige un socio comercial</string>
     <string name="fragment_detail_btn_text_btnShowFail">Socio comercial determinado</string>
     <string name="fragment_detail_TextView_UsuarioInformacion">Informacion del usuario</string>
+    <string name="fragment_detail_TextView_ItemPrice">Precio</string>
     <string name="toast_message_needSignIn">Por favor Iniciar sesión.</string>
     <string name="fragment_detail_btn_detail_active_to_deactive">Deje de publicar este artículo.</string>
     <string name="fragment_detail_btn_detail_active_to_active">Reanudar la publicación de este artículo.</string>
@@ -136,6 +143,10 @@
     <string name="fragment_sign_up_btnSignUp">Registro</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_signUp">Registro de usuario</string>
+
+
+    <!-- Google Maps -->
+    <string name="fragment_get_coordinates_radius">alcance del negocio (m)</string>
 
 
     <!-- Profile -->
@@ -237,10 +248,37 @@
 
     <!-- カテゴリーのリスト -->
     <string-array name="categoryList">
-        <item>Donar o vender</item>
-        <item>Buscar ayuda</item>
-        <item>Anunciate</item>
+        <item>Gente que quiere donar o vender</item>
+        <item>Gente que busca donante</item>
+        <item>Gente que quiere avisar</item>
+        <item>Gente que busca una habitación</item>
+        <item>Gente que alquila una habitación</item>
+        <item>Gente que busca trabajo</item>
+        <item>Gente que busca trabajador</item>
     </string-array>
+
+
+    <string-array name="categoryListForButton">
+        <item>quiere donar o vender</item>
+        <item>busca donante</item>
+        <item>quiere avisar</item>
+        <item>busca una habitación</item>
+        <item>alquila una habitación</item>
+        <item>busca trabajo</item>
+        <item>busca trabajador</item>
+    </string-array>
+
+
+    <!--string-array name="categoryListIndex">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array-->
+
 
 
     <!-- Paisのリスト -->

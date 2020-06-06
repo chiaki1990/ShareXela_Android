@@ -15,31 +15,52 @@ import java.io.File
 
 
 //CrearArticuloFragmentとEditarArticuloFragmentで使用している
-fun retrieveArticuloData(etArticuloTitle: EditText, etArticuloDescription: EditText,
+fun retrieveArticuloData(etArticuloTitle: EditText, etArticuloDescription: EditText, etArticuloPrecio:EditText?,
                          spArticuloCategory: Spinner, spSelectPais:Spinner, spSelectDepartamento:Spinner,
                          spSelectMunicipio:Spinner, tvCrearArticuloPoint: TextView, tvCrearArticuloRadius: TextView
 )
         :ItemSerializerModel {
 
-    //入力データの取得 //なんでpoontとradiusを追加していないのか理由がわかっていない。。。
-    val title           = etArticuloTitle.text.toString()
-    val description     = etArticuloDescription.text.toString()
-    val category:String = spArticuloCategory.selectedItem.toString()
-    val adm0: String    = spSelectPais.selectedItem.toString()
-    val adm1: String    = spSelectDepartamento.selectedItem.toString()
-    val adm2: String    = spSelectMunicipio.selectedItem.toString()
-    val point: String   = tvCrearArticuloPoint.text.toString()
-    val radius: Int     = tvCrearArticuloRadius.text.toString().toInt()
+
+    val title              = etArticuloTitle.text.toString()
+    val description        = etArticuloDescription.text.toString()
+    val strCategory:String = spArticuloCategory.selectedItem.toString()
+    val category:String    = categoryIdmaker(strCategory)
+    val adm0: String       = spSelectPais.selectedItem.toString()
+    val adm1: String       = spSelectDepartamento.selectedItem.toString()
+    val adm2: String       = spSelectMunicipio.selectedItem.toString()
+    val point: String      = tvCrearArticuloPoint.text.toString()
+    val radius: Int        = tvCrearArticuloRadius.text.toString().toInt()
+    var price: Int?        = null
+    try {
+        price              = etArticuloPrecio?.text.toString().toInt()
+    }catch (e:java.lang.NumberFormatException){
+        price              = null
+
+    }
+
     //CategorySerializerModelオブジェクトの生成
-    val categoryObj     = CategorySerializerModel(name=category)
+    val categoryObj     = CategorySerializerModel(number=category)
     //ItemSerializerModelオブジェクトの作成
-    val itemObj = ItemSerializerModel(title=title, description=description, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2, point=point, radius=radius )
+    val itemObj = ItemSerializerModel(title=title, description=description, price=price, category=categoryObj, adm0=adm0, adm1=adm1, adm2=adm2, point=point, radius=radius )
 
     return itemObj
 }
 
 
+fun categoryIdmaker(strCategory: String):String{
+    val categoryIndex: Int = MyApplication.appContext.resources.getStringArray(R.array.categoryList).indexOf(strCategory)
+    return (categoryIndex + 1 ).toString()
+}
 
+
+fun categoryDisplayMaker(categoryId:String):String{
+    //カテゴリーIDから該当するリストの文字列を返す
+    val categoryList = MyApplication.appContext.resources.getStringArray(R.array.categoryList)
+    val categoryListIndex = categoryId.toInt() -1
+    val categoryDisplay = categoryList[categoryListIndex]
+    return categoryDisplay
+}
 
 //CrearArticuloFragmentとEditarArticuloFragmentで使用している
 fun makeImgagePartForRetrofit(imageViewFilePath:String?, formName:String): MultipartBody.Part?{
@@ -71,6 +92,35 @@ fun makeImgagePartForRetrofit(imageViewFilePath:String?, formName:String): Multi
 
 
 
+
+
+
+
+fun setRegionSpinner(itemObj: ItemSerializerModel?, spSelectPais:Spinner, spSelectDepartamento:Spinner, spSelectMunicipio:Spinner){
+    //この関数は下記にある関数群をラッピングしたものである
+    //setAdapterToCategotySpinner, setAdapterToDepartamentoSpinner, setAdapterToMunicipioSpinner
+    //setValueToPaisSpinner, setValueToDepartamentoSpinner, setValueToMunicipioSpinner
+
+
+    setAdapterToPaisSpinner(spSelectPais)
+    setAdapterToDepartamentoSpinner(spSelectDepartamento)
+    setAdapterToMunicipioSpinner(spSelectMunicipio)
+
+    if (itemObj == null){
+        setValueToPaisSpinner(sessionData.profileObj!!.adm0!!, spSelectPais)
+        setValueToDepartamentoSpinner(sessionData.profileObj!!.adm1!!, spSelectDepartamento)
+        setValueToMunicipioSpinner(sessionData.profileObj!!.adm2!!, spSelectMunicipio)
+        return
+    }
+    setValueToPaisSpinner(itemObj.adm0!!, spSelectPais)
+    setValueToDepartamentoSpinner(itemObj.adm1!!, spSelectDepartamento)
+    setValueToMunicipioSpinner(itemObj.adm2!!, spSelectMunicipio)
+    return
+
+}
+
+
+
 fun setAdapterToCategotySpinner(spinner: Spinner){
     val adapter = ArrayAdapter.createFromResource(MyApplication.appContext, R.array.categoryList, android.R.layout.simple_list_item_1)
     //spArticuloCategory.adapter = adapter
@@ -79,7 +129,7 @@ fun setAdapterToCategotySpinner(spinner: Spinner){
 
 fun setValueToCategotySpinner(itemObj: ItemSerializerModel, spinner: Spinner) {
     val categoryList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.categoryList)
-    val indexOfCategory = categoryList.indexOf(itemObj.category!!.name)
+    val indexOfCategory = categoryList.indexOf(itemObj.category!!.number)
     //spArticuloCategory.setSelection(indexOfCategory)
     spinner.setSelection(indexOfCategory)
 }
