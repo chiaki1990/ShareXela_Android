@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_log_in.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -125,6 +126,9 @@ class SignUpFragment : Fragment() {
 
         //password1とpassword2が一致しているので、考えるべきところはemailが使われていないかどうか
 
+        //プログレスバーを表示させる
+        progressBarSignUp.visibility = View.VISIBLE
+
 
         val service = setService()
         service.signup(email, password1, password2).enqueue(object :Callback<AuthModel>{
@@ -136,21 +140,6 @@ class SignUpFragment : Fragment() {
                     val key = response.body()?.key
                     //authToken = key
 
-                    /*
-                    //ユーザー登録できたのでauthTokenを端末に登録する -> SharedPreferencesに格納
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                        sharedPreferences = MyApplication.appContext.getSharedPreferences(SP_XML, Context.MODE_PRIVATE)
-                    }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-                        sharedPreferences = EncryptedSharedPreferences.create(
-                            getString(R.string.LOGIN_SHARED_PREFERENCES),
-                            masterKeyAlias,
-                            MyApplication.appContext,
-                            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                        )
-                    }
-                    */
 
                     val sharedPreferences = getSharedPreferencesInstance()
                     val editor = sharedPreferences.edit()
@@ -168,10 +157,12 @@ class SignUpFragment : Fragment() {
                     //FCMのデバイストークンを取得、送信する
                     sendDeviceToken()
 
+                    //ptofileオブジェクトを取得してからエリアセッティングフラグメントへ移動させる。
+                    getProfileSerializerModel()
 
-                    //エリアセッティングフラグメントを起動する。
-                    listener!!.sendEditAreaInfoFragment()
-                    return
+
+
+
 
                 }else if (response.code() == 400){
 
@@ -190,6 +181,11 @@ class SignUpFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<AuthModel>, t: Throwable) {
+
+                //プログレスバーを削除する
+                progressBarSignUp.visibility = View.GONE
+
+
                 println("onFailureの場合")
                 println(t)
 
@@ -197,4 +193,41 @@ class SignUpFragment : Fragment() {
         })
     }
 
+
+
+
+    private fun getProfileSerializerModel() {
+
+
+        val service = setService()
+
+        service.readProfile(sessionData.authTokenHeader!!).enqueue(object :Callback<ProfileSerializerModel>{
+            override fun onResponse(call: Call<ProfileSerializerModel>, response: Response<ProfileSerializerModel>) {
+                //progressBarLogIn.visibility = View.GONE
+
+                val profileObj = response.body()
+                println("profileObjの表示")
+                println(profileObj)
+                sessionData.profileObj = profileObj
+
+                //プログレスバーを削除する
+                progressBarSignUp.visibility = View.GONE
+
+                //エリアセッティングフラグメントを起動する。
+                listener!!.sendEditAreaInfoFragment()
+                return
+
+            }
+
+            override fun onFailure(call: Call<ProfileSerializerModel>, t: Throwable) {
+                progressBarLogIn.visibility = View.GONE
+                println("onFailureを通る")
+                println(t)
+                println(t.message)
+
+                //プログレスバーを削除する
+                progressBarSignUp.visibility = View.GONE
+            }
+        })
+    }
 }

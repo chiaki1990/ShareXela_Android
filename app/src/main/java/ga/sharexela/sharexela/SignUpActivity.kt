@@ -39,4 +39,6 @@ class SignUpActivity : AppCompatActivity(), SignUpFragment.OnFragmentInteraction
     }
 
 
+
+
 }

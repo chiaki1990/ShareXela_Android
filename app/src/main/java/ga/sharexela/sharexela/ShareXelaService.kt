@@ -45,22 +45,11 @@ interface ShareXelaService {
     //fun getItemListAPIView():Call<List<ItemSerializerModel>>
     fun getItemListAPIView():Call<ItemListAPIViewModel>
 
-    // api.views.ItemDonarListAPIView#getに連結する
-    @GET("api/items/donar_list/")
-    fun getItemDonarListAPIView():Call<ItemUniversalListAPIView>
 
-    // api.views.ItemDonarLocalListAPIView#getに連結する
-    @GET("api/items/donar_local_list/")
-    fun getItemDonarLocalListAPIView(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
+    // api.Views.item_views.py ItemCategoryListAPIView#getに連結する
+    @GET("api/items/home/list/")
+    fun getItemHomeListAPIView():Call<ItemHomeListSerializerViewModel>
 
-    // api.views.ItemAyudaListAPIView#getに連結する
-    @GET("api/items/ayuda_list/")
-    fun getItemAyudaListAPIView():Call<ItemUniversalListAPIView>
-
-
-    // api.views.ItemDonarLocalListAPIView#getに連結する
-    @GET("api/items/ayuda_local_list/")
-    fun getItemAyudaLocalListAPIView(@Header("Authorization") authTokenHeader: String):Call<ItemUniversalListAPIView>
 
 
     // api.Views.item_views.py ItemCategoryListAPIView#getに連結する
@@ -114,7 +103,6 @@ interface ShareXelaService {
     @Multipart
     @POST("api/item_create_1/")
     fun postItemCreateAPIViewMultiPart(@Header("Authorization") authTokenHeader: String, @Part file1:MultipartBody.Part?, @Part file2:MultipartBody.Part?, @Part file3:MultipartBody.Part?, @Part("jsonData") requestBody: RequestBody):Call<ResultModel>
-
 
 
 

@@ -213,4 +213,5 @@
     <string name="fragment_main_btn_text_alquilar_habitacion">alquila una habitación</string>
     <string name="fragment_main_btn_text_buscar_trabajo">busca trabajo</string>
     <string name="fragment_main_btn_text_buscar_trabajador">busca trabajador</string>
+    <string name="fragment_main_btn_text_negocio">hace publicidad de su negocio</string>
 </resources>

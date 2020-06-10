@@ -23,13 +23,11 @@
     <string name="set_mail_password_title">correo electrónico y contraseña</string>
 
 
-
     <!-- Toast Message -->
     <string name="fail_crear_articulo">falló al crear el artículo.</string>
     <string name="fail_editar_articulo">falló al editar el artículo.</string>
     <string name="success_logOut">ha cerrado la sesión con éxito.</string>
     <string name="success_change_profile_image">La imagen ha sido cambiada.</string>
-
 
 
     <!-- SharedPreferences Key -->
@@ -42,9 +40,9 @@
     <string name="drawer_menu_signIn">Iniciar sesión</string>
     <string name="drawer_menu_signUp">Registro de usuario</string>
     <string name="drawer_menu_notification">Notificación</string>
-    <string name="drawer_menu_myList">Mi lista</string>
+    <string name="drawer_menu_myList">Mis avisos</string>
     <string name="drawer_menu_myFavorite">Mis favoritos</string>
-    <string name="drawer_menu_crearArticulo">Hacer un aviso</string>
+    <string name="drawer_menu_crearArticulo">Crear un aviso</string>
     <string name="drawer_menu_profile">Perfil</string>
     <string name="drawer_menu_settings">Configuración</string>
     <string name="drawer_menu_others">Otros</string>
@@ -61,15 +59,16 @@
 
     <!-- SearchMenu -->
     <!--        widget -->
-    <string name="fragment_main_text_guatemala">Toda Guatemala</string>
+    <!--string name="fragment_main_text_guatemala">Toda Guatemala</string>
     <string name="fragment_main_text_departament0">Tu Departamento</string>
     <string name="fragment_main_btn_text_donar">quiere donar o vender</string>
     <string name="fragment_main_btn_text_ayudar"> busca donante</string>
     <string name="fragment_main_btn_text_anunciar">quiere avisar</string>
     <string name="fragment_main_btn_text_buscar_habitacion">busca una habitación</string>
     <string name="fragment_main_btn_text_alquilar_habitacion">alquila una habitación</string>
-    <string name="fragment_main_btn_text_buscar_trabajo">busca trabajo</string>
+    <string name="fragment_main_btn_text_buscar_trabajo">busca empleo</string>
     <string name="fragment_main_btn_text_buscar_trabajador">busca trabajador</string>
+    <string name="fragment_main_btn_text_negocio">publicidad de Enpresas y Servicios</string-->
 
 
     <!--        toolbarタイトル -->
@@ -106,7 +105,7 @@
     <string name="fragment_crear_articulo_etArticuloDescription_hint">Descripción del articulo</string>
     <string name="fragment_crear_articulo_chooseCategory">Selección de categoría</string>
     <string name="fragment_crear_artivulo_btnCrearArticulo">Completa el articulo</string>
-    <string name="fragment_crear_articulo_btnCrearArticuloLaunchMap">(opción)Proporcionar datos geográficos concretos.</string>
+    <string name="fragment_crear_articulo_btnCrearArticuloLaunchMap">(opción)dirección</string>
     <!--        Toast Message -->
     <string name="title_o_description_blank_message">No hay entrada en el título del artículo y la descripción del artículo. Por favor llenalo.</string>
     <string name="success_crear_articlo_message">Creó un artículo.</string>
@@ -199,13 +198,13 @@
 
     <!-- GetCoordinatesFragment -->
     <string name="title_set_point_and_radius">Configurar ubicación comercial</string>
-    
-    
+
+
     <!-- Notification -->
     <string name="notification_recyclerview_adapter_recieve_solicitud">"Se ha recibido una solicitud comercial.      "</string>
-    <string name="notification_recyclerview_adapter_recieve_commento" >"El artículo se comentó.                      "</string>
+    <string name="notification_recyclerview_adapter_recieve_commento">"El artículo se comentó.                      "</string>
     <string name="notification_recyclerview_adapter_begin_transaction">"Empieza a comerciar.                         "</string>
-    <string name="notification_recyclerview_adapter_recieve_message"  >"Ha recibido un mensaje de su socio comercial."</string>
+    <string name="notification_recyclerview_adapter_recieve_message">"Ha recibido un mensaje de su socio comercial."</string>
 
 
     <!-- adMob -->
@@ -219,13 +218,10 @@
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-8726407510970827/9887522441</string>
 
 
-
     <!-- requestPermissionDialog -->
     <string name="allow">Aprobar</string>
     <string name="deny">Rechazar</string>
     <string name="deny_message">No va a funcionar porque no dio permiso.</string>
-
-
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -246,38 +242,38 @@
 
 
 
-    <!-- カテゴリーのリスト -->
+    <!-- カテゴリーのリスト crear,editarで使用するだけ -->
     <string-array name="categoryList">
-        <item>Gente que quiere donar o vender</item>
-        <item>Gente que busca donante</item>
-        <item>Gente que quiere avisar</item>
-        <item>Gente que busca una habitación</item>
-        <item>Gente que alquila una habitación</item>
-        <item>Gente que busca trabajo</item>
-        <item>Gente que busca trabajador</item>
+        <item>quiero donar o vender</item>
+        <item>quiero buscar donante</item>
+        <item>quiero avisar</item>
+        <item>quiero buscar una habitación</item>
+        <item>quiero alquilar una habitación</item>
+        <item>quiero dar pensionado</item>
+        <item>quiero buscar pensionista</item>
+        <item>quiero buscar empleo</item>
+        <item>quiero buscar trabajador</item>
+        <item>publicidad de Enpresas y Servicios</item>
     </string-array>
 
 
-    <string-array name="categoryListForButton">
-        <item>quiere donar o vender</item>
-        <item>busca donante</item>
-        <item>quiere avisar</item>
-        <item>busca una habitación</item>
-        <item>alquila una habitación</item>
-        <item>busca trabajo</item>
-        <item>busca trabajador</item>
+
+//djangoから受け取る値は。。。
+
+
+    //メインで扱う
+    <string-array name="categoryListForCategoryNumber">
+        <item>1:quiere donar o vender</item>
+        <item>2:busca donante</item>
+        <item>3:quiere avisar</item>
+        <item>4:busca una habitación</item>
+        <item>5:alquila una habitación</item>
+        <item>6:quiere dar pensionado</item>
+        <item>7:quiere buscar pensionista</item>
+        <item>8:busca empleo</item>
+        <item>9:busca trabajador</item>
+        <item>10:publicidad de Enpresas y Servicios</item>
     </string-array>
-
-
-    <!--string-array name="categoryListIndex">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-    </string-array-->
 
 
 
@@ -660,7 +656,6 @@
         <item>Zunil</item>
         <item>Zunilito</item>
     </string-array>
-
 
 
 </resources>

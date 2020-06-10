@@ -216,6 +216,18 @@ data class ItemDarListSerializerViewModel(
 //modelの属性に関しては小文字にすれば良いんじゃないか？？そういう修正していく。
 
 
+// django: api.Views.item_views.py ItemHomeListAPIViewに対応するもの
+data class ItemHomeListSerializerViewModel(
+
+    var ITEM_OBJECTS_COSAS: List<ItemSerializerModel>?,
+    var ITEM_OBJECTS_HABITACION: List<ItemSerializerModel>?,
+    var ITEM_OBJECTS_TRABAJO: List<ItemSerializerModel>?,
+    var ITEM_OBJECTS_TIENDA: List<ItemSerializerModel>?
+):Serializable
+
+
+
+
 // django: api/views.py ItemListAPIView,
 data class ItemListAPIViewModel(
     var ITEM_OBJECTS: List<ItemSerializerModel>?

@@ -54,6 +54,13 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
 
     }
 
+    override fun launchSignUpActivity(){
+
+        //sendSignUpActivity()
+        sendSignUpActivity(this@LogInActivity)
+        finish()
+    }
+
 
     //LogInFragment.OnFragmentInteractionListener#resultSuccessLogIn()
     /*

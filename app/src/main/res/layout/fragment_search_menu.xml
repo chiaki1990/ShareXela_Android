@@ -8,6 +8,7 @@
     tools:context=".SearchMenuFragment">
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -83,18 +84,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnDonarGuatemala"
+                        android:id="@+id/btn1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_donar" />
+                        android:text="1" />
 
                     <Button
-                        android:id="@+id/btnDonarDepartamento"
+                        android:id="@+id/btn1Local"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_donar" />
+                        android:text="1" />
                 </LinearLayout>
 
             </TableRow>
@@ -116,18 +117,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnAyudaGuatemala"
+                        android:id="@+id/btn2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_ayudar" />
+                        android:text="2" />
 
                     <Button
-                        android:id="@+id/btnAyudaDepartamento"
+                        android:id="@+id/btn2Local"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_ayudar" />
+                        android:text="2" />
 
                 </LinearLayout>
 
@@ -150,18 +151,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnAnunciateGuatemala"
+                        android:id="@+id/btn3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_anunciar" />
+                        android:text="3" />
 
                     <Button
-                        android:id="@+id/btnAnunciateDepartament"
+                        android:id="@+id/btn3Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_anunciar" />
+                        android:text="3" />
                 </LinearLayout>
 
             </TableRow>
@@ -183,18 +184,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnBuscarHabitacion"
+                        android:id="@+id/btn4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_habitacion" />
+                        android:text="4" />
 
                     <Button
-                        android:id="@+id/btnBuscarHabitacionLocal"
+                        android:id="@+id/btn4Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_habitacion" />
+                        android:text="4" />
                 </LinearLayout>
 
             </TableRow>
@@ -216,18 +217,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnAlquilarHabitacion"
+                        android:id="@+id/btn5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_alquilar_habitacion" />
+                        android:text="5" />
 
                     <Button
-                        android:id="@+id/btnAlquilarHabitacionLocal"
+                        android:id="@+id/btn5Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_alquilar_habitacion" />
+                        android:text="5" />
                 </LinearLayout>
 
             </TableRow>
@@ -249,18 +250,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnBuscarTrabajo"
+                        android:id="@+id/btn6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_trabajo" />
+                        android:text="6" />
 
                     <Button
-                        android:id="@+id/btnBuscarTrabajoLocal"
+                        android:id="@+id/btn6Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_trabajo" />
+                        android:text="6" />
                 </LinearLayout>
 
             </TableRow>
@@ -282,18 +283,18 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnBuscarTrabajador"
+                        android:id="@+id/btn7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_trabajador" />
+                        android:text="7" />
 
                     <Button
-                        android:id="@+id/btnBuscarTrabajadorLocal"
+                        android:id="@+id/btn7Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_buscar_trabajador" />
+                        android:text="7" />
                 </LinearLayout>
 
             </TableRow>
@@ -304,7 +305,128 @@
                 android:layout_height="@dimen/midium_span"
                 android:background="@android:drawable/screen_background_light_transparent" />
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="8" />
+
+                    <Button
+                        android:id="@+id/btn8Local"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="8" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <View
+                android:id="@+id/divider84"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="9" />
+
+                    <Button
+                        android:id="@+id/btn9Local"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="9" />
+                </LinearLayout>
+            </TableRow>
+
+            <View
+                android:id="@+id/divider97"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10" />
+
+                    <Button
+                        android:id="@+id/btn10Local"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10" />
+                </LinearLayout>
+            </TableRow>
+
+            <View
+                android:id="@+id/divider98"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/midium_span"
+                android:background="@android:drawable/screen_background_light_transparent" />
+
+            <View
+                android:id="@+id/basicDivider57"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider59"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider61"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutMasterBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

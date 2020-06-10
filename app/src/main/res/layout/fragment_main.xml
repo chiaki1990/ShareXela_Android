@@ -71,18 +71,17 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnDonarGuatemala"
+                        android:id="@+id/btn1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Donar o vender" />
 
                     <Button
-                        android:id="@+id/btnDonarDepartamento"
+                        android:id="@+id/btn1Local"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_donar" />
+                        android:layout_weight="1" />
                 </LinearLayout>
             </TableRow>
 
@@ -97,18 +96,16 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnAyudaGuatemala"
+                        android:id="@+id/btn2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_ayudar" />
+                        android:layout_weight="1" />
 
                     <Button
-                        android:id="@+id/btnAyudaDepartamento"
+                        android:id="@+id/btn2Local"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_ayudar" />
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
@@ -125,18 +122,16 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btnAnunciateGuatemala"
+                        android:id="@+id/btn3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_anunciar" />
+                        android:layout_weight="1" />
 
                     <Button
-                        android:id="@+id/btnAnunciateDepartament"
+                        android:id="@+id/btn3Local"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_main_btn_text_anunciar" />
+                        android:layout_weight="1" />
                 </LinearLayout>
             </TableRow>
 

@@ -2,18 +2,24 @@ package ga.sharexela.sharexela
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.fragment_search_menu.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SearchActivity : AppCompatActivity(),
-    SearchMenuFragment.OnFragmentInteractionListener {
+    SearchMenuFragment.OnFragmentInteractionListener{  //HomeFragment.OnFragmentInteractionListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
+
+
+
 
         toolbar.apply{
             setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
@@ -27,14 +33,16 @@ class SearchActivity : AppCompatActivity(),
         }
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            if (sessionData.logInStatus == false) {
+                makeToast(MyApplication.appContext, getString(R.string.toast_message_needSignIn))
+                return@setOnClickListener
+            }
+            sendCrearArticuloActivity(context=this@SearchActivity)
         }
 
         supportFragmentManager.beginTransaction()
             .add(R.id.frameLayoutSearch, SearchMenuFragment.newInstance("", ""))
             .commit()
-
 
     }
 
@@ -50,5 +58,17 @@ class SearchActivity : AppCompatActivity(),
         }
         startActivity(intent)
     }
+
+
+    /*
+    //RecyclerViewテスト用に実装
+    override fun launchDetailActivity(selectedItem: ItemSerializerModel) {
+        val intent = Intent(this@SearchActivity, DetailActivity::class.java)
+        intent.putExtra(IntentKey.ItemId.name, selectedItem.id.toString())
+        startActivity(intent)
+
+    }
+    */
+
 
 }

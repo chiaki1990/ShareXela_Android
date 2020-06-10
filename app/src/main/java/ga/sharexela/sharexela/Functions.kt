@@ -154,8 +154,18 @@ fun sendDetailActivity(context: Context){
  */
 
 
+//使い方： v.layoutParams = ViewGroup.LayoutParams(pixels, ViewGroup.LayoutParams.MATCH_PARENT) //ViewGroup.LayoutParams.WRAP_CONTENT
+fun getPixelsMatchlDP(dps:Int):Int{
+    val scale: Float = MyApplication.appContext.getResources().getDisplayMetrics().density
+    val pixels: Int = (dps * scale + 0.5f).toInt()
+    return  pixels
+}
 
-fun sendDeviceToken() { //case: String
+
+
+
+
+fun sendDeviceToken() {
 
     FirebaseInstanceId.getInstance().instanceId
         .addOnCompleteListener(OnCompleteListener { task ->
@@ -169,7 +179,7 @@ fun sendDeviceToken() { //case: String
 
             //devoceTokenをサーバーに送信する
             val service = setService()
-            service.patchDeviceTokenDealAPIVeiw(sessionData!!.authTokenHeader, token)
+            service.patchDeviceTokenDealAPIVeiw(sessionData.authTokenHeader, token)
                 .enqueue(object : Callback<ResultModel> {
 
                     override fun onResponse(call: Call<ResultModel>, response: Response<ResultModel>) {
@@ -179,12 +189,7 @@ fun sendDeviceToken() { //case: String
                         if (result == "success") return makeToast(MyApplication.appContext, token)
                         if (result == "fail") return makeToast(MyApplication.appContext, "送信不可")
 
-                        //if (case=="SignUpCase") {}
-                        //if (case=="LogInCase") {}
                     }
-
-
-
 
 
                     override fun onFailure(call: Call<ResultModel>, t: Throwable) {

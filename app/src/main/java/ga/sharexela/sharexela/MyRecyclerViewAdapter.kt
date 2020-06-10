@@ -28,11 +28,13 @@ class MyRecyclerViewAdapter(val dataArrayList:ArrayList<ItemSerializerModel>, va
         val itemId   :TextView;
         val itemTitle:TextView;
         val itemImage:ImageView;
+        val itemCategory: TextView;
 
         init {
             itemId    = view.tvItemId
             itemTitle = view.tvItemTitle
             itemImage = view.ivItem
+            itemCategory = view.tvCategory
         }
     }
 
@@ -61,6 +63,15 @@ class MyRecyclerViewAdapter(val dataArrayList:ArrayList<ItemSerializerModel>, va
         val item = dataArrayList[position]
         holder.view.tvItemId.text = item.id.toString()
         holder.view.tvItemTitle.text = item.title
+        try{
+            val itemCategoryNumber = item.category!!.number
+            val itemCategoryDisplay = categoryDisplayMaker(itemCategoryNumber)
+
+            holder.view.tvCategory.text = itemCategoryDisplay
+        }catch (e: kotlin.KotlinNullPointerException)   {
+            println(item.id.toString())
+        }
+
 
 
 

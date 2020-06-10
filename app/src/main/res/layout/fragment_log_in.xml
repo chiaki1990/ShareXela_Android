@@ -157,11 +157,52 @@
                 android:layout_height="@dimen/basic_span"
                 android:background="@color/backgroundColor" />
 
-            <View
-                android:id="@+id/basicDivider34"
+            <TextView
+                android:id="@+id/textView36"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/basic_span"
-                android:background="@color/backgroundColor" />
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:paddingLeft="@dimen/startText"
+                android:paddingBottom="@dimen/titlePaddingBottom"
+                android:text="@string/drawer_menu_signUp"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/divider85"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <View
+                    android:id="@+id/divider95"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <Button
+                    android:id="@+id/btnLogInForSignUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/drawer_menu_signUp" />
+
+                <View
+                    android:id="@+id/divider86"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+
+                <View
+                    android:id="@+id/divider96"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/midium_span"
+                    android:background="@android:drawable/screen_background_light_transparent" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/basicDivider35"

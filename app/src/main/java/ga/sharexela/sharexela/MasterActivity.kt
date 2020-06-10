@@ -25,7 +25,11 @@ import retrofit2.Response
 class MasterActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     MasterFragment.OnFragmentInteractionListener,
-    MyListFragment.OnFragmentInteractionListener {
+    MyListFragment.OnFragmentInteractionListener,
+    HomeFragment.OnFragmentInteractionListener{
+
+
+    lateinit var toolbar: Toolbar
 
 
 
@@ -33,7 +37,7 @@ class MasterActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
 
@@ -103,17 +107,7 @@ class MasterActivity : AppCompatActivity(),
             val itemObjectsSerialized = intent.extras?.getSerializable("itemObjectsSerialized") as ItemObjectsSerialized
             val categoryNumber = intent.extras?.getString("categoryNumber")
             val localStatus = intent.extras?.getBoolean("localStatus", false)
-            //fragmentの起動でデータを受け渡す。。。
 
-            //タイトルの変更
-            when(categoryNumber){
-                //ItemObjectsCategory.DONAR_GUATEMALA.name -> {toolbar.title= "DONAR O VENDER"}
-                //ItemObjectsCategory.DONAR_LOCAL.name -> {toolbar.title= "DONAR O VENDER"}
-                //ItemObjectsCategory.AYUDAR_GUATEMALA.name -> {toolbar.title= "BUSCAR AYUDA"}
-                //ItemObjectsCategory.AYUDAR_LOCAL.name -> {toolbar.title= "BUSCAR AYUDA"}
-                //ItemObjectsCategory.ANUNCIO_GUATEMALA.name -> {toolbar.title= "ANUNCIATE"}
-                //ItemObjectsCategory.ANUNCIO_LOCAL.name -> {toolbar.title= "ANUNCIATE"}
-            }
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSerialized, categoryNumber, localStatus!!))
@@ -121,19 +115,53 @@ class MasterActivity : AppCompatActivity(),
             return
         }
 
-        //フラグメントの起動 データを取得した後にフラグメントを開く
-        firstLaunchMasterFragment()
+        //フラグメントの起動 データを取得した後にフラグメントを開く ＃以前のもの
+        //firstLaunchMasterFragment()  ＃以前のもの
+
+        //フラグメントの起動 Homeのフラグメントを起動する
+        launchHomeFragmentForApplicationStarted()
+    }
+
+
+    private fun launchHomeFragmentForApplicationStarted(){
+
+        //データの取得とHomeFragmentに渡す（起動）
+
+        //データの取得
+        val service = setService()
+        service.getItemHomeListAPIView().enqueue(object : Callback<ItemHomeListSerializerViewModel> {
+
+
+            override fun onResponse(call: Call<ItemHomeListSerializerViewModel>, response: Response<ItemHomeListSerializerViewModel>) {
+
+                toolbar.title = getString(R.string.ALL_GUATEMALA)
+
+
+                var itemObjectsSet = response.body()!!
+
+                //HomeFragmentに渡す（起動）
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.frameLayoutMaster, HomeFragment.newInstance(itemObjectsSet,""))
+                    //.commit()
+                    .commitAllowingStateLoss();
+
+            }
+
+            override fun onFailure(call: Call<ItemHomeListSerializerViewModel>, t: Throwable) {
+                println("onFailureの結果　： 発生場所：MasterActivity#firstLaunchMasterFragment()　")
+                println(t)
+                println(t.message)
+            }
+        })
 
     }
 
 
 
-
-
+    /*
     private fun firstLaunchMasterFragment() {
         //データを取得した後にフラグメントを開く
 
-        val itemObjectsCategory = ItemObjectsCategory.ALL_GUATEMALA.name
 
         val service = setService()
         service.getItemListAPIView().enqueue(object : Callback<ItemListAPIViewModel> {
@@ -151,7 +179,6 @@ class MasterActivity : AppCompatActivity(),
 
                 supportFragmentManager.beginTransaction()
                     .add(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSelialized, categoryNumber, localStatus))
-                    //.commit()
                     .commitAllowingStateLoss( );
 
             }
@@ -162,8 +189,8 @@ class MasterActivity : AppCompatActivity(),
                 println(t.message)
             }
         })
-
     }
+    */
 
 
 
@@ -224,6 +251,8 @@ class MasterActivity : AppCompatActivity(),
                     makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
                     return true
                 }
+                toolbar.title = getString(R.string.drawer_menu_myList)
+
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayoutMaster, MyListFragment.newInstance("",""))
                     .commit()
@@ -289,9 +318,17 @@ class MasterActivity : AppCompatActivity(),
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
 
-        finish()
+
     }
 
+    override fun launchMasterFragment(itemObjectsSerialized: ItemObjectsSerialized, stringItemObjectsCategory: String, localStatus: Boolean) {
+
+        val intent = Intent(this, MasterActivity::class.java)
+        intent.putExtra("itemObjectsSerialized", itemObjectsSerialized)
+        intent.putExtra("stringItemObjectsCategory", stringItemObjectsCategory)
+        intent.putExtra("localStatus",localStatus)
+        startActivity(intent)
+    }
 
 
     override fun launchDetailActivity(selectedItem: ItemSerializerModel) {

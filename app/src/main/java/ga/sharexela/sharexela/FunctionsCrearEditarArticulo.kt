@@ -35,7 +35,7 @@ fun retrieveArticuloData(etArticuloTitle: EditText, etArticuloDescription: EditT
     try {
         price              = etArticuloPrecio?.text.toString().toInt()
     }catch (e:java.lang.NumberFormatException){
-        price              = null
+        price              = 0
 
     }
 
@@ -48,19 +48,25 @@ fun retrieveArticuloData(etArticuloTitle: EditText, etArticuloDescription: EditT
 }
 
 
+
+
+
 fun categoryIdmaker(strCategory: String):String{
     val categoryIndex: Int = MyApplication.appContext.resources.getStringArray(R.array.categoryList).indexOf(strCategory)
     return (categoryIndex + 1 ).toString()
 }
 
 
-fun categoryDisplayMaker(categoryId:String):String{
-    //カテゴリーIDから該当するリストの文字列を返す
-    val categoryList = MyApplication.appContext.resources.getStringArray(R.array.categoryList)
-    val categoryListIndex = categoryId.toInt() -1
-    val categoryDisplay = categoryList[categoryListIndex]
-    return categoryDisplay
-}
+
+
+
+
+
+
+
+
+
+
 
 //CrearArticuloFragmentとEditarArticuloFragmentで使用している
 fun makeImgagePartForRetrofit(imageViewFilePath:String?, formName:String): MultipartBody.Part?{

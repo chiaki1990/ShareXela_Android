@@ -67,6 +67,9 @@ class LogInFragment : Fragment() {
 
         //ログインボタンを押したら発動するリスナーを設置
         setBtnLogInListener()
+
+        //サインアップボタンを押したら発動するリスナーを設置
+        setBtnSignUpListener()
     }
 
 
@@ -94,6 +97,9 @@ class LogInFragment : Fragment() {
 
         // profileObjを取得してLogInActivityを終了する
         fun getProfileSerializerModel()
+
+        //SignUpアクティビティを起動する
+        fun launchSignUpActivity()
     }
 
     companion object {
@@ -127,6 +133,13 @@ class LogInFragment : Fragment() {
             progressBarLogIn.visibility = View.VISIBLE
             logInByBasicAuth(inputEmailAddress, inputPassword)
         }
+    }
+
+    private fun setBtnSignUpListener(){
+        btnLogInForSignUp.setOnClickListener {
+            listener!!.launchSignUpActivity()
+        }
+
     }
 
 

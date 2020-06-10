@@ -191,10 +191,8 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
 
 
-
-
-                    val itemCategory = itemObj.category!!.number
-                    val itemCategoryDisplay = categoryDisplayMaker(itemCategory)
+                    val itemCategoryNumber = itemObj.category!!.number
+                    val itemCategoryDisplay = categoryDisplayMaker(itemCategoryNumber)
 
                     //val ItemContactObjects = response.body()!!.item_contact_objects_serializer
                     val ItemContactObjects = itemObj.item_contacts
@@ -253,14 +251,16 @@ class DetailFragment : Fragment(), OnMapReadyCallback {
 
                     //記事作成者以外のアクセスの場合には記事編集ボタンを非表示にする/作成者の場合には記事の変更表示を変更する
                     if (sessionData.logInStatus == false ) btnDetailEditarArticulo.visibility = View.GONE
-                    if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailEditarArticulo.visibility = View.GONE
+                    else if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailEditarArticulo.visibility = View.GONE
+
+
 
 
 
                     //記事作成者以外のアクセスの場合にはアクティブを変更するボタンを非表示にする
                     if (sessionData.logInStatus == false ) btnDetailActive.visibility = View.GONE
-                    if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailActive.visibility = View.GONE
-                    if (sessionData.profileObj!!.user!!.username == itemObj.user!!.username){
+                    else if (sessionData.profileObj!!.user!!.username != itemObj.user!!.username) btnDetailActive.visibility = View.GONE
+                    else if (sessionData.profileObj!!.user!!.username == itemObj.user!!.username){
                         if (itemObj.active == true) btnDetailActive.text = getString(R.string.fragment_detail_btn_detail_active_to_deactive) //"この記事の公開を中止する"
                         if (itemObj.active == false) btnDetailActive.text = getString(R.string.fragment_detail_btn_detail_active_to_active)  //"この記事の公開を再開する"
                     }

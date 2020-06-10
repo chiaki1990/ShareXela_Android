@@ -64,12 +64,12 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         //各buttonのリスナーをセットする
 
-        btnDonarGuatemala.setOnClickListener {}
-        btnDonarDepartamento.setOnClickListener {  }
-        btnAyudaGuatemala.setOnClickListener {  }
-        btnAyudaDepartamento.setOnClickListener {  }
-        btnAnunciateGuatemala.setOnClickListener {  }
-        btnAnunciateDepartament.setOnClickListener {  }
+        btn1.setOnClickListener {}
+        btn1Local.setOnClickListener {  }
+        btn2.setOnClickListener {  }
+        btn2Local.setOnClickListener {  }
+        btn3.setOnClickListener {  }
+        btn3Local.setOnClickListener {  }
 
     }
 

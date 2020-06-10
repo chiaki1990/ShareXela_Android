@@ -13,12 +13,11 @@ import retrofit2.Response
 
 
 
-
-
 var BASE_URL: String = ""
 var ADMOB_APP_ID: String = ""
 lateinit var sessionData: SessionData;
 var navigationDrawerInit = false //false:未実行 -> MasterFragmentで実行する
+
 
 /*
 MyApplicationの役割は
