@@ -37,22 +37,21 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
 
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
-        //menu.findItem(R.id.menuLogIn).isVisible = true
-        //menu.findItem(R.id.menuLogIn).isVisible = true
-        //menu.findItem(R.id.menuLogIn).isVisible = true
-        //menu.findItem(R.id.menuLogIn).isVisible = true
+        menu.findItem(R.id.menuSync).isVisible = false
         return true
 
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+    //override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    //    return super.onOptionsItemSelected(item)
+    //
+    //}
 
-    }
 
     override fun launchSignUpActivity(){
 
@@ -61,24 +60,6 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
         finish()
     }
 
-
-    //LogInFragment.OnFragmentInteractionListener#resultSuccessLogIn()
-    /*
-    override fun resultSuccessLogIn() {
-        makeToast(this@LogInActivity, getString(R.string.login_success_message))
-
-        /* 改修中
-        //ログインのインスタンスを生成する
-        MyApplication.loginStatus = true
-
-        println("profileObjのプリントLOGINACTIBVITY")
-        println(profileObj)
-
-        */
-
-        finish()
-    }
-    */
 
 
 
@@ -110,6 +91,7 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
 
                 finish()
 
+
             }
 
             override fun onFailure(call: Call<ProfileSerializerModel>, t: Throwable) {
@@ -124,26 +106,3 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
 
     }
 }
-
-/*
-
-       val service = setService()
-        val authTokenHeader = getAuthTokenHeader(authToken)
-        if (authTokenHeader == null) return
-        service.readProfile(authTokenHeader).enqueue(object : Callback<ProfileSerializerModel>{
-
-            override fun onResponse(call: Call<ProfileSerializerModel>, response: Response<ProfileSerializerModel>) {
-
-                println("onResponseを通る")
-                profileObj = response.body()!!
-            }
-
-            override fun onFailure(call: Call<ProfileSerializerModel>, t: Throwable) {
-
-                println("onFailureを通る")
-                println(t)
-                println(t.message)
-            }
-        })
-
- */

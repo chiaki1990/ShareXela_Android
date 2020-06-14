@@ -10,19 +10,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [MyListFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [MyListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
+
+
+
 class MyListFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -51,21 +48,18 @@ class MyListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.findItem(R.id.menuSearch).isVisible = false
-        menu.findItem(R.id.menuGoHome).isVisible = true
+        menu.findItem(R.id.menuGoHome).isVisible = false
         menu.findItem(R.id.action_settings).isVisible = false
         menu.findItem(R.id.menuDone).isVisible = false
+        menu.findItem(R.id.menuSync).isVisible = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when (item.itemId) {
-            R.id.menuGoHome ->{
-                //MyListFragmentを消去してMasterFragmentを起動し直す
-                //あとで
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
+        //when (item.itemId) {
+            //R.id.menuGoHome ->{ item.isVisible = false )
+        //}
+        return true
     }
 
 
@@ -114,8 +108,9 @@ class MyListFragment : Fragment() {
                     //println("番号 : "+ numero)
                     var id    = itemSerializerList[numero].id
                     var title = itemSerializerList[numero].title
-                    //var description = itemSerializerList[numero].description
-                    //var category = itemSerializerList[numero].category.name
+                    var price = itemSerializerList[numero].price
+                    var description = itemSerializerList[numero].description
+                    var categoryNumber = itemSerializerList[numero].category!!.number
                     //var created_at = itemSerializerList[numero].created_at
                     var image = itemSerializerList[numero].image1
 
@@ -123,25 +118,27 @@ class MyListFragment : Fragment() {
                         ItemSerializerModel(
                             id = id,
                             title = title,
-                            //description = description,
-                            //category = category,
+                            price = price,
+                            description = description,
+                            category = CategorySerializerModel(number=categoryNumber ),
                             //created_at = created_at,
                             image1 = image
                         ))
-
                 }
 
+                val divider = androidx.recyclerview.widget.DividerItemDecoration(MyApplication.appContext, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL)
+                recyclerViewMyLsit.apply { addItemDecoration(divider) }
 
                 val layoutManager = LinearLayoutManager(this@MyListFragment.context)
                 recyclerViewMyLsit.layoutManager = layoutManager
 
-                val adapter = MyListRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
+                val adapter = MyItemVerticalCardRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener, favListener=null )
                 recyclerViewMyLsit.adapter = adapter
 
             }
 
             override fun onFailure(call: Call<MyItemListSerializerAPIView>, t: Throwable) {
-                //TODO("Not yet implemented")
+
             }
 
         })
@@ -154,15 +151,7 @@ class MyListFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MyListFragment().apply {

@@ -177,7 +177,7 @@ fun sendDeviceToken() {
             // Get new Instance ID token
             val token = task.result?.token.toString()
 
-            //devoceTokenをサーバーに送信する
+            //deviceTokenをサーバーに送信する
             val service = setService()
             service.patchDeviceTokenDealAPIVeiw(sessionData.authTokenHeader, token)
                 .enqueue(object : Callback<ResultModel> {
@@ -200,16 +200,6 @@ fun sendDeviceToken() {
                 })
         })
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

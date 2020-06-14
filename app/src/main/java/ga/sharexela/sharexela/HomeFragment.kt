@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_master.*
 import kotlinx.android.synthetic.main.fragment_search_menu.*
@@ -16,9 +18,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+
+
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 
 
 
@@ -30,6 +34,10 @@ class HomeFragment : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
 
+    lateinit var dataArrayListCosas:      ArrayList<ItemSerializerModel>
+    lateinit var dataArrayListHabitacion: ArrayList<ItemSerializerModel>
+    lateinit var dataArrayListTrabajo:    ArrayList<ItemSerializerModel>
+    lateinit var dataArrayListTienda:     ArrayList<ItemSerializerModel>
 
 
 
@@ -44,7 +52,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-        ): View? {
+    ): View? {
         setHasOptionsMenu(true)
 
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -57,19 +65,18 @@ class HomeFragment : Fragment() {
             findItem(R.id.menuGoHome).isVisible = false
             findItem(R.id.action_settings).isVisible = false
             findItem(R.id.menuDone).isVisible = false
+            findItem(R.id.menuSync).isVisible = true
+
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.menuSearch -> {
-                listener!!.onSearchMenuSelected()
-            }
+        when (item.itemId) {
+            R.id.menuSearch -> { listener!!.onSearchMenuSelected() }
+            R.id.menuSync   -> { updateItemObjectsSet(this) }
         }
         return true
     }
-
-
 
 
     override fun onAttach(context: Context) {
@@ -87,7 +94,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -95,32 +101,43 @@ class HomeFragment : Fragment() {
         //ボタンのリスナーを設定する
 
         btn500.setOnClickListener { executeGetItemCategoryListAPIView(btn500) }
-        btn600.setOnClickListener {  }
-        btn700.setOnClickListener {  }
-        btn800.setOnClickListener {  }
+        btn600.setOnClickListener { executeGetItemCategoryListAPIView(btn600) }
+        btn700.setOnClickListener { executeGetItemCategoryListAPIView(btn700) }
+        btn800.setOnClickListener { executeGetItemCategoryListAPIView(btn800) }
 
 
         //var dataArrayList: ArrayList<ItemSerializerModel> = arrayListOf()
-
-        var itemObjectsCosas = itemObjectsSet!!.ITEM_OBJECTS_COSAS
-        var itemObjectsCasas = itemObjectsSet!!.ITEM_OBJECTS_HABITACION
-        var itemObjectsTrabajo = itemObjectsSet!!.ITEM_OBJECTS_TRABAJO
-        var itemObjectsTienda = itemObjectsSet!!.ITEM_OBJECTS_TIENDA
+        val itemObjectsCosas = itemObjectsSet!!.ITEM_OBJECTS_COSAS
+        val itemObjectsCasas = itemObjectsSet!!.ITEM_OBJECTS_HABITACION
+        val itemObjectsTrabajo = itemObjectsSet!!.ITEM_OBJECTS_TRABAJO
+        val itemObjectsTienda = itemObjectsSet!!.ITEM_OBJECTS_TIENDA
 
         //各クエリ結果をArrayListに直す関数を通す
-
-        var dataArrayListCosas = dataArrayListMaker(itemObjectsCosas!!)
-        var dataArrayListHabitacion = dataArrayListMaker(itemObjectsCasas!!)
-        var dataArrayListTrabajo = dataArrayListMaker(itemObjectsTrabajo!!)
-        var dataArrayListTienda = dataArrayListMaker(itemObjectsTienda!!)
+        dataArrayListCosas = dataArrayListMaker(itemObjectsCosas!!)
+        dataArrayListHabitacion = dataArrayListMaker(itemObjectsCasas!!)
+        dataArrayListTrabajo = dataArrayListMaker(itemObjectsTrabajo!!)
+        dataArrayListTienda = dataArrayListMaker(itemObjectsTienda!!)
 
 
         //作成したArrayListをrecyclerviewとadapterにリンクさせる関数に通す
-        setUpRecyclerView(recyclerViewHomeCosas, dataArrayListCosas)
-        setUpRecyclerView(recyclerViewHomeCasas, dataArrayListHabitacion)
-        setUpRecyclerView(recyclerViewHomeTrabajo, dataArrayListTrabajo)
-        setUpRecyclerView(recyclerViewHomeEmpresa, dataArrayListTienda)
+        //setUpRecyclerViewHORIZONTAL(recyclerViewHomeCosas, dataArrayListCosas, listener!!)
+        //setUpRecyclerViewHORIZONTAL(recyclerViewHomeCasas, dataArrayListHabitacion, listener!!)
+        //setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
+        //setUpRecyclerViewHORIZONTAL(recyclerViewHomeEmpresa, dataArrayListTienda, listener!!)
 
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpNavigationDrawer(requireActivity())
+        //作成したArrayListをrecyclerviewとadapterにリンクさせる関数に通す
+        setUpRecyclerViewHORIZONTAL(recyclerViewHomeCosas, dataArrayListCosas, listener!!)
+        setUpRecyclerViewHORIZONTAL(recyclerViewHomeCasas, dataArrayListHabitacion, listener!!)
+        setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
+        setUpRecyclerViewHORIZONTAL(recyclerViewHomeEmpresa, dataArrayListTienda, listener!!)
+        //println(itemObjectsSet)
 
     }
 
@@ -130,8 +147,147 @@ class HomeFragment : Fragment() {
 
         fun onSearchMenuSelected()
 
-        fun launchMasterFragment(itemObjectsSerialized:ItemObjectsSerialized, stringItemObjectsCategory: String, localStatus:Boolean)
+        fun launchMasterActivity(
+            itemObjectsSerialized: ItemObjectsSerialized,
+            stringItemObjectsCategory: String,
+            localStatus: Boolean
+        )
+
+        fun reLaunchHomeFragmentforUpdate(itemObjectsSet:ItemHomeListSerializerViewModel, fragment: HomeFragment)
+
     }
+
+
+
+
+
+
+    private fun executeGetItemCategoryListAPIView(button: Button) {
+
+        val rsName = requireContext().getResources().getResourceEntryName(button.id);
+        val categoryNumber = rsName.removePrefix("btn")
+
+        println(categoryNumber)
+        println("categoryNumber" + categoryNumber)
+
+        val service = setService()
+        service.getItemCategoryListAPIView(categoryNumber)
+            .enqueue(object : Callback<ItemUniversalListAPIView> {
+
+                override fun onResponse(
+                    call: Call<ItemUniversalListAPIView>,
+                    response: Response<ItemUniversalListAPIView>
+                ) {
+                    println("onResponseを通る_HomeFragment#executeGetItemCategoryListAPIView")
+                    //クエリ結果を取得し、それを引数としてコールバックする。
+                    val itemObjects: List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
+                    if (itemObjects.size == 0) {
+                        makeToast(
+                            MyApplication.appContext,
+                            getString(R.string.toast_message_no_article)
+                        )
+                        return
+                    }
+                    val itemObjectsSerialized: ItemObjectsSerialized =
+                        ItemObjectsSerialized(itemObjects = itemObjects)
+                    val localStatus = false
+                    listener!!.launchMasterActivity(
+                        itemObjectsSerialized,
+                        categoryNumber,
+                        localStatus
+                    )
+
+
+                }
+
+                override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
+                    println("onFailureを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
+                    println(t)
+                }
+            })
+    }
+
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(itemObjectsSet: ItemHomeListSerializerViewModel, param2: String) =
+            HomeFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_PARAM1, itemObjectsSet)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+
+
+    fun updateItemObjectsSet(fragment: HomeFragment){
+
+
+        progressBarHomeFragment.visibility = View.VISIBLE
+
+
+        //itemObjectsの取得
+
+        val service = setService()
+        service.getItemHomeListAPIView()
+            .enqueue(object : Callback<ItemHomeListSerializerViewModel> {
+
+                override fun onResponse(call: Call<ItemHomeListSerializerViewModel>, response: Response<ItemHomeListSerializerViewModel>) {
+
+
+                    val itemObjectsSet = response.body()!!
+                    progressBarHomeFragment.visibility = View.INVISIBLE
+
+
+                    val itemObjectsCosas = itemObjectsSet.ITEM_OBJECTS_COSAS
+                    val itemObjectsCasas = itemObjectsSet.ITEM_OBJECTS_HABITACION
+                    val itemObjectsTrabajo = itemObjectsSet.ITEM_OBJECTS_TRABAJO
+                    val itemObjectsTienda = itemObjectsSet.ITEM_OBJECTS_TIENDA
+
+                    //各クエリ結果をArrayListに直す関数を通す
+                    dataArrayListCosas = dataArrayListMaker(itemObjectsCosas!!)
+                    dataArrayListHabitacion = dataArrayListMaker(itemObjectsCasas!!)
+                    dataArrayListTrabajo = dataArrayListMaker(itemObjectsTrabajo!!)
+                    dataArrayListTienda = dataArrayListMaker(itemObjectsTienda!!)
+
+
+                    //作成したArrayListをrecyclerviewとadapterにリンクさせる関数に通す
+                    setUpRecyclerViewHORIZONTAL(recyclerViewHomeCosas, dataArrayListCosas, listener!!)
+                    setUpRecyclerViewHORIZONTAL(recyclerViewHomeCasas, dataArrayListHabitacion, listener!!)
+                    setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
+                    setUpRecyclerViewHORIZONTAL(recyclerViewHomeEmpresa, dataArrayListTienda, listener!!)
+
+
+                }
+
+
+
+                override fun onFailure(
+                    call: Call<ItemHomeListSerializerViewModel>,
+                    t: Throwable
+                ) {
+                    println("SwipeRefreshHome:SwipeRefreshLayout.OnRefreshListener#onFailureを通過")
+
+                    println(t)
+                    println(t.message)
+
+                    progressBarHomeFragment.visibility = View.GONE
+
+                    makeToast(
+                        MyApplication.appContext,
+                        MyApplication.appContext.getString(R.string.fail_update_by_swipeRefresh)
+                    )
+
+                }
+
+            })
+    }
+
+}
+
+
+
 
 
 
@@ -166,69 +322,30 @@ class HomeFragment : Fragment() {
         return dataArrayList
     }
 
-    private fun setUpRecyclerView(recyclerView: RecyclerView ,dataArrayList:ArrayList<ItemSerializerModel>){
-
-        //リサイクラービューの枠線をつける
-        val divider = androidx.recyclerview.widget.DividerItemDecoration(MyApplication.appContext, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL)
-        recyclerView.apply { addItemDecoration(divider) }
-
-        //横向きに並べる
-        val layoutManager = LinearLayoutManager(this@HomeFragment.activity);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // ここで横方向に設定
-        recyclerView.layoutManager = layoutManager
-
-        //アダプターの設定
-        val adapter = MyHomeRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
-        recyclerView.adapter = adapter
-
-
-    }
-
-    private fun executeGetItemCategoryListAPIView(button: Button){
-
-        val rsName = requireContext().getResources().getResourceEntryName(button.id);
-        val categoryNumber = rsName.removePrefix("btn")
-
-        println(categoryNumber)
-
-        val service = setService()
-        service.getItemCategoryListAPIView(categoryNumber).enqueue(object: Callback<ItemUniversalListAPIView> {
-
-            override fun onResponse(call: Call<ItemUniversalListAPIView>, response: Response<ItemUniversalListAPIView>) {
-                println("onResponseを通る_HomeFragment#executeGetItemCategoryListAPIView")
-                //クエリ結果を取得し、それを引数としてコールバックする。
-                val itemObjects:List<ItemSerializerModel> = response.body()!!.ITEM_OBJECTS
-                if (itemObjects.size == 0){
-                    makeToast(MyApplication.appContext, getString(R.string.toast_message_no_article))
-                    return
-                }
-                val itemObjectsSerialized:ItemObjectsSerialized = ItemObjectsSerialized(itemObjects=itemObjects)
-                val localStatus = false
-                listener!!.launchMasterFragment(itemObjectsSerialized, categoryNumber, localStatus)
-
-
-            }
-
-            override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {
-                println("onFailureを通る_SearchMenuFragment#executeGetItemCategoryListAPIView")
-                println(t)
-            }
-        })
-    }
 
 
 
+private fun setUpRecyclerViewHORIZONTAL(
+    recyclerView: RecyclerView,
+    dataArrayList: ArrayList<ItemSerializerModel>,
+    listener: HomeFragment.OnFragmentInteractionListener
+) {
 
-    companion object {
+    //リサイクラービューの枠線をつける
+    val divider = androidx.recyclerview.widget.DividerItemDecoration(
+        MyApplication.appContext,
+        androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+    )
+    recyclerView.apply { addItemDecoration(divider) }
 
+    //横向きに並べる
+    val layoutManager = LinearLayoutManager(MyApplication.appContext);
+    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // ここで横方向に設定
+    recyclerView.layoutManager = layoutManager
 
-        @JvmStatic
-        fun newInstance(itemObjectsSet: ItemHomeListSerializerViewModel, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_PARAM1, itemObjectsSet)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+    //アダプターの設定
+    val adapter =
+        MyHomeRecyclerViewAdapter(dataArrayList = dataArrayList, myListener = listener)
+    recyclerView.adapter = adapter
+
 }

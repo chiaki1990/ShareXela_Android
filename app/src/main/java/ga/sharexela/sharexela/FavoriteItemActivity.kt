@@ -61,13 +61,6 @@ class FavoriteItemActivity : AppCompatActivity(),
                         .commit()
 
 
-                    //val intent = Intent(this@FavoriteItemActivity, MasterActivity::class.java)
-                    //intent.apply {
-                    //    putExtra("itemObjectsSerialized", itemObjectsSerialized)
-                    //}
-                    //startActivity(intent)
-
-
                 }
 
                 override fun onFailure(call: Call<ItemUniversalListAPIView>, t: Throwable) {

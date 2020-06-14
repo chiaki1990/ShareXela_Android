@@ -15,6 +15,11 @@
     <string name="menu_send">Send</string>
 
 
+
+    <!-- facebook app_id -->
+    <string name="facebook_app_id" translatable="false">550671982145537</string>
+
+
     <!-- Toolbar Title -->
     <string name="editar_articulo_title">Editar Articulo</string>
     <string name="user_profile_title">Perfil de usuario</string>
@@ -28,6 +33,8 @@
     <string name="fail_editar_articulo">falló al editar el artículo.</string>
     <string name="success_logOut">ha cerrado la sesión con éxito.</string>
     <string name="success_change_profile_image">La imagen ha sido cambiada.</string>
+    <string name="fail_update_by_swipeRefresh">no pudo actualizar los datos.</string>
+    <string name="fail_share_facebook">no se compartió en Facebook.</string>
 
 
     <!-- SharedPreferences Key -->
@@ -239,6 +246,7 @@
     <string name="fragment_detail_TextView_text_itemDescription">Descripción del articulo</string>
     <string name="tv_forget_password">Olvidó la contraseña</string>
     <string name="drawer_header_logOutStatus">no conectado</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 
 
@@ -273,6 +281,11 @@
         <item>8:busca empleo</item>
         <item>9:busca trabajador</item>
         <item>10:publicidad de Enpresas y Servicios</item>
+
+        <item>500:Las Cosas</item>
+        <item>600:Habitacion y Casa</item>
+        <item>700:Trabajo</item>
+        <item>800:Empresa y Servicio</item>
     </string-array>
 
 
@@ -656,6 +669,7 @@
         <item>Zunil</item>
         <item>Zunilito</item>
     </string-array>
+
 
 
 </resources>

@@ -1,6 +1,7 @@
 package ga.sharexela.sharexela
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,7 +27,6 @@ class SignUpFragment : Fragment() {
     //var masterKeyAlias = "";
 
 
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
@@ -99,14 +99,7 @@ class SignUpFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -215,7 +208,10 @@ class SignUpFragment : Fragment() {
 
                 //エリアセッティングフラグメントを起動する。
                 listener!!.sendEditAreaInfoFragment()
-                return
+                //return
+
+                //val intent = Intent(MyApplication.appContext, HomeFragment::class.java)
+                //startActivity(intent)
 
             }
 

@@ -1,18 +1,22 @@
 package ga.sharexela.sharexela
 
-import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.share.Sharer
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,14 +24,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_crear_articulo.*
 import okhttp3.MediaType
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
+
+
+/*
+実装したいこと
+facebookでシェアする場合には☑にチェックを入れてもらう。そして
+きじ作成すると、チェックボックスがtrueの場合にはシェアを実行する。
+次にチェックある -> shareのurlを取得
+ダイアログ作成、表示 -> コールバックを実行
+
+
+djangoの返り値にurlまたはitemIdを実装したい。
+
+
+ */
+
+
 
 
 private const val ARG_PARAM1 = "param1"
@@ -43,6 +59,15 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     private var listener: OnFragmentInteractionListener? = null
 
 
+    var isFacebookShare = false
+    var isTwitterShare  = false
+    var callbackManager: CallbackManager? = null
+    var shareDialog: ShareDialog? = null
+    var title:String = ""
+    var itemUrl: String = ""
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +76,7 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +94,6 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
         //spinner(Articuloの記事カテゴリ)の選択肢をセットする
         setAdapterToCategotySpinner(spArticuloCategory)
-
 
         //具体的な座標データ取得するためにGoogleMapsを開く。このきのうのためにパーミションチェックを実装
         btnCrearArticuloLaunchMap.setOnClickListener {
@@ -149,12 +174,18 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
 
 
 
+
+
+
+
     private fun postCrearArticuloData() {
 
 
         //入力データの取得
-        val title = etArticuloTitle.text.toString()
+        title = etArticuloTitle.text.toString()
         val description = etArticuloDescription.text.toString()
+        isFacebookShare = checkBoxShareFB.isChecked
+        isTwitterShare  = checkBoxShareTwitter.isChecked
 
 
         //タイトルや説明欄に入力データデータがないときにメッセージを表示する(バリデーション)
@@ -189,9 +220,38 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
                 println("onResponseを通る : CrearArticuloFragment#postItemCreateAPIViewMultiPart")
                 println(call.request().body())
 
+                //urlを取得する
+                itemUrl = response.body()!!.detail
+                println(itemUrl)
+
+
+                callbackManager = CallbackManager.Factory.create();
+                shareDialog = ShareDialog(this@CrearArticuloFragment)
+                shareDialog!!.registerCallback(callbackManager, MyFacebookCallback(listener!!, isTwitterShare, spSelectDepartamento, title, itemUrl));
+
+
+                //fとtの考えられる状態
+                //f○t○ f○t☓　f☓t○ f☓t☓
+                //両方丸の場合はfacebookのシェア終了後にtwitterのシェアを実行しなければならない
+                // -> onResultActivityで実行する
+
+
+                //checkboxの状態を確認
+                if (checkBoxShareFB.isChecked == true){
+                    // facebookのシェアを実行する
+                    shareByFacebook(shareDialog!!, itemUrl)//関数
+                    return
+                }
+
+
+                if (isTwitterShare == true){
+                    // twitterのシェアを実行する
+                    shareByTwitter(spSelectDepartamento, title, itemUrl, listener!!, null)
+                }
 
                 //CrearActivityを切る
                 listener!!.successCrearArticulo()
+
             }
 
             override fun onFailure(call: Call<ResultModel>, t: Throwable) {
@@ -265,6 +325,12 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager!!.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         println("パーミッションのここ")
@@ -313,4 +379,42 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
+
+    class MyFacebookCallback(val listener:OnFragmentInteractionListener, val isTwitterShare:Boolean, val spSelectDepartamento:Spinner, val title:String, val itemUrl:String):FacebookCallback<Sharer.Result>{
+
+        override fun onSuccess(result: Sharer.Result?) {
+
+            //twitterシェアを行うかチェック
+            if (isTwitterShare){
+                shareByTwitter(spSelectDepartamento, title, itemUrl, listener, null)
+                return
+            }
+            listener.successCrearArticulo()
+        }
+
+        override fun onCancel() {
+            //twitterのチェックボックスをチェック チェックある -> インテントの起動
+            // チェックなし -> CrearActivityの終了
+            if (isTwitterShare){
+                shareByTwitter(spSelectDepartamento, title, itemUrl, listener, null)
+                return
+            }
+            //CrearActivityを切る
+            listener.successCrearArticulo()
+        }
+
+        override fun onError(error: FacebookException?) {
+            makeToast(MyApplication.appContext, MyApplication.appContext.getString(R.string.fail_share_facebook))
+            listener.successCrearArticulo()
+        }
+    }
+
 }
+
+
+
+
+
+
+

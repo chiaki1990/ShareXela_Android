@@ -92,6 +92,7 @@ class ProfileActivity : AppCompatActivity(),
             findItem(R.id.menuGoHome).isVisible = false
             findItem(R.id.action_settings).isVisible = false
             findItem(R.id.menuDone).isVisible = false
+            findItem(R.id.menuSync).isVisible = false
         }
         return true
     }

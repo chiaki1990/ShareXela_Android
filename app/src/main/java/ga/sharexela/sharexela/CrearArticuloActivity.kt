@@ -21,6 +21,11 @@ import java.util.*
 // 存在するか調べ、あればEditarArticuloFragmentを起動させる
 
 
+//このアクティビティの説明
+// CrearArticuloFragmentとEditarArticuloFragmentが存在する
+//これを起動する役割をもつ
+
+
 var uri1:Uri? = null
 var uri2:Uri? = null
 var uri3:Uri? = null
@@ -37,6 +42,7 @@ class CrearArticuloActivity : AppCompatActivity(),
     GetCoordinatesFragment.OnFragmentInteractionListener{
 
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         menu.apply {
@@ -44,6 +50,7 @@ class CrearArticuloActivity : AppCompatActivity(),
             findItem(R.id.menuGoHome).isVisible = false
             findItem(R.id.action_settings).isVisible = false
             findItem(R.id.menuDone).isVisible = false
+            findItem(R.id.menuSync).isVisible = false
         }
         return true
     }
@@ -61,7 +68,6 @@ class CrearArticuloActivity : AppCompatActivity(),
         imageView1FilePath = null
         imageView2FilePath = null
         imageView3FilePath = null
-
 
 
 
@@ -93,7 +99,6 @@ class CrearArticuloActivity : AppCompatActivity(),
                 .add(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(null, "param2"))
                 .commit()
         }
-
     }
 
 
@@ -110,7 +115,6 @@ class CrearArticuloActivity : AppCompatActivity(),
         val intent = Intent(this, ImagesActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_IMAGES_ACTIVITY)
     }
-
 
 
     //CrearArticuloFragment.OnFragmentInteractionListener#launchGetCoordinatesFragment
@@ -137,7 +141,6 @@ class CrearArticuloActivity : AppCompatActivity(),
             .replace(R.id.frameLayoutCrearArticulo, CrearArticuloFragment.newInstance(itemObj, ""))
             .commit()
 
-        //タグ入れないとやばい
     }
 
     override fun sendEditarArticuloFragmentAgain(itemObj: ItemSerializerModel?) {
@@ -190,9 +193,5 @@ class CrearArticuloActivity : AppCompatActivity(),
             }
         }
     }
-
-
-
-
 
 }

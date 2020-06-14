@@ -20,16 +20,11 @@ class SearchActivity : AppCompatActivity(),
 
 
 
+        title = "Todas las categorías"
 
         toolbar.apply{
             setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-            setNavigationOnClickListener {
-
-                val intent = Intent(this@SearchActivity, MasterActivity::class.java)
-                startActivity(intent)
-                //起動中のフラグメントによって挙動を変更する
-                finish()
-            }
+            setNavigationOnClickListener { finish() }
         }
 
         fab.setOnClickListener { view ->
@@ -59,16 +54,6 @@ class SearchActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
-
-    /*
-    //RecyclerViewテスト用に実装
-    override fun launchDetailActivity(selectedItem: ItemSerializerModel) {
-        val intent = Intent(this@SearchActivity, DetailActivity::class.java)
-        intent.putExtra(IntentKey.ItemId.name, selectedItem.id.toString())
-        startActivity(intent)
-
-    }
-    */
 
 
 }

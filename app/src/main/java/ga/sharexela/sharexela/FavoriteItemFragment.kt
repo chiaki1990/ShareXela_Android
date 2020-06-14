@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_favorite_item.*
+import kotlinx.android.synthetic.main.fragment_my_list.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -20,7 +19,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 class FavoriteItemFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var itemObjectsSelialized: ItemObjectsSerialized? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
@@ -54,23 +53,17 @@ class FavoriteItemFragment : Fragment() {
         for (ele in itemObjectsSelialized!!.itemObjects){
             dataArrayList.add(ele)
         }
-        //ItemObjectsSelialized
-        // ArrayList<ItemModel>
 
 
-
+        val divider = androidx.recyclerview.widget.DividerItemDecoration(MyApplication.appContext, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL)
+        recyclerViewFavoriteItem.apply { addItemDecoration(divider) }
 
         //RecyclerViewをセットする
         val layoutManager = LinearLayoutManager(MyApplication.appContext, RecyclerView.VERTICAL, false)
         recyclerViewFavoriteItem.layoutManager = layoutManager
 
-        val adapter = MyItemVerticalCardRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
+        val adapter = MyItemVerticalCardRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=null, favListener=listener )
         recyclerViewFavoriteItem.adapter = adapter
-
-
-
-
-
 
     }
 

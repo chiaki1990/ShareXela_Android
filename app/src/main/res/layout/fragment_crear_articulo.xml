@@ -245,6 +245,24 @@
                 android:layout_height="15dp"
                 android:background="@color/backgroundColor" />
 
+            <CheckBox
+                android:id="@+id/checkBoxShareFB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compartir en Facebook" />
+
+            <CheckBox
+                android:id="@+id/checkBoxShareTwitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Compartir en Twitter" />
+
+            <View
+                android:id="@+id/divider99"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@color/backgroundColor" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"

@@ -34,9 +34,9 @@ private const val ARG_PARAM2 = "param2"
 
 class EditAreaInfoFragment : Fragment(), OnMapReadyCallback {
 
-    var paisItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.paisList) //as ArrayList<String>
-    var departamentoItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.departamentoList)
-    var municipioItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.municipioList)
+    //var paisItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.paisList) //as ArrayList<String>
+    //var departamentoItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.departamentoList)
+    //var municipioItems:Array<String> = MyApplication.appContext.resources.getStringArray(R.array.municipioList)
 
 
     //lateinit var map: SupportMapFragment
@@ -100,9 +100,6 @@ class EditAreaInfoFragment : Fragment(), OnMapReadyCallback {
             //retrofitで修正内容を送信
             ServiceProfile.patchProfile(sessionData.authTokenHeader!!, profileObjForSend, MyApplication.appContext)
         }
-
-
-
 
     }
 

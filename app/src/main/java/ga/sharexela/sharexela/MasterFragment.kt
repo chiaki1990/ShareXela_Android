@@ -1,5 +1,6 @@
 package ga.sharexela.sharexela
 
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.fragment_master.*
@@ -55,6 +57,7 @@ class MasterFragment : Fragment(){
             findItem(R.id.menuGoHome).isVisible = false
             findItem(R.id.action_settings).isVisible = false
             findItem(R.id.menuDone).isVisible = false
+            findItem(R.id.menuSync).isVisible = false
         }
     }
 
@@ -92,7 +95,7 @@ class MasterFragment : Fragment(){
     override fun onResume() {
         super.onResume()
 
-        setUpNavigationDrawer()
+        //setUpNavigationDrawer()
     }
 
     override fun onAttach(context: Context) {
@@ -238,43 +241,43 @@ class MasterFragment : Fragment(){
 
 
 
-
-    fun setUpNavigationDrawer(){
-
-        if (navigationDrawerInit == true) return
-
-        //ナビゲーションドロワーの編集
-        val nav_view = requireActivity().findViewById<NavigationView>(R.id.nav_view)
-        val h_view = nav_view.getHeaderView(0)
-        val userProfileImageView = h_view.findViewById<ImageView>(R.id.iv_profile)
-        val tv_userName = h_view.findViewById<TextView>(R.id.tv_userName)
-        val tv_emailAddress = h_view.findViewById<TextView>(R.id.tv_emailAddress)
-
-        if (sessionData.profileObj != null){
-
-            val profileImageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
-            //Glide.with(MyApplication.appContext).load(profileImageUrl).into(userProfileImageView)
-            Glide.with(MyApplication.appContext).load(profileImageUrl).circleCrop().into(userProfileImageView)
-            tv_userName.text = sessionData.profileObj!!.user!!.username
-            tv_emailAddress.visibility = View.VISIBLE
-            tv_emailAddress.text = sessionData.profileObj!!.user!!.email
-            //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
-            //val menu = nav_view.menu
-            //menu.removeItem(R.id.menuSignIn)
-            //menu.
+}
 
 
-        }else if (sessionData.profileObj == null){
-            tv_userName.setText(getString(R.string.drawer_header_logOutStatus)) //"未ログイン"
-            tv_emailAddress.visibility = View.GONE
-            //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
-            //val menu = nav_view.menu
-            //menu.removeItem(R.id.menuSignOut)
+fun setUpNavigationDrawer(activity: Activity){
 
-        }
-        navigationDrawerInit = true
+    //if (navigationDrawerInit == true) return
+
+    //ナビゲーションドロワーの編集
+    val nav_view = activity.findViewById<NavigationView>(R.id.nav_view)
+    val h_view = nav_view.getHeaderView(0)
+    val userProfileImageView = h_view.findViewById<ImageView>(R.id.iv_profile)
+    val tv_userName = h_view.findViewById<TextView>(R.id.tv_userName)
+    val tv_emailAddress = h_view.findViewById<TextView>(R.id.tv_emailAddress)
+
+    if (sessionData.profileObj != null){
+
+        val profileImageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
+        //Glide.with(MyApplication.appContext).load(profileImageUrl).into(userProfileImageView)
+        Glide.with(MyApplication.appContext).load(profileImageUrl).circleCrop().into(userProfileImageView)
+        tv_userName.text = sessionData.profileObj!!.user!!.username
+        tv_emailAddress.visibility = View.VISIBLE
+        tv_emailAddress.text = sessionData.profileObj!!.user!!.email
+        //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
+        //val menu = nav_view.menu
+        //menu.removeItem(R.id.menuSignIn)
+        //menu.
+
+
+    }else if (sessionData.profileObj == null){
+        tv_userName.setText(activity.getString(R.string.drawer_header_logOutStatus)) //"未ログイン"
+        tv_emailAddress.visibility = View.GONE
+        //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
+        //val menu = nav_view.menu
+        //menu.removeItem(R.id.menuSignOut)
 
     }
+    //navigationDrawerInit = true
 
 }
 

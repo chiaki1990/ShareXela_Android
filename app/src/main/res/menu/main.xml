@@ -23,4 +23,9 @@
         android:orderInCategory="101"
         android:title="Done"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuSync"
+        android:icon="@drawable/ic_baseline_sync_24"
+        android:title="menuSync"
+        app:showAsAction="always" />
 </menu>

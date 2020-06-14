@@ -2,6 +2,8 @@ package ga.sharexela.sharexela
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_notification.*
@@ -31,6 +33,19 @@ class NotificationActivity : AppCompatActivity(),
             .commit()
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        //return super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main, menu)
+        menu.apply {
+            findItem(R.id.menuSync).isVisible = false
+            findItem(R.id.menuGoHome).isVisible = false
+            findItem(R.id.action_settings).isVisible = false
+            findItem(R.id.menuDone).isVisible = false
+            findItem(R.id.menuSearch).isVisible = false
+        }
+        return true
     }
 
     override fun launchNotificationSolicitar(objectId: String) {

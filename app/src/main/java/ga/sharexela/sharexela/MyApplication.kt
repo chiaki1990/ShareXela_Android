@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
@@ -16,7 +17,7 @@ import retrofit2.Response
 var BASE_URL: String = ""
 var ADMOB_APP_ID: String = ""
 lateinit var sessionData: SessionData;
-var navigationDrawerInit = false //false:未実行 -> MasterFragmentで実行する
+var navigationDrawerInit = false //false:未実行 -> HomeFragmentで実行する
 
 
 /*
@@ -45,8 +46,8 @@ class MyApplication:Application() {
 
         if (devEnv){
             //BASE_URL = "http://10.0.2.2:8000/"
-            //BASE_URL = "http://localhost:8000/"
-            BASE_URL     = "http://192.168.1.8:8000/"
+            BASE_URL = "https://sharexela.ga/"
+            //BASE_URL     = "http://192.168.1.6:8000/"
         }else if (devEnv == false){
             BASE_URL = "https://sharexela.ga/"
 
@@ -95,6 +96,10 @@ class MyApplication:Application() {
                 sessionData.profileObj = profileObj
                 sessionData.logInStatus = true
                 sessionData.authTokenHeader = authTokenHeader
+
+
+
+
 
 
                 //SPにauthToken(key)を保存する

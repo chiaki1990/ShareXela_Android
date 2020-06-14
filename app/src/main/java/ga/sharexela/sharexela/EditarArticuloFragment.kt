@@ -2,10 +2,17 @@ package ga.sharexela.sharexela
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.share.Sharer
+import com.facebook.share.widget.ShareDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -35,9 +42,12 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
     private var listener: OnFragmentInteractionListener? = null
 
 
-    //val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-    //val REQUEST_CODE_PERMISSIONS = 15
-
+    var isFacebookShare = false
+    var isTwitterShare  = false
+    var callbackManager: CallbackManager? = null
+    var shareDialog: ShareDialog? = null
+    var title:String = ""
+    var itemUrl: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +103,9 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+
+
+
         //itemObjのデータを反映させる
         applyItemObjData()
 
@@ -101,11 +114,6 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
 
         //具体的な座標データを利用する
         btnCrearArticuloLaunchMap.setOnClickListener{
-            //位置情報のパーミッション状態を取得する
-            //var permissionStatus = isAllPermissionsGranted(REQUIRED_PERMISSIONS)
-            //if (permissionStatus == true) return@setOnClickListener listener!!.launchGetCoordinatesFragment(itemObj!!, FragmentTag.FROM_EDITAR_ARTICULO_FRAGMENT.name)
-            // パーミッション許可をリクエストし、許可が出ればshowMap()が実行される
-            //requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
 
 
             // 位置情報のパーミッション状態を取得する
@@ -143,14 +151,12 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
         setValueToCategotySpinner(itemObj!!, spArticuloCategory)
         etArticuloTitle.setText(itemObj!!.title)
         etArticuloDescription.setText(itemObj!!.description)
-        if (itemObj!!.price != null) etArticuloPrice.setText(itemObj!!.price!!)
+        if (itemObj!!.price != null) etArticuloPrice.setText(itemObj!!.price!!.toString())
         tvCrearArticuloPoint.text = itemObj?.point
         tvCrearArticuloRadius.text = itemObj!!.radius.toString()
         setRegionSpinner(itemObj, spSelectPais, spSelectDepartamento, spSelectMunicipio)
         if (imageView1FilePath != null && imageView1FilePath != "") Glide.with(this).load(imageView1FilePath).into(ivArticuloImage1)
-
         if (imageView2FilePath != null && imageView2FilePath != "") Glide.with(this).load(imageView2FilePath).into(ivArticuloImage2)
-
         if (imageView3FilePath != null && imageView3FilePath != "") Glide.with(this).load(imageView3FilePath).into(ivArticuloImage3)
 
         //pointがある場合にはgoogleMapsに描画する
@@ -167,7 +173,6 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
 
 
     companion object {
-
 
         @JvmStatic
         fun newInstance(itemObj: ItemSerializerModel, param2: String) =
@@ -241,6 +246,8 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
         //入力データの取得
         val title = etArticuloTitle.text.toString()
         val description = etArticuloDescription.text.toString()
+        isFacebookShare = checkBoxShareFB.isChecked
+        isTwitterShare  = checkBoxShareTwitter.isChecked
 
 
         //タイトルや説明欄に入力データデータがないときにメッセージを表示する(バリデーション)
@@ -272,6 +279,33 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
                 println("onResponseを通る : EditarFragment#patchItemDetailSerializerAPIView")
                 println(call.request().body())
 
+
+                //urlを取得する
+                itemUrl = response.body()!!.detail
+                println(itemUrl)
+                println(isTwitterShare)
+
+
+                callbackManager = CallbackManager.Factory.create();
+                shareDialog = ShareDialog(this@EditarArticuloFragment)
+                shareDialog!!.registerCallback(callbackManager, EditarArticuloFragment().MyFacebookCallback(listener!!, isTwitterShare,spSelectDepartamento, title, itemUrl));
+
+
+
+
+                //checkboxの状態を確認
+                if (checkBoxShareFB.isChecked == true){
+                    // facebookのシェアを実行する
+                    shareByFacebook(shareDialog!!, itemUrl)//関数
+                    return
+                }
+
+
+                if (isTwitterShare){
+                    // twitterのシェアを実行する
+                    shareByTwitter(spSelectDepartamento, title, itemUrl, null, listener!!)
+                }
+
                 //EsitarArticuloFragmentを切る
                 listener!!.successCrearArticulo()
             }
@@ -284,7 +318,6 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
                 progressBar.visibility = View.GONE
                 makeToast(MyApplication.appContext, getString(R.string.fail_editar_articulo))
             }
-
         })
 
     }
@@ -306,6 +339,56 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
         }
 
     }
+    //これがないとfacebookのシェアダイアログ後の挙動を制御できない
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager!!.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    private inner class MyFacebookCallback(val listener: OnFragmentInteractionListener, val isTwitterShare:Boolean, val spSelectDepartamento:Spinner, val title:String, val itemUrl:String): FacebookCallback<Sharer.Result> {
+
+        override fun onSuccess(result: Sharer.Result?) {
+            println("onSuccessを通過")
+            println(result.toString())
+
+            //twitterシェアを行うかチェック
+            println("twitterのisTwitterShareの値")
+            println(isTwitterShare)
+            if (isTwitterShare){
+                println("twitterのシェアを実行する")
+                shareByTwitter(spSelectDepartamento, title, itemUrl, null, listener)
+                return
+            }
+            listener!!.successCrearArticulo()
+        }
+
+        override fun onCancel() {
+            //twitterのチェックボックスをチェック チェックある -> インテントの起動
+            // チェックなし -> EditarActivityの終了
+            println("onCancelを通過")
+
+
+            println(isTwitterShare)
+
+            if (isTwitterShare){
+                shareByTwitter(spSelectDepartamento, title, itemUrl, null, listener)
+                return
+            }
+            //EditarActivityを切る
+            listener!!.successCrearArticulo()
+        }
+
+        override fun onError(error: FacebookException?) {
+            println("onErrorを通過")
+            println(error)
+            println(error!!.message)
+            println(error.localizedMessage)
+            makeToast(MyApplication.appContext, MyApplication.appContext.getString(R.string.fail_share_facebook))
+            listener!!.successCrearArticulo()
+        }
+    }
+
 
 
 }

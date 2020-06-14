@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.app_bar_master.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,10 +24,9 @@ import retrofit2.Response
 
 
 class MasterActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener,
     MasterFragment.OnFragmentInteractionListener,
-    MyListFragment.OnFragmentInteractionListener,
-    HomeFragment.OnFragmentInteractionListener{
+    MyListFragment.OnFragmentInteractionListener {
+
 
 
     lateinit var toolbar: Toolbar
@@ -36,9 +36,18 @@ class MasterActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_master)
+        //setContentView(R.layout.activity_master)
+        setContentView(R.layout.app_bar_master)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+
+        toolbar.apply{
+            setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+            setNavigationOnClickListener {
+                finish()
+            }
+        }
 
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -51,53 +60,12 @@ class MasterActivity : AppCompatActivity(),
             sendCrearArticuloActivity(context=this@MasterActivity)
         }
 
-        val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-
-
-        nav_view.setNavigationItemSelectedListener(this)
-
     }
 
 
 
     override fun onResume() {
         super.onResume()
-
-
-        //ナビゲーションドロワーの編集
-        val nav_view = findViewById<NavigationView>(R.id.nav_view)
-        val h_view = nav_view.getHeaderView(0)
-        val userProfileImageView = h_view.findViewById<ImageView>(R.id.iv_profile)
-        val tv_userName = h_view.findViewById<TextView>(R.id.tv_userName)
-        val tv_emailAddress = h_view.findViewById<TextView>(R.id.tv_emailAddress)
-
-        if (sessionData.profileObj != null){
-            //ナビゲーションドロワーヘッダーの編集
-            val profileImageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
-            //Glide.with(MyApplication.appContext).load(profileImageUrl).into(userProfileImageView)
-            Glide.with(MyApplication.appContext).load(profileImageUrl).circleCrop().into(userProfileImageView)
-            tv_userName.text = sessionData.profileObj!!.user!!.username
-            tv_emailAddress.visibility = View.VISIBLE
-            tv_emailAddress.text = sessionData.profileObj!!.user!!.email
-            //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
-            //val menu = nav_view.menu
-            //menu.removeItem(R.id.menuSignIn)
-            //menu.removeItem(R.id.menuSignUp)
-
-
-        }else if (sessionData.profileObj == null){
-            tv_userName.setText(getString(R.string.drawer_header_logOutStatus)) //"未ログイン"
-            tv_emailAddress.visibility = View.GONE
-            Glide.with(MyApplication.appContext).load(R.drawable.ic_account_circle_black_72dp).into(userProfileImageView)
-
-            //ナビゲーションドロワーメニューの編集(ログインメニューの削除)
-            //val menu = nav_view.menu
-            //menu.removeItem(R.id.menuSignOut)
-        }
-
 
 
 
@@ -107,6 +75,11 @@ class MasterActivity : AppCompatActivity(),
             val itemObjectsSerialized = intent.extras?.getSerializable("itemObjectsSerialized") as ItemObjectsSerialized
             val categoryNumber = intent.extras?.getString("categoryNumber")
             val localStatus = intent.extras?.getBoolean("localStatus", false)
+
+            //タイトルの設定
+            println(categoryNumber)
+            val categoryDisplay = categoryDisplayMaker(categoryNumber!!)
+            toolbar.title = categoryDisplay
 
 
             supportFragmentManager.beginTransaction()
@@ -119,78 +92,9 @@ class MasterActivity : AppCompatActivity(),
         //firstLaunchMasterFragment()  ＃以前のもの
 
         //フラグメントの起動 Homeのフラグメントを起動する
-        launchHomeFragmentForApplicationStarted()
+        //launchHomeFragmentForApplicationStarted()
     }
 
-
-    private fun launchHomeFragmentForApplicationStarted(){
-
-        //データの取得とHomeFragmentに渡す（起動）
-
-        //データの取得
-        val service = setService()
-        service.getItemHomeListAPIView().enqueue(object : Callback<ItemHomeListSerializerViewModel> {
-
-
-            override fun onResponse(call: Call<ItemHomeListSerializerViewModel>, response: Response<ItemHomeListSerializerViewModel>) {
-
-                toolbar.title = getString(R.string.ALL_GUATEMALA)
-
-
-                var itemObjectsSet = response.body()!!
-
-                //HomeFragmentに渡す（起動）
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayoutMaster, HomeFragment.newInstance(itemObjectsSet,""))
-                    //.commit()
-                    .commitAllowingStateLoss();
-
-            }
-
-            override fun onFailure(call: Call<ItemHomeListSerializerViewModel>, t: Throwable) {
-                println("onFailureの結果　： 発生場所：MasterActivity#firstLaunchMasterFragment()　")
-                println(t)
-                println(t.message)
-            }
-        })
-
-    }
-
-
-
-    /*
-    private fun firstLaunchMasterFragment() {
-        //データを取得した後にフラグメントを開く
-
-
-        val service = setService()
-        service.getItemListAPIView().enqueue(object : Callback<ItemListAPIViewModel> {
-
-
-            override fun onResponse(call: Call<ItemListAPIViewModel>, response: Response<ItemListAPIViewModel>) {
-
-                toolbar.title = getString(R.string.ALL_GUATEMALA)
-
-                //修正前var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                var itemObjects: List<ItemSerializerModel> = response.body()?.ITEM_OBJECTS!!
-                val itemObjectsSelialized: ItemObjectsSerialized = ItemObjectsSerialized(itemObjects = itemObjects)
-                val localStatus = false
-                val categoryNumber = "999"
-
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayoutMaster, MasterFragment.newInstance(itemObjectsSelialized, categoryNumber, localStatus))
-                    .commitAllowingStateLoss( );
-
-            }
-
-            override fun onFailure(call: Call<ItemListAPIViewModel>, t: Throwable) {
-                println("onFailureの結果　： 発生場所：MasterActivity#firstLaunchMasterFragment()　")
-                println(t)
-                println(t.message)
-            }
-        })
-    }
-    */
 
 
 
@@ -209,102 +113,10 @@ class MasterActivity : AppCompatActivity(),
         menu.apply {
             findItem(R.id.menuSearch).isVisible = true
             findItem(R.id.action_settings).isVisible = true
-        }
-        return true
-    }
+            findItem(R.id.menuSync).isVisible = false
+            findItem(R.id.menuGoHome).isVisible = false
+            findItem(R.id.menuDone).isVisible = false
 
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.menuSignIn -> {
-                //ログイン済みであれば実行しない
-                if (sessionData.logInStatus == true){
-                    makeToast(this@MasterActivity, getString(R.string.login_status_true))
-                    return true
-                }
-                //sendLogInActivity()
-                sendLogInActivity(this@MasterActivity)
-            }
-            R.id.menuSignUp -> {
-                //ログイン済みであれば実行しない
-                if (sessionData.logInStatus == true){
-                    makeToast(this@MasterActivity, getString(R.string.login_status_true))
-                    return true
-                }
-                //sendSignUpActivity()
-                sendSignUpActivity(this@MasterActivity)
-                 }
-
-            R.id.menuNotification -> {
-                //未ログインであれば実行しない
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
-                    return true
-                }
-                //sendNotificationActivity()
-                sendNotificationActivity(this@MasterActivity)
-            }
-
-            R.id.menuMyList -> {
-                //ログイン済みであれば実行しない
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
-                    return true
-                }
-                toolbar.title = getString(R.string.drawer_menu_myList)
-
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameLayoutMaster, MyListFragment.newInstance("",""))
-                    .commit()
-            }
-
-            R.id.menuFavorite -> {
-                //未ログインであれば実行しない
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
-                    return true
-                }
-                sendFavoriteItemActivity(this@MasterActivity)
-            }
-
-            R.id.menuCrearArticulo ->{
-                //未ログインであれば実行しない
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
-                    return true
-                }
-                sendCrearArticuloActivity(this@MasterActivity)
-            }
-
-            R.id.menuProfile -> {
-                //未ログインであれば実行しない
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.toast_message_needSignIn))
-                    return true
-                }
-                sendProfileActivity(this@MasterActivity)
-            }
-
-            R.id.menuSettings -> {
-                //未設定
-
-            }
-
-            R.id.menuOthers -> {
-                val intent = Intent(this, OthersActivity::class.java)
-                startActivity(intent)
-            }
-
-            R.id.menuSignOut -> {
-                //logoutを実行してToastで表示する
-                if (sessionData.logInStatus == false){
-                    makeToast(this@MasterActivity, getString(R.string.drawer_menu_response_no_logIn))
-                    return true
-                }
-
-                sendSignOutActivity(this@MasterActivity)
-
-            }
         }
         return true
     }
@@ -318,17 +130,8 @@ class MasterActivity : AppCompatActivity(),
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
 
-
     }
 
-    override fun launchMasterFragment(itemObjectsSerialized: ItemObjectsSerialized, stringItemObjectsCategory: String, localStatus: Boolean) {
-
-        val intent = Intent(this, MasterActivity::class.java)
-        intent.putExtra("itemObjectsSerialized", itemObjectsSerialized)
-        intent.putExtra("stringItemObjectsCategory", stringItemObjectsCategory)
-        intent.putExtra("localStatus",localStatus)
-        startActivity(intent)
-    }
 
 
     override fun launchDetailActivity(selectedItem: ItemSerializerModel) {

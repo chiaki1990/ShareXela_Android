@@ -1,9 +1,11 @@
 package ga.sharexela.sharexela
 
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.content.Intent
+import android.net.Uri
+import android.widget.*
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.widget.ShareDialog
+import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -46,20 +48,6 @@ fun retrieveArticuloData(etArticuloTitle: EditText, etArticuloDescription: EditT
 
     return itemObj
 }
-
-
-
-
-
-fun categoryIdmaker(strCategory: String):String{
-    val categoryIndex: Int = MyApplication.appContext.resources.getStringArray(R.array.categoryList).indexOf(strCategory)
-    return (categoryIndex + 1 ).toString()
-}
-
-
-
-
-
 
 
 
@@ -180,6 +168,44 @@ fun setValueToMunicipioSpinner(strMunicipio: String, spinner: Spinner) {
     val municipioList: Array<String> = MyApplication.appContext.resources.getStringArray(R.array.municipioList)
     val indexOfMunicipos = municipioList.indexOf(strMunicipio)
     spinner.setSelection(indexOfMunicipos)
+}
+
+
+
+
+
+fun shareByFacebook(shareDialog: ShareDialog, itemUrl:String){
+
+    //facebookのシェアを実行する
+    val content = ShareLinkContent.Builder().setContentUrl(Uri.parse(itemUrl)).build()
+    shareDialog.show(content);
+}
+
+
+
+fun shareByTwitter(spSelectDepartamento:Spinner, title:String, itemUrl:String, cListener: CrearArticuloFragment.OnFragmentInteractionListener?, eListener: EditarArticuloFragment.OnFragmentInteractionListener?){
+    /*機能
+        暗黙Intentによるtwitterのシェアを実行する(アプリが起動するかチェックしておくこと)
+
+    args:
+        spSelectDepartamento: Spinner ... fragment_crear_articulo.xmlのspSelectDepartamentoを引数とする
+        title: String ... fragment_crear_articulo.xmlのetArticuloTitleで入力された値
+        itemUrl: String ... webサーバーから返されたアイテム詳細ページのurl
+    returns:
+        -
+    */
+    val area = spSelectDepartamento.selectedItem.toString()
+    val text = "${title}%0a%0a%0a&url=${itemUrl}&hashtags=ShareXela,${area}"
+    val twitterShareUrl = "https://twitter.com/share?text=%s"
+    val url = twitterShareUrl.format(text)
+    println(url)
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    MyApplication.appContext.startActivity(intent);
+    //fragment.requireActivity().startActivityFromFragment()
+    if (cListener != null) cListener.successCrearArticulo()
+    if (eListener != null) eListener.successCrearArticulo()
+
 }
 
 
