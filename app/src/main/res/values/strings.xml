@@ -35,6 +35,8 @@
     <string name="success_change_profile_image">La imagen ha sido cambiada.</string>
     <string name="fail_update_by_swipeRefresh">no pudo actualizar los datos.</string>
     <string name="fail_share_facebook">no se compartió en Facebook.</string>
+    <string name="fail_change_data" >no pudo cambiar los datos.</string>
+    <string name="success_change_data" >La información cambió.</string>
 
 
     <!-- SharedPreferences Key -->

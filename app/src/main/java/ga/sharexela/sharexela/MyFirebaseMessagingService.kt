@@ -32,16 +32,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        remoteMessage?.let { message ->
+
+        remoteMessage.let { message ->
             // 通知メッセージ
             message.notification?.let {
                 // 通知メッセージを処理
+                println("通知メッセージ")
+
             }
 
 
             // データメッセージ
-            message.data?.let {
+            message.data.let {
                 // データメッセージを処理
+                println("データメッセージ")
+
             }
 
 

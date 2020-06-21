@@ -215,6 +215,8 @@
     <string name="fragment_main_btn_text_buscar_trabajador">busca trabajador</string>
     <string name="fragment_main_btn_text_negocio">hace publicidad de su negocio</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="fail_update_by_swipeRefresh">更新できませんでした。</string>
+    <string name="fail_update_by_swipeRefresh">更新できませんでした</string>
     <string name="fail_share_facebook">Facebookのシェアに失敗しました</string>
+    <string name="fail_change_data">変更できませんでした</string>
+    <string name="success_change_data">変更しました</string>
 </resources>

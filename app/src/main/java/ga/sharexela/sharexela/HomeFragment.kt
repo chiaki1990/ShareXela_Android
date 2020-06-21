@@ -2,6 +2,7 @@ package ga.sharexela.sharexela
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_master.*
@@ -20,10 +22,8 @@ import retrofit2.Response
 
 
 
-
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 
 
 
@@ -47,6 +47,7 @@ class HomeFragment : Fragment() {
             itemObjectsSet = it.getSerializable(ARG_PARAM1) as ItemHomeListSerializerViewModel
             param2 = it.getString(ARG_PARAM2)
         }
+        Log.d("SignInの後の調査", "HomeFragment#onCreateを通過")
     }
 
     override fun onCreateView(
@@ -54,6 +55,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
+        Log.d("SignInの後の調査", "HomeFragment#onCreateViewを通過")
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -96,6 +98,7 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Log.d("SignInの後の調査", "HomeFragment#onActivityCreatedを通過")
 
 
         //ボタンのリスナーを設定する
@@ -125,14 +128,20 @@ class HomeFragment : Fragment() {
         //setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
         //setUpRecyclerViewHORIZONTAL(recyclerViewHomeEmpresa, dataArrayListTienda, listener!!)
 
-
-
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d("SignInの後の調査", "HomeFragment#onResumeを通過")
+        //println()
         setUpNavigationDrawer(requireActivity())
         //作成したArrayListをrecyclerviewとadapterにリンクさせる関数に通す
+        println("checkkkk")
+        println(dataArrayListCosas)
+
+        //val recyclerViewHomeCosas =
+        clearFindViewByIdCache()
+
         setUpRecyclerViewHORIZONTAL(recyclerViewHomeCosas, dataArrayListCosas, listener!!)
         setUpRecyclerViewHORIZONTAL(recyclerViewHomeCasas, dataArrayListHabitacion, listener!!)
         setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
@@ -156,8 +165,6 @@ class HomeFragment : Fragment() {
         fun reLaunchHomeFragmentforUpdate(itemObjectsSet:ItemHomeListSerializerViewModel, fragment: HomeFragment)
 
     }
-
-
 
 
 
@@ -228,17 +235,14 @@ class HomeFragment : Fragment() {
 
 
         //itemObjectsの取得
-
         val service = setService()
         service.getItemHomeListAPIView()
             .enqueue(object : Callback<ItemHomeListSerializerViewModel> {
 
                 override fun onResponse(call: Call<ItemHomeListSerializerViewModel>, response: Response<ItemHomeListSerializerViewModel>) {
 
-
                     val itemObjectsSet = response.body()!!
                     progressBarHomeFragment.visibility = View.INVISIBLE
-
 
                     val itemObjectsCosas = itemObjectsSet.ITEM_OBJECTS_COSAS
                     val itemObjectsCasas = itemObjectsSet.ITEM_OBJECTS_HABITACION
@@ -257,8 +261,6 @@ class HomeFragment : Fragment() {
                     setUpRecyclerViewHORIZONTAL(recyclerViewHomeCasas, dataArrayListHabitacion, listener!!)
                     setUpRecyclerViewHORIZONTAL(recyclerViewHomeTrabajo, dataArrayListTrabajo, listener!!)
                     setUpRecyclerViewHORIZONTAL(recyclerViewHomeEmpresa, dataArrayListTienda, listener!!)
-
-
                 }
 
 
@@ -284,10 +286,13 @@ class HomeFragment : Fragment() {
             })
     }
 
+    override fun onDestroy() {
+        Log.d("SignInの後の調査", "HomeFragment#onDestroyを通過")
+        super.onDestroy()
+
+    }
+
 }
-
-
-
 
 
 
@@ -345,7 +350,7 @@ private fun setUpRecyclerViewHORIZONTAL(
 
     //アダプターの設定
     val adapter =
-        MyHomeRecyclerViewAdapter(dataArrayList = dataArrayList, myListener = listener)
+        MyHomeRecyclerViewAdapter(dataArrayList=dataArrayList, myListener=listener)
     recyclerView.adapter = adapter
 
 }

@@ -285,12 +285,9 @@ class EditarArticuloFragment : Fragment(), OnMapReadyCallback {
                 println(itemUrl)
                 println(isTwitterShare)
 
-
                 callbackManager = CallbackManager.Factory.create();
                 shareDialog = ShareDialog(this@EditarArticuloFragment)
                 shareDialog!!.registerCallback(callbackManager, EditarArticuloFragment().MyFacebookCallback(listener!!, isTwitterShare,spSelectDepartamento, title, itemUrl));
-
-
 
 
                 //checkboxの状態を確認

@@ -3,6 +3,7 @@ package ga.sharexela.sharexela
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -38,6 +39,7 @@ class HomeActivity : AppCompatActivity(),
         setContentView(R.layout.activity_home)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        Log.d("SignInの後の調査", "HomeActivity#onCreateを通過")
 
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -63,7 +65,6 @@ class HomeActivity : AppCompatActivity(),
         nav_view.setNavigationItemSelectedListener(this)
 
         launchHomeFragmentForApplicationStarted()
-
     }
 
 
@@ -93,7 +94,7 @@ class HomeActivity : AppCompatActivity(),
                 //transaction.commitAllowingStateLoss()
                 //transaction.commit()
 
-
+                Log.d("SignInの後の調査", "HomeActivity内でデータを取得してHomeFragmentを起動する")
                 supportFragmentManager.beginTransaction()
                     .add(R.id.frameLayoutHome, HomeFragment.newInstance(itemObjectsSet,""))
                     .commit()
@@ -115,8 +116,10 @@ class HomeActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        Log.d("SignInの後の調査", "HomeActivity#onResumeを通過")
 
         setUpNavigationDrawer(this)
+        //launchHomeFragmentForApplicationStarted()
     }
 
 
@@ -274,6 +277,12 @@ class HomeActivity : AppCompatActivity(),
         intent.putExtra(IntentKey.ItemId.name, selectedItem.id.toString())
         startActivity(intent)
 
+    }
+
+
+    override fun onDestroy() {
+        Log.d("SignInの後の調査", "HomeActivity#onDestroyを通過")
+        super.onDestroy()
     }
 
 

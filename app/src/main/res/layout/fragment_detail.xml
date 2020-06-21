@@ -11,13 +11,12 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="408dp"
+        android:layout_width="0dp"
         android:layout_height="567dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutBottomLayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -428,7 +427,6 @@
                 android:background="@color/backgroundColor" />
 
 
-
             <LinearLayout
                 android:id="@+id/linearLayoutUserProfile"
                 android:layout_width="match_parent"
@@ -626,6 +624,30 @@
 
             <View
                 android:id="@+id/basicDivider55"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider34"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider66"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider68"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/basic_span"
+                android:background="@color/backgroundColor" />
+
+            <View
+                android:id="@+id/basicDivider67"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/basic_span"
                 android:background="@color/backgroundColor" />

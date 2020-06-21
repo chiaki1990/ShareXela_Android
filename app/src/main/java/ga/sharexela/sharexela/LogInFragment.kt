@@ -1,8 +1,11 @@
 package ga.sharexela.sharexela
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_log_in.*
@@ -11,8 +14,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -37,6 +38,7 @@ class LogInFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        Log.d("SignInの後の調査", "LogInFragment#onCreateを通過")
     }
 
 
@@ -64,6 +66,7 @@ class LogInFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Log.d("SignInの後の調査", "LogInFragment#onActivityCreateｄを通過")
 
         //ログインボタンを押したら発動するリスナーを設置
         setBtnLogInListener()
@@ -103,15 +106,8 @@ class LogInFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LogInFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             LogInFragment().apply {
@@ -214,6 +210,18 @@ class LogInFragment : Fragment() {
             }
         })
 
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        //ソフトキーボードを非表示
+        hideKeybord(this)
+    }
+
+    override fun onDestroy() {
+        Log.d("SignInの後の調査", "LogInFragment#onDestroyを通過")
+        super.onDestroy()
     }
 
 }

@@ -1,4 +1,4 @@
 package ga.sharexela.sharexela
 
 
-val devEnv:Boolean = true
+val devEnv:Boolean = false

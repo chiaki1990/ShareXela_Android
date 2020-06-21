@@ -410,6 +410,12 @@ class CrearArticuloFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        //キーボードが表示中なら削除する(HomeFragmentで画面描画されなくなる欠陥に対応)
+        hideKeybord(this)
+    }
+
 }
 
 

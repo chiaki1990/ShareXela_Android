@@ -14,7 +14,7 @@ buildscript {
         // in the individual module build.gradle files
 
         //FirebaseCloudMessagingの導入
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 }
 

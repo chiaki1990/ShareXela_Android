@@ -1,7 +1,6 @@
 package ga.sharexela.sharexela
 
 import android.content.Context
-import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,17 +12,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 
-
 class ServiceProfile {
-
-
-
 
     companion object{
 
-
         fun patchProfile(authToken:String, profile:ProfileSerializerModel, context: Context){
-            var retrofit: Retrofit = retrofit2.Retrofit.Builder()
+            var retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -43,24 +37,20 @@ class ServiceProfile {
                     println(response.body())
 
 
-                    //送信が成功したら内容を反映させる(エリア設定が終わったらProfileデータを取得)
-                    val profileObj = response.body()!!.PROFILE_OBJ
+                    if (response.body()!!.result == "fail"){
+                        makeToast(context, context.getString(R.string.fail_change_data))
+                        return
+                    }
 
+
+                    //送信が成功したら内容を反映させる(エリア設定が終わったらProfileデータを取得)
+                    val profileObj:ProfileSerializerModel? = response.body()!!.PROFILE_OBJ
                     println("profileObjの更新をServiceProfile#patchで行う")
                     println(profileObj)
-
                     sessionData.profileObj = profileObj
 
-
-
                     //トーストで成功の旨を表示(overrideでToastを実行する)
-                    makeToast(context,"変更しました")
-                    //Toast.makeText(applicationContext,"変更を完了しました", Toast.LENGTH_SHORT).show()
-
-                    //変更したらフラグメントを終わらせるのはどうか？
-                    //終わらせるならreplaceは良くないのか？
-                    //ProfileActivity().supportFragmentManager.beginTransaction().replace(R.id.frameLayoutProfile, ProfileListFragment.newInstance("","")).commit()
-
+                    makeToast(context,context.getString(R.string.success_change_data))
 
 
                 }
@@ -69,7 +59,7 @@ class ServiceProfile {
 
                     println(t.message)
                     //送信失敗している旨を表示(overrideでToastを実行する)
-                    Toast.makeText(context,"送信に失敗しました。", Toast.LENGTH_SHORT)
+                    makeToast(context,context.getString(R.string.fail_change_data))
 
                 }
             })

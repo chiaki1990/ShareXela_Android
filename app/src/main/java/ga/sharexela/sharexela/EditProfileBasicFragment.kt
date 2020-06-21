@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_edit_profile_basic.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -59,17 +58,14 @@ class EditProfileBasicFragment : Fragment() {
         ivUserProfileImage.setOnClickListener { listener!!.onClickProfileImage() }
 
 
-
-
         //送信データを押したら変更を始める
-
         btnProfileConfirm.setOnClickListener {
 
             //入力内容を取得
-            val inputUserName = etUserName.text.toString()
+            val inputUserName    = etUserName.text.toString()
             val inputDescription = etDescription.text.toString()
 
-            var profileObjForSend = ProfileSerializerModel(UserSerializerModel())
+            val profileObjForSend = ProfileSerializerModel(UserSerializerModel())
 
             //入力内容とオブジェクトのプロパティが同一のものが含まれている場合、
             // Djangoのis_valid()がFalseになってしまう。
@@ -86,7 +82,7 @@ class EditProfileBasicFragment : Fragment() {
             }else {
 
                 //retrofitで送信する
-                ServiceProfile.patchProfile(authToken= sessionData.authTokenHeader!!, profile=profileObjForSend, context=MyApplication.appContext )
+                ServiceProfile.patchProfile(authToken=sessionData.authTokenHeader!!, profile=profileObjForSend, context=MyApplication.appContext )
 
             }
         }
@@ -98,16 +94,9 @@ class EditProfileBasicFragment : Fragment() {
         super.onResume()
         //画面を描画する
 
-        /* 改修パート
-        etUserName.setText(username)
-        etDescription.setText(description)
-        Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
-        */
-
         etUserName.setText(sessionData.profileObj!!.user!!.username)
         etDescription.setText(sessionData.profileObj!!.description)
         val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)
-        //Glide.with(MyApplication.appContext).load(imageUrl).into(ivUserProfileImage)
         GlideApp.with(MyApplication.appContext).load(imageUrl).circleCrop().into(ivUserProfileImage)
     }
 
@@ -129,24 +118,13 @@ class EditProfileBasicFragment : Fragment() {
 
 
 
-
-
     interface OnFragmentInteractionListener {
-
         fun onClickProfileImage()
-
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditProfileBasicFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             EditProfileBasicFragment().apply {

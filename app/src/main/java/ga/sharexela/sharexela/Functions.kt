@@ -9,7 +9,9 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -144,6 +146,16 @@ fun sendFavoriteItemActivity(context: Context){
     context.startActivity(intent)
 }
 
+
+
+fun hideKeybord(fragment: Fragment){
+    //Fragment内でキーボード表示中の状態で元のフラグメントに戻るとonResumeでレイアウトが適切に表示されない事例が発覚した。
+    //そのためにこの関数を作成した
+
+    //ソフトキーボードを非表示
+    val imm : InputMethodManager = fragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(fragment.view?.windowToken, 0)
+}
 
 
 /*

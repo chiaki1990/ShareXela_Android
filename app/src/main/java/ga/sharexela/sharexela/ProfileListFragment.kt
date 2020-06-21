@@ -13,14 +13,7 @@ import kotlinx.android.synthetic.main.fragment_profile_list.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ProfileListFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [ProfileListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 
 
 
@@ -141,7 +134,9 @@ class ProfileListFragment : Fragment() {
          */
 
         //取得データをレイアウトファイルへ反映する
-        if (sessionData.profileObj == null) return println("profileObjがnullになっている")
+        //ログインステータスがTrueでProfileObjがない場合がひょっとして存在する事によるエラーがあるのかもしれない
+        println(sessionData.profileObj)
+        if (sessionData.profileObj == null) return makeToast(requireContext(),"profileObjがnullになっている")
         tvUserName.text = sessionData.profileObj!!.user!!.username
         tvEmailAddress.text = sessionData.profileObj!!.user!!.email
         val imageUrl = BASE_URL + sessionData.profileObj!!.image!!.substring(1)

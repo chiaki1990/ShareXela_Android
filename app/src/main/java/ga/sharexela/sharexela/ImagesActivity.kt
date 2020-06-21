@@ -71,7 +71,7 @@ class ImagesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.menuDone -> {
-                makeToast(this, "URIをCREARACTIVITYに戻してやる。")
+                //makeToast(this, "URIをCREARACTIVITYに戻してやる。")
                 val intent = Intent()
                 intent.putExtra("imageView1FilePath", imageView1FilePath)
                 intent.putExtra("imageView2FilePath", imageView2FilePath)
@@ -217,7 +217,7 @@ class ImagesActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
 
-            val fileDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TAKAYAMA")
+            val fileDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "ShareXela")
             fileDir.mkdirs()
 
             val file = File(fileDir, "${System.currentTimeMillis()}.jpg")

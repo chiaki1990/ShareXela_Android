@@ -1,10 +1,13 @@
 package ga.sharexela.sharexela
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 
 import kotlinx.android.synthetic.main.activity_log_in.*
 import kotlinx.android.synthetic.main.fragment_log_in.*
@@ -19,6 +22,7 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
         setSupportActionBar(toolbar)
+        Log.d("SignInの後の調査", "LogInActivity#onCreateを通過")
 
         //バックボタンを実装
         toolbar.apply {
@@ -47,16 +51,12 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
     }
 
 
-    //override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    //    return super.onOptionsItemSelected(item)
-    //
-    //}
-
 
     override fun launchSignUpActivity(){
 
         //sendSignUpActivity()
         sendSignUpActivity(this@LogInActivity)
+
         finish()
     }
 
@@ -89,6 +89,8 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
                 editor.putBoolean(getString(R.string.SP_KEY_LOGIN_STATUS), true)
                 editor.apply()
 
+                Log.d("SignInの後の調査", "LogInActivity#getProfileSerializerModelメソッドでこのアクティビティを切る")
+
                 finish()
 
 
@@ -100,9 +102,16 @@ class LogInActivity : AppCompatActivity(), LogInFragment.OnFragmentInteractionLi
                 println(t)
                 println(t.message)
             }
-
-
         })
 
+    }
+
+
+
+
+
+    override fun onDestroy() {
+        Log.d("SignInの後の調査", "LogInActivity#onDestroyを通過")
+        super.onDestroy()
     }
 }
